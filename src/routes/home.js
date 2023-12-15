@@ -1,49 +1,51 @@
-import Carousel from 'react-multi-carousel';
 import "react-multi-carousel/lib/styles.css";
 
 import '../App.css';
-import { Button, Col, Container, Row } from 'react-bootstrap';
+import { Container, Table } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { useEffect, useState } from 'react';
+import { dateToDateTime } from '../components/Simple';
 
 
-function Home() {
-    const responsive = {
-        xxl: {
-            breakpoint: { max: 4000, min: 1400 },
-            items: 5
-        },
-        xl: {
-            breakpoint: { max: 1400, min: 1200 },
-            items: 5
-        },
-        lg: {
-            breakpoint: { max: 1200, min: 992 },
-            items: 5
-        },
-        md: {
-            breakpoint: { max: 992, min: 768 },
-            items: 3
-        },
-        sm: {
-            breakpoint: { max: 768, min: 576 },
-            items: 2
-        },
-        xs: {
-            breakpoint: { max: 576, min: 0 },
-            items: 1
-        }
-    };
+const Home = () => {
+    const [risks, setRisks] = useState([]);
 
-    const handleClick = async (e) => {
-        e.preventDefault();
-        localStorage.setItem('room', e.target.value)
-        window.location.href = "/Booking";
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+    const fetchData = async () => {
+        await fetch('http://127.0.0.1:9000/risks', {
+            method: "GET",
+        }).then((data) => (data.json()))
+        .then((data) => {
+            setRisks(data.data)
+        }).catch();
     }
 
     return(
-        <div className='m-5'>
-
-        </div>
+        <Container className='p-5'>
+            <Table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>รายละเอียด</th>
+                        <th>ผู้แจ้ง</th>
+                        <th>วันที่รายงาน</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {risks.map((data, idx) => (
+                        <tr key={idx}>
+                            <td>{data.id}</td>
+                            <td>{data.detail}</td>
+                            <td>{data.reporter}</td>
+                            <td>{dateToDateTime(data.report_date)}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </Table>
+        </Container>
     );
 }
 export default Home;

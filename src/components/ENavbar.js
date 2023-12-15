@@ -1,7 +1,6 @@
 import { Container, Nav, NavDropdown, Navbar } from "react-bootstrap";
 import logo from './SWU_Central_Library_TH_Color.png';
 import './web.css';
-import { useState } from "react";
 
 function ENavbar({user}){
     const name = user['name'];
@@ -12,8 +11,8 @@ function ENavbar({user}){
         window.location.href = "/";
     };
 
-    if(user.status === 'admin'){
-        adminNav = <Nav.Link href="/">ทดสอบ</Nav.Link>;
+    if(user.role === 'admin'){
+        adminNav = <Nav.Link href="/user-manager">จัดการผู้ใช้</Nav.Link>;
     }
     
 
@@ -28,7 +27,7 @@ function ENavbar({user}){
                     <Navbar.Toggle aria-controls="navbarScroll" /> 
                     <Navbar.Collapse className="justify-content-end">
                         <Nav className="me-auto">
-                            <Nav.Link href="/">ระบุความเสี่ยง</Nav.Link>
+                            <Nav.Link href="/report">รายงานความเสี่ยง</Nav.Link>
                             {adminNav}
                         </Nav>
                         

@@ -5,8 +5,8 @@ import Home from './routes/Home';
 import SignIn from './routes/SignIn';
 import Layout from './routes/Layout';
 import Booking from './routes/Booking';
-import BookingAdmin from './routes/Booking_Admin';
-import BookingCheck from './routes/Booking_Check';
+import UserManager from './routes/UserManager';
+import RiskReport from './routes/RiskReport';
 
 function App() {
   var user = sessionStorage.getItem('user');
@@ -25,8 +25,8 @@ function App() {
           <Route index element={<Home />} />
           <Route path='*' element={<ErrorPage />} />
           <Route path='/booking' element={<Booking user={user} room={room} />} />
-          <Route path='/admin' element={<BookingAdmin />} />
-          <Route path='/check' element={<BookingCheck />} />
+          <Route path='/user-manager' element={<UserManager />} />
+          <Route path='/report' element={<RiskReport />} />
         </Route>
       </Routes>
     </BrowserRouter>
