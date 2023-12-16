@@ -18,26 +18,23 @@ function ENavbar({user}){
 
     return(
         <>
-            <Navbar className="navcolor" expand='sm'>
-                <Container fluid>
+            <Navbar className="bg-white" fixed="top" expand='sm'>
                     <Navbar.Brand href="https://lib.swu.ac.th">
                         <img src={logo} height="100" alt="สำนักหอสมุดกลาง มหาวิทยาลัยศรีนครินทรวิโรฒ" />
-                    </Navbar.Brand>                   
-                    <Navbar.Brand href="/">ระบบจัดการความเสี่ยง</Navbar.Brand>
-                    <Navbar.Toggle aria-controls="navbarScroll" /> 
-                    <Navbar.Collapse className="justify-content-end">
+                    </Navbar.Brand>
+                    <Navbar.Collapse className="justify-content-end">                   
+                        <Navbar.Brand href="/">ระบบจัดการความเสี่ยง</Navbar.Brand>
+                        <Navbar.Toggle aria-controls="navbarScroll" /> 
                         <Nav className="me-auto">
                             <Nav.Link href="/report">รายงานความเสี่ยง</Nav.Link>
                             {adminNav}
-                        </Nav>
-                        
+                        </Nav>   
                         <Nav className="d-flex">
                             <NavDropdown title={`สวัสดี, ${name}`}>
                                 <NavDropdown.Item onClick={handleLogout}>ออกจากระบบ</NavDropdown.Item>
                             </NavDropdown>
                         </Nav> 
                     </Navbar.Collapse>
-                </Container>
             </Navbar>
         </>
     )
