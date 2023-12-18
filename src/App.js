@@ -4,9 +4,9 @@ import ErrorPage from './error-page';
 import Home from './routes/Home';
 import SignIn from './routes/SignIn';
 import Layout from './routes/Layout';
-import Booking from './routes/Booking';
 import UserManager from './routes/UserManager';
 import RiskReport from './routes/RiskReport';
+import RiskEvaluation from './routes/RiskEvaluation';
 
 function App() {
   var user = sessionStorage.getItem('user');
@@ -24,7 +24,7 @@ function App() {
         <Route path='/' element={<Layout user={user} />}>
           <Route index element={<Home />} />
           <Route path='*' element={<ErrorPage />} />
-          <Route path='/booking' element={<Booking user={user} room={room} />} />
+          <Route path='/risk-evaluation' element={<RiskEvaluation />} />
           <Route path='/user-manager' element={<UserManager />} />
           <Route path='/report' element={<RiskReport />} />
         </Route>
