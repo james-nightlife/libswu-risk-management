@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Container, Form } from "react-bootstrap";
 
 const RiskEvaluation = () => {
-    const id = localStorage.getItem('risk_id');
+    const id = Number(localStorage.getItem('risk_id'));
     if(!id){
         window.location.href = "/";
     }
@@ -14,7 +14,8 @@ const RiskEvaluation = () => {
     }, []);
 
     const fetchRiskData = async () => {
-        return fetch('http://127.0.0.1:9000/get-risk', {
+        await console.log("test")
+        await fetch('http://127.0.0.1:9000/get-risk', {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -24,25 +25,28 @@ const RiskEvaluation = () => {
             })
         }).then((data) => (data.json()))
         .then((data) => {
-            console.log(data)
             setRisk(data.result);
-        }).catch();
+        }).catch((error) => {
+            console.error('Error fetching risk data:', error);
+        });
     }
 
 
     return(
         <Container className="p-5">
-            {risk}
             <Form>
                 <h5>ข้อมูลความเสี่ยง</h5>
                 <Form.Group>
                     <Form.Label>รายละเอียดความเสี่ยง</Form.Label>
+                    <Form.Control name="detail" type="text" disabled value={risk.detail} />
                 </Form.Group>
                 <Form.Group>
                     <Form.Label>ผู้รายงานความเสี่ยง</Form.Label>
+                    <Form.Control name="reporter" type="text" disabled value={risk.reporter} />
                 </Form.Group>
                 <Form.Group>
                     <Form.Label>วันที่รายงานความเสี่ยง</Form.Label>
+                    <Form.Control name="reporter" type="text" disabled value={risk.reporter} />
                 </Form.Group>
                 <h5>การประเมินความเสี่ยง</h5>
                 <Form.Group>
