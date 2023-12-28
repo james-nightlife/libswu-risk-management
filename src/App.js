@@ -7,6 +7,7 @@ import Layout from './routes/Layout';
 import UserManager from './routes/UserManager';
 import RiskReport from './routes/RiskReport';
 import RiskEvaluation from './routes/RiskEvaluation';
+import RiskEditor from './routes/RiskEditor';
 
 function App() {
   var user = sessionStorage.getItem('user');
@@ -27,6 +28,7 @@ function App() {
           <Route path='/risk-evaluation' element={<RiskEvaluation />} />
           <Route path='/user-manager' element={<UserManager />} />
           <Route path='/report' element={<RiskReport />} />
+          <Route path='/risk-editor' element={<RiskEditor />} />
         </Route>
       </Routes>
     </BrowserRouter>

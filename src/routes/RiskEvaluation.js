@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { Container, Form } from "react-bootstrap";
+import { dateToDateTime } from "../components/Simple";
 
 const RiskEvaluation = () => {
+    const user = JSON.parse(sessionStorage.getItem('user'));
     const id = Number(localStorage.getItem('risk_id'));
     if(!id){
         window.location.href = "/";
@@ -46,20 +48,24 @@ const RiskEvaluation = () => {
                 </Form.Group>
                 <Form.Group>
                     <Form.Label>วันที่รายงานความเสี่ยง</Form.Label>
-                    <Form.Control name="reporter" type="text" disabled value={risk.reporter} />
+                    <Form.Control name="report_date" type="text" disabled value={dateToDateTime(risk.report_date)} />
                 </Form.Group>
                 <h5>การประเมินความเสี่ยง</h5>
                 <Form.Group>
                     <Form.Label>ผู้ประเมินความเสี่ยง</Form.Label>
+                    <Form.Control name="report_date" type="text" disabled value={user.username} />
                 </Form.Group>
                 <Form.Group>
                     <Form.Label>โอกาส</Form.Label>
+                    <Form.Control name="chance_score" type="number" max={5} min={1} />
                 </Form.Group>
                 <Form.Group>
                     <Form.Label>ผลกระทบ</Form.Label>
+                    <Form.Control name="effect_score" type="text" disabled value={user.username} />
                 </Form.Group>
                 <Form.Group>
                     <Form.Label>ระดับความเสี่ยง</Form.Label>
+                    <Form.Control name="report_date" type="text" disabled value={user.username} />
                 </Form.Group>
                 <Form.Group>
                     <Form.Label>ประเภทความเสี่ยง</Form.Label>
@@ -69,6 +75,7 @@ const RiskEvaluation = () => {
                 </Form.Group>
                 <Form.Group>
                     <Form.Label>รหัสข้อมูลความเสี่ยงที่เกี่ยวข้อง (กรณีที่เป็นความเสี่ยงที่เคยรายงานแล้ว)</Form.Label>
+                    <Form.Control name="report_date" type="text" disabled value={user.username} />
                 </Form.Group>
             </Form>
         </Container>

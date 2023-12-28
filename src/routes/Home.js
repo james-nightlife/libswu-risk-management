@@ -5,7 +5,6 @@ import { Button, Container, Table } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useEffect, useState } from 'react';
 import { dateToDateTime } from '../components/Simple';
-import EvalButton from "../components/Committee";
 
 
 const Home = () => {
@@ -25,6 +24,12 @@ const Home = () => {
         }).catch();
     }
 
+    const riskEditorRoute = (e, id) => {
+        e.preventDefault()
+        localStorage.setItem('risk_id', id);
+        window.location.href = "/risk-editor";
+    }
+
     return(
         <Container className='p-5'>
             <Table responsive>
@@ -39,11 +44,12 @@ const Home = () => {
                 <tbody>
                     {risks.map((data, idx) => (
                         <tr key={idx}>
-                            <td>{data.id}</td>
+                            <td>
+                                <a onClick={e => riskEditorRoute(e, data.id)}>{data.id}</a>
+                            </td>
                             <td>{data.detail}</td>
                             <td>{data.reporter}</td>
                             <td>{dateToDateTime(data.report_date)}</td>
-                            <EvalButton user={user} id={data.id} />
                         </tr>
                     ))}
                 </tbody>
