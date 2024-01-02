@@ -1,8 +1,8 @@
 import { useState } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button, Container, Form } from "react-bootstrap";
-import swal from "sweetalert";
 import logo from '../components/SWU_Central_Library_TH_Color.png';
+import Swal from "sweetalert2";
 
 /* รับ username และ password ส่งให้ api ตรวจสอบบัญชีผู้ใช้ */
 async function loginUser(credentials){
@@ -38,18 +38,29 @@ const SignIn = () => {
                 password: inputs.password
             });
             if("user" in response){
-                swal("Success", response.message, "success", {
-                    buttons: false,
-                    timer: 2000,
-                }).then((value) => {
+                Swal.fire({
+                    title: 'Success',
+                    text: response.message,
+                    icon: 'success',
+                    showConfirmButton: false,
+                    timer: 2000
+                }).then(() => {
                     sessionStorage.setItem('user', JSON.stringify(response['user']));
                     window.location.href = '/';
                 })
-            } else{
-                swal("ล้มเหลว", response.message, "error");
+            }else{
+                Swal.fire({
+                    title: 'ล้มเหลว',
+                    text: response.message,
+                    icon: 'error'
+                })
             }
         }else{
-            swal("ล้มเหลว", "โปรดระบุบัวศรีไอดีและรหัสผ่านของคุณ", "error");
+            Swal.fire({
+                title: 'ล้มเหลว',
+                text: 'โปรดระบุบัวศรีไอดีและรหัสผ่านของคุณ',
+                icon: 'error'
+            })
         } 
     }
     

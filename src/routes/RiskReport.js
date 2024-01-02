@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button, Container, Form, FormLabel } from "react-bootstrap";
-import swal from "sweetalert";
+import Swal from "sweetalert2";
 
 async function submitRisk(input){
     return fetch('http://127.0.0.1:9000/insert-risk', {
@@ -33,21 +33,31 @@ const RiskReport = () => {
             response = await submitRisk({
                 reporter: user.username,
                 detail: inputs.detail
-            })
+            });
             if(response.status === '201'){
-                swal("Success", 'ดำเนินการเพิ่มข้อมูลความเสี่ยงเรียบร้อยแล้ว', "success", {
-                    buttons: false,
-                    timer: 2000,
+                Swal.fire({
+                    title: 'Success',
+                    text: 'ดำเนินการเพิ่มข้อมูลความเสี่ยงเรียบร้อยแล้ว',
+                    icon: 'success',
+                    showConfirmButton: false,
+                    timer: 2000
                 }).then(() => {
                     window.location.href = '/';
-                })
+                });
             }else{
-                swal("ล้มเหลว", 'เกิดปัญหาขัดข้องทางเทคนิค ขออภัยในความไม่สะดวก', "error");
+                Swal.fire({
+                    title: 'ล้มเหลว',
+                    text: 'เกิดปัญหาขัดข้องทางเทคนิค ขออภัยในความไม่สะดวก',
+                    icon: 'error'
+                });
             }
         }else{
-            swal("ล้มเหลว", "โปรดระบุรายละเอียดความเสี่ยง", "error");
+            Swal.fire({
+                title: 'ล้มเหลว',
+                text: 'โปรดระบุรายละเอียดความเสี่ยง',
+                icon: 'error'
+            });
         }
-
     }
 
     return(

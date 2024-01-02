@@ -1,11 +1,12 @@
 const dateToDateTime = (data) => {
-    const date = new Date(data)
-    const day = date.getDay();
-    const month = date.getMonth();
-    const year = date.getFullYear();
-    const hour = date.getHours();
-    const min = date.getMinutes();
-    return `${day}/${month}/${year} ${hour}.${min}`
+    if(data){
+        const date = new Date(data);
+        return(date.toLocaleString('th-th'));
+    }else{
+        return('');
+    }
+    
+    
 }
 
 const findUser = (data) => {
