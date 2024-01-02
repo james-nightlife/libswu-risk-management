@@ -7,6 +7,8 @@ import Layout from './routes/Layout';
 import UserManager from './routes/UserManager';
 import RiskReport from './routes/RiskReport';
 import RiskEditor from './routes/RiskEditor';
+import AdminAddUser from './routes/AdminAddUser';
+import ChangePassword from './routes/ChangePassword';
 
 function App() {
   var user = sessionStorage.getItem('user');
@@ -24,9 +26,11 @@ function App() {
         <Route path='/' element={<Layout user={user} />}>
           <Route index element={<Home />} />
           <Route path='*' element={<ErrorPage />} />
-          <Route path='/user-manager' element={<UserManager />} />
+          <Route path='/admin/users' element={<UserManager />} />
           <Route path='/report' element={<RiskReport />} />
           <Route path='/risk-editor' element={<RiskEditor />} />
+          <Route path='/admin/users/add' element={<AdminAddUser />} />
+          <Route path='/change-password' element={<ChangePassword />} />
         </Route>
       </Routes>
     </BrowserRouter>

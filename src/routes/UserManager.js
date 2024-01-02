@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Container, Table } from "react-bootstrap";
+import { Button, Col, Container, Row, Table } from "react-bootstrap";
 
 const UserManager = () => {
     const session = JSON.parse(sessionStorage.getItem('user'));
@@ -24,7 +24,20 @@ const UserManager = () => {
 
     return(
         <Container className='p-5'>
-            <Table>
+            <Row>
+                <Col>
+                    <div className="d-grid">
+                        <Button href="/admin/users/add">เพิ่มผู้ใช้</Button>
+                    </div> 
+                </Col>
+                <Col>
+                    <div className="d-grid">
+                        <Button>เพิ่มผู้ใช้</Button>
+                    </div> 
+                </Col>
+            </Row>
+
+            <Table className="mt-3" responsive>
                 <thead>
                     <tr>
                         <th>ID</th>
