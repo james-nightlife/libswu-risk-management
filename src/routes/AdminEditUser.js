@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Container, Form } from "react-bootstrap";
 import Swal from "sweetalert2";
 
 // ส่ง Request เพื่อแก้ไขข้อมูลความเสี่ยง
-async function insertUser(input){
-    return fetch('http://127.0.0.1:9000/insert-user', {
+async function updateUser(input){
+    return fetch('http://127.0.0.1:9000/update-user', {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -17,7 +17,7 @@ async function insertUser(input){
     }))
 }
 
-const AdminAddUser = () => {
+const AdminEditUser = () => {
     const [input, setInput] = useState([]);
 
     // อัปเดต input
@@ -33,7 +33,6 @@ const AdminAddUser = () => {
         e.preventDefault();
         console.log(input);
         if(input.username &&
-           input.password &&
            input.uni_id &&
            input.name &&
            input.faculty &&
@@ -42,20 +41,20 @@ const AdminAddUser = () => {
            input.faculty !== '0' &&
            input.status !== '0' &&
            input.role !== '0' ){
-        Swal.fire({
+            Swal.fire({
                 title: 'ยืนยันการแก้ไข',
                 html: `บัวศรีไอดี : ${input.username} <br>
                             เลขประจำตัวบุคลากร / นิสิต : ${input.uni_id} <br>
                             ชื่อ - สกุล : ${input.name} <br>
                             ส่วนงาน : ${input.faculty} <br>
                             สถานะ : ${input.status} <br>
-                            สถานะการใช้งาน : ${input.role}`,
+                            สถานะการใช้งาน : ${input.role} <br>
+                            เปลี่ยนรหัสผ่าน : ${Boolean(input.password)}`,
                 icon: 'warning',
                 showCancelButton: true,
             }).then(async confirm =>  {
                 if(confirm.isConfirmed){
-                    
-                    response = await insertUser({
+                    response = await updateUser({
                         username: input.username,
                         password: input.password,
                         uni_id: input.uni_id,
@@ -67,7 +66,7 @@ const AdminAddUser = () => {
                     if(response.status === '201'){
                         Swal.fire({
                             title: 'Success',
-                            text: 'ดำเนินการเพิ่มข้อมูลผู้ใช้แล้ว',
+                            text: response.message,
                             icon: 'success',
                             showConfirmButton: false,
                             timer: 2000
@@ -81,7 +80,6 @@ const AdminAddUser = () => {
                             icon: 'error',
                         })
                     }  
-                     
                 }
             }) 
         }else{
@@ -93,6 +91,30 @@ const AdminAddUser = () => {
         }    
     }
 
+    // ดึงข้อมูลความเสี่ยง (datatype id ความเสี่ยงต้องเป็น number)
+    const fetchRiskData = async () => {
+        await fetch('http://127.0.0.1:9000/get-user', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                username: localStorage.getItem('edit_username')
+            })
+        }).then((data) => (data.json()))
+        .then((data) => {
+            setInput(data.user);    
+        }).catch((error) => {
+            console.error('Error fetching risk data:', error);
+        });
+    }
+
+    useEffect(() => {
+        fetchRiskData();
+    }, []);
+
+    
+
     return(
         <Container className="p-5">
             <Form onSubmit={handleSubmit}>
@@ -102,7 +124,8 @@ const AdminAddUser = () => {
                         type="text" 
                         name="username"  
                         onChange={handleChange} 
-                        value={input.username} />
+                        value={input.username}
+                        disabled />
                 </Form.Group>
                 <Form.Group>
                     <Form.Label>รหัสผ่าน</Form.Label>
@@ -200,6 +223,6 @@ const AdminAddUser = () => {
                 </div>
             </Form>
         </Container>
-    )   
+    );
 }
-export default AdminAddUser;
+export default AdminEditUser;

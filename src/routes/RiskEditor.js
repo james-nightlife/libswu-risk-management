@@ -84,6 +84,15 @@ const RiskEditor = () => {
         }
     }
 
+    const disabledDeleteBtn = () => {
+        if(user.role === 'admin' || user.username === risk.reporter){
+            return(false);
+        }else{
+            return(true);
+        }
+    }
+
+
     // อัปเดต input
     const handleChange = (e) => {
         const name = e.target.name;
@@ -103,27 +112,27 @@ const RiskEditor = () => {
                 showCancelButton: true,
             }).then(async confirm =>  {
                 if(confirm.isConfirmed){
-                        response = await editRisk({
-                            id: id,
-                            detail: risk.detail
+                    response = await editRisk({
+                        id: id,
+                        detail: risk.detail
+                    })
+                    if(response.status === '201'){
+                        Swal.fire({
+                            title: 'Success',
+                            text: 'ดำเนินการแก้ไขข้อมูลความเสี่ยงเรียบร้อยแล้ว',
+                            icon: 'success',
+                            showConfirmButton: false,
+                            timer: 2000
+                         }).then(() => {
+                            window.location.href = '/';
                         })
-                        if(response.status === '201'){
-                            Swal.fire({
-                                title: 'Success',
-                                text: 'ดำเนินการแก้ไขข้อมูลความเสี่ยงเรียบร้อยแล้ว',
-                                icon: 'success',
-                                showConfirmButton: false,
-                                timer: 2000
-                            }).then(() => {
-                                window.location.href = '/';
-                            })
-                        }else{
-                            Swal.fire({
-                                title: 'ล้มเหลว',
-                                text: 'เกิดปัญหาขัดข้องทางเทคนิค ขออภัยในความไม่สะดวก',
-                                icon: 'error',
-                            })
-                        }    
+                    }else{
+                        Swal.fire({
+                            title: 'ล้มเหลว',
+                            text: 'เกิดปัญหาขัดข้องทางเทคนิค ขออภัยในความไม่สะดวก',
+                            icon: 'error',
+                        })
+                    }    
                 }
             }) 
         }else{
@@ -147,29 +156,27 @@ const RiskEditor = () => {
                 showCancelButton: true,
             }).then(async confirm =>  {
                 if(confirm.isConfirmed){
-                    if(risk.feedback){
-                        response = await evalRisk({
-                            id: id,
-                            feedback: risk.feedback,
-                            assessor: user.username
+                    response = await evalRisk({
+                        id: id,
+                        feedback: risk.feedback,
+                        assessor: user.username
+                    })
+                    if(response.status === '201'){
+                        Swal.fire({
+                            title: 'Success',
+                            text: 'ดำเนินการประเมินความเสี่ยงเรียบร้อยแล้ว',
+                            icon: 'success',
+                            showConfirmButton: false,
+                            timer: 2000
+                        }).then(() => {
+                            window.location.href = '/';
                         })
-                        if(response.status === '201'){
-                            Swal.fire({
-                                title: 'Success',
-                                text: 'ดำเนินการประเมินความเสี่ยงเรียบร้อยแล้ว',
-                                icon: 'success',
-                                showConfirmButton: false,
-                                timer: 2000
-                            }).then(() => {
-                                window.location.href = '/';
-                            })
-                        }else{
-                            Swal.fire({
-                                title: 'ล้มเหลว',
-                                text: 'เกิดปัญหาขัดข้องทางเทคนิค ขออภัยในความไม่สะดวก',
-                                icon: 'error'
-                            });
-                        }
+                    }else{
+                        Swal.fire({
+                            title: 'ล้มเหลว',
+                            text: 'เกิดปัญหาขัดข้องทางเทคนิค ขออภัยในความไม่สะดวก',
+                            icon: 'error'
+                        });
                     }
                 }
             })
@@ -182,12 +189,26 @@ const RiskEditor = () => {
         }        
     }
 
+    const handleDelete = async (e) => {
+        e.preventDefault();
+        Swal.fire({
+            title: 'ยืนยันการลบข้อมูล',
+                text: 'ยืนยันการลบข้อมูลความเสี่ยง',
+                icon: 'warning',
+                showCancelButton: true,
+        }).then(async confirm => {
+            if(confirm.isConfirmed){
+
+            }
+        });
+    }
+
     return(
         <Container className="p-5">
             <Form onSubmit={handleEdit}>
                 <h5>ข้อมูลความเสี่ยง</h5>
                 <Form.Group>
-                    <Form.Label>รายละเอียดความเสี่ยง</Form.Label>
+                    <Form.Label className="pt-3">รายละเอียดความเสี่ยง</Form.Label>
                     <Form.Control 
                         name="detail" 
                         type="text" 
@@ -197,7 +218,7 @@ const RiskEditor = () => {
                         value={risk.detail} />
                 </Form.Group>
                 <Form.Group>
-                    <Form.Label>ผู้รายงานความเสี่ยง</Form.Label>
+                    <Form.Label className="pt-3">ผู้รายงานความเสี่ยง</Form.Label>
                     <Form.Control 
                         name="reporter" 
                         type="text" 
@@ -205,7 +226,7 @@ const RiskEditor = () => {
                         value={risk.reporter} />
                 </Form.Group>
                 <Form.Group>
-                    <Form.Label>วันที่รายงานความเสี่ยง</Form.Label>
+                    <Form.Label className="pt-3">วันที่รายงานความเสี่ยง</Form.Label>
                     <Form.Control 
                         name="report_date" 
                         type="text" 
@@ -221,9 +242,9 @@ const RiskEditor = () => {
                 </div>
             </Form>
             <Form onSubmit={handleEvaluation}>
-                <h5>การประเมินความเสี่ยง</h5>
+                <h5 className="pt-3">การประเมินความเสี่ยง</h5>
                 <Form.Group>
-                    <Form.Label>การประเมินความเสี่ยง</Form.Label>
+                    <Form.Label className="pt-3">การประเมินความเสี่ยง</Form.Label>
                     <Form.Control 
                         name="feedback" 
                         type="text" 
@@ -233,7 +254,7 @@ const RiskEditor = () => {
                         value={risk.feedback} />
                 </Form.Group>
                 <Form.Group>
-                    <Form.Label>ผู้ประเมินความเสี่ยง</Form.Label>
+                    <Form.Label className="pt-3">ผู้ประเมินความเสี่ยง</Form.Label>
                     <Form.Control 
                         name="report_date" 
                         type="text" 
@@ -241,7 +262,7 @@ const RiskEditor = () => {
                         value={risk.assessor} />
                 </Form.Group>
                 <Form.Group>
-                    <Form.Label>วันที่ประเมินความเสี่ยง</Form.Label>
+                    <Form.Label className="pt-3">วันที่ประเมินความเสี่ยง</Form.Label>
                     <Form.Control 
                         name="eval_date" 
                         type="text" 
@@ -256,6 +277,22 @@ const RiskEditor = () => {
                     </Button>
                 </div>
             </Form>
+            <Form.Group>
+                    <Form.Label className="pt-3">วันที่ปรับปรุงข้อมูลล่าสุด</Form.Label>
+                    <Form.Control 
+                        name="eval_date" 
+                        type="text" 
+                        disabled 
+                        value={dateToDateTime(risk.latest_update_date)} />
+                </Form.Group>
+            <div className="d-grid mt-3">
+                    <Button 
+                        className="btn-danger" 
+                        disabled={disabledDeleteBtn()}
+                        onClick={handleDelete}>
+                        ลบข้อมูลความเสี่ยง
+                    </Button>
+                </div>
         </Container>
     );
 };

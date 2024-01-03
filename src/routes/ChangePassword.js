@@ -19,7 +19,7 @@ async function changePassword(input){
 
 const ChangePassword = () => {
     const user = JSON.parse(sessionStorage.getItem('user'));
-    const [input, setInput] = useState([]);
+    const [input, setInput] = useState({username: user.username});
 
     // อัปเดต input
     const handleChange = (e) => {
@@ -43,18 +43,19 @@ const ChangePassword = () => {
             })
             if(response.status === '201'){
                 Swal.fire({
-                    title: 'Success',
-                    text: 'ดำเนินการเพิ่มข้อมูลผู้ใช้แล้ว',
+                    title: 'สำเร็จ',
+                    text: response.message,
                     icon: 'success',
                     showConfirmButton: false,
                     timer: 2000
-                })/*.then(() => {
-                    window.location.href = '/admin/users';
-                })*/
+                }).then(() => {
+                    sessionStorage.removeItem("user");
+                    window.location.href = '/';
+                })
             }else{
                 Swal.fire({
                     title: 'ล้มเหลว',
-                    text: 'เกิดปัญหาขัดข้องทางเทคนิค ขออภัยในความไม่สะดวก',
+                    text: response.message,
                     icon: 'error',
                 })
             }  
@@ -101,7 +102,7 @@ const ChangePassword = () => {
                     <Form.Control 
                         type="text"
                         name="username"
-                        value={user.username}
+                        value={input.username}
                         disabled />
                 </Form.Group>
                 <Form.Group>
