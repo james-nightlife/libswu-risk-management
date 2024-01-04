@@ -109,7 +109,6 @@ const RiskReport = () => {
                         บันทึก
                     </Button>
                 </div>
-                
             </Form>
         </Container>
     )

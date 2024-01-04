@@ -37,9 +37,7 @@ function ENavbar({user}){
                             </NavDropdown>
                         </Nav> 
                     </Navbar.Collapse>
-                </Container>
-                    
-                    
+                </Container>    
             </Navbar>
         </>
     )

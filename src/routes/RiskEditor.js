@@ -33,6 +33,21 @@ async function evalRisk(input){
     }))
 }
 
+// ส่ง Request เพื่อประเมินความเสี่ยง
+async function deleteRisk(input){
+    return fetch('http://127.0.0.1:9000/delete-risk', {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(input)
+    }).then((data) => (data.json()))
+    .catch((data) => ({
+        'status': 'ok',
+        'message': 'ระบบยืนยันตัวตนมีปัญหาขัดข้องทางเทคนิค ขออภัยในความไม่สะดวก'
+    }))
+}
+
 const RiskEditor = () => {
     const user = JSON.parse(sessionStorage.getItem('user'));
     const id = Number(localStorage.getItem('risk_id'));
@@ -190,6 +205,7 @@ const RiskEditor = () => {
     }
 
     const handleDelete = async (e) => {
+        let response;
         e.preventDefault();
         Swal.fire({
             title: 'ยืนยันการลบข้อมูล',
@@ -198,7 +214,26 @@ const RiskEditor = () => {
                 showCancelButton: true,
         }).then(async confirm => {
             if(confirm.isConfirmed){
-
+                response = await deleteRisk({
+                    id: id,
+                })
+                if(response.status === '201'){
+                    Swal.fire({
+                        title: 'Success',
+                        text: response.message,
+                        icon: 'success',
+                        showConfirmButton: false,
+                        timer: 2000
+                    }).then(() => {
+                        window.location.href = '/';
+                    })
+                }else{
+                    Swal.fire({
+                        title: 'ล้มเหลว',
+                        text: 'เกิดปัญหาขัดข้องทางเทคนิค ขออภัยในความไม่สะดวก',
+                        icon: 'error'
+                    });
+                }
             }
         });
     }
