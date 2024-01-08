@@ -6,7 +6,6 @@ function Layout({user}){
     return(
         <>
             <ENavbar user={user} />
-            <div id="behindnavbar" />
             <Outlet />
         </>
     );

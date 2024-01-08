@@ -12,10 +12,6 @@ code {
     monospace;
 }
 
-#behindnavbar {
-  height: 170px;
-}
-
 ul[role=navigation] {
   margin-bottom: 2rem;
   display: flex;

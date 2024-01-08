@@ -18,7 +18,7 @@ function ENavbar({user}){
 
     return(
         <>
-            <Navbar className="bg-white" fixed="top" expand='sm'>
+            <Navbar className="bg-white" sticky="top" expand='sm'>
                 <Container>
                     <Navbar.Brand href="https://lib.swu.ac.th" className='m-auto'>
                         <img src={logo} height="100" alt="สำนักหอสมุดกลาง มหาวิทยาลัยศรีนครินทรวิโรฒ" />
