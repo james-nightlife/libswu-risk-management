@@ -30,27 +30,36 @@ const RiskReport = () => {
         let response;
         e.preventDefault();
         if(inputs.detail){
-            response = await submitRisk({
-                reporter: user.username,
-                detail: inputs.detail
-            });
-            if(response.status === '201'){
-                Swal.fire({
-                    title: 'Success',
-                    text: 'ดำเนินการเพิ่มข้อมูลความเสี่ยงเรียบร้อยแล้ว',
-                    icon: 'success',
-                    showConfirmButton: false,
-                    timer: 2000
-                }).then(() => {
-                    window.location.href = '/';
-                });
-            }else{
-                Swal.fire({
-                    title: 'ล้มเหลว',
-                    text: 'เกิดปัญหาขัดข้องทางเทคนิค ขออภัยในความไม่สะดวก',
-                    icon: 'error'
-                });
-            }
+            Swal.fire({
+                title: 'ยืนยันการรายงาน',
+                text: 'ยืนยันการรายงานความเสี่ยง',
+                icon: 'warning',
+                showCancelButton: true,
+            }).then(async confirm => {
+                if(confirm.isConfirmed){
+                    response = await submitRisk({
+                        reporter: user.username,
+                        detail: inputs.detail
+                    });
+                    if(response.status === '201'){
+                        Swal.fire({
+                            title: 'Success',
+                            text: 'ดำเนินการเพิ่มข้อมูลความเสี่ยงเรียบร้อยแล้ว',
+                            icon: 'success',
+                            showConfirmButton: false,
+                            timer: 2000
+                        }).then(() => {
+                            window.location.href = '/';
+                        });
+                    }else{
+                        Swal.fire({
+                            title: 'ล้มเหลว',
+                            text: 'เกิดปัญหาขัดข้องทางเทคนิค ขออภัยในความไม่สะดวก',
+                            icon: 'error'
+                        });
+                    }
+                }
+            })     
         }else{
             Swal.fire({
                 title: 'ล้มเหลว',

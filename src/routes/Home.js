@@ -27,7 +27,7 @@ const Home = () => {
     }
 
     // Pagination
-    const itemsPerPage = 5;
+    const itemsPerPage = 10;
     const [itemOffset, setItemOffset] = useState(0);
     const endOffset = itemOffset + itemsPerPage;
     const currentItems = risks.slice(itemOffset, endOffset);
@@ -45,7 +45,7 @@ const Home = () => {
     }
 
     return(
-        <Container className='p-5'>
+        <Container className='px-5 py-3'>
             <Table responsive>
                 <thead>
                     <tr>
