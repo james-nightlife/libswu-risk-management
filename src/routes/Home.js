@@ -10,7 +10,7 @@ import ReactPaginate from "react-paginate";
 
 
 const Home = () => {
-    const user = JSON.parse(sessionStorage.getItem('user'))
+    // const user = JSON.parse(sessionStorage.getItem('user'))
     const [risks, setRisks] = useState([]);
     
     useEffect(() => {
@@ -22,7 +22,7 @@ const Home = () => {
             method: "GET",
         }).then((data) => (data.json()))
         .then(async (data) => {
-            await setRisks(data.data)
+            await setRisks(data.data.sort((a, b) => b.id - a.id))
         }).catch();
     }
 
@@ -51,8 +51,10 @@ const Home = () => {
                     <tr>
                         <th>ID</th>
                         <th>รายละเอียด</th>
+                        <th>สถานที่แจ้ง</th>
                         <th>ผู้แจ้ง</th>
                         <th>วันที่รายงาน</th>
+                        <th>สถานะการดำเนินการ</th>
                         <th>จัดการ</th>
                     </tr>
                 </thead>
@@ -61,8 +63,10 @@ const Home = () => {
                         <tr key={idx}>  
                             <td className="align-middle">{data.id}</td>
                             <td className="align-middle">{data.detail}</td>
+                            <td className="align-middle">{data.location}</td>
                             <td className="align-middle">{data.reporter}</td>
                             <td className="align-middle">{dateToDateTime(data.report_date)}</td>
+                            <td className="align-middle">{data.status}</td>
                             <td className="align-middle"><Button onClick={e => riskEditorRoute(e, data.id)}>แก้ไข/ประเมิน</Button></td>
                         </tr> 
                     ))}

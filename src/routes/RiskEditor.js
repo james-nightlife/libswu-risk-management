@@ -5,7 +5,7 @@ import Swal from "sweetalert2";
 
 // ส่ง Request เพื่อแก้ไขข้อมูลความเสี่ยง
 async function editRisk(input){
-    return fetch('http://127.0.0.1:9000/edit-risk', {
+    return fetch('http://127.0.0.1:9000/update-risk', {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -13,8 +13,8 @@ async function editRisk(input){
         body: JSON.stringify(input)
     }).then((data) => (data.json()))
     .catch((data) => ({
-        'status': 'ok',
-        'message': 'ระบบยืนยันตัวตนมีปัญหาขัดข้องทางเทคนิค ขออภัยในความไม่สะดวก'
+        status: 'ok',
+        message: 'ระบบยืนยันตัวตนมีปัญหาขัดข้องทางเทคนิค ขออภัยในความไม่สะดวก'
     }))
 }
 
@@ -119,7 +119,9 @@ const RiskEditor = () => {
     const handleEdit = async (e) => {
         let response;
         e.preventDefault();
-        if(risk.detail){
+        if(risk.detail &&
+            risk.location &&
+            risk.location !== '0'){
             Swal.fire({
                 title: 'ยืนยันการแก้ไข',
                 text: 'ยืนยันการแก้ไขข้อมูลความเสี่ยง',
@@ -129,12 +131,13 @@ const RiskEditor = () => {
                 if(confirm.isConfirmed){
                     response = await editRisk({
                         id: id,
-                        detail: risk.detail
+                        detail: risk.detail,
+                        location: risk.location,
                     })
                     if(response.status === '201'){
                         Swal.fire({
                             title: 'Success',
-                            text: 'ดำเนินการแก้ไขข้อมูลความเสี่ยงเรียบร้อยแล้ว',
+                            text: response.message,
                             icon: 'success',
                             showConfirmButton: false,
                             timer: 2000
@@ -144,7 +147,7 @@ const RiskEditor = () => {
                     }else{
                         Swal.fire({
                             title: 'ล้มเหลว',
-                            text: 'เกิดปัญหาขัดข้องทางเทคนิค ขออภัยในความไม่สะดวก',
+                            text: response.message,
                             icon: 'error',
                         })
                     }    
@@ -241,7 +244,7 @@ const RiskEditor = () => {
     return(
         <Container className="p-5">
             <Form onSubmit={handleEdit}>
-                <h5>ข้อมูลความเสี่ยง</h5>
+                <h5>รายงานความเสี่ยง</h5>
                 <Form.Group>
                     <Form.Label className="pt-3">รายละเอียดความเสี่ยง</Form.Label>
                     <Form.Control 
@@ -251,6 +254,17 @@ const RiskEditor = () => {
                         onChange={handleChange}
                         disabled={reporterEdit()}
                         value={risk.detail} />
+                </Form.Group>
+                <Form.Group className="mt-3">
+                    <Form.Label>สถานที่แจ้งความเสี่ยง</Form.Label>
+                    <Form.Select 
+                        name="location" 
+                        value={'' || risk.location}
+                        onChange={handleChange}>
+                        <option value='0'>-- สถานที่ --</option>
+                        <option>ประสานมิตร</option>
+                        <option>องครักษ์</option>
+                    </Form.Select>
                 </Form.Group>
                 <Form.Group>
                     <Form.Label className="pt-3">ผู้รายงานความเสี่ยง</Form.Label>

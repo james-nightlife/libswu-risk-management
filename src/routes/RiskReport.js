@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { Button, Container, Form, FormLabel } from "react-bootstrap";
+import { Button, Container, Form } from "react-bootstrap";
 import Swal from "sweetalert2";
 
 async function submitRisk(input){
     return fetch('http://127.0.0.1:9000/insert-risk', {
-        method: "POST",
+        method: "PUT",
         headers: {
             "Content-Type": "application/json"
         },
@@ -29,7 +29,9 @@ const RiskReport = () => {
     const handleSubmit = async (e) => {
         let response;
         e.preventDefault();
-        if(inputs.detail){
+        if(inputs.detail &&
+            inputs.location &&
+            inputs.location !== '0'){
             Swal.fire({
                 title: 'ยืนยันการรายงาน',
                 text: 'ยืนยันการรายงานความเสี่ยง',
@@ -39,7 +41,8 @@ const RiskReport = () => {
                 if(confirm.isConfirmed){
                     response = await submitRisk({
                         reporter: user.username,
-                        detail: inputs.detail
+                        detail: inputs.detail, 
+                        location: inputs.location
                     });
                     if(response.status === '201'){
                         Swal.fire({
@@ -71,47 +74,27 @@ const RiskReport = () => {
 
     return(
         <Container className="p-5">
+            <h1>รายงานความเสี่ยง</h1>
             <Form onSubmit={handleSubmit}>
-                <Form.Group>
-                    <FormLabel>บัวศรีไอดี</FormLabel>
-                    <Form.Control 
-                    name="reporter"
-                    type="text" 
-                    value={user.username} 
-                    disabled />
-                </Form.Group>
                 <Form.Group className="mt-3">
-                    <FormLabel>ชื่อ</FormLabel>
-                    <Form.Control 
-                    name="name" 
-                    type="text" 
-                    value={user.name} 
-                    disabled />
-                </Form.Group>
-                <Form.Group className="mt-3">
-                    <FormLabel>รหัสบุคลากร / นิสิต</FormLabel>
-                    <Form.Control 
-                    name="uni_id" 
-                    type="text" 
-                    value={user.uni_id} 
-                    disabled />
-                </Form.Group>
-                <Form.Group className="mt-3">
-                    <FormLabel>ส่วนงาน</FormLabel>
-                    <Form.Control 
-                    name="faculty" 
-                    type="text" 
-                    value={user.faculty} 
-                    disabled />
-                </Form.Group>
-                <Form.Group className="mt-3">
-                    <FormLabel>รายละเอียดความเสี่ยง</FormLabel>
+                    <Form.Label>รายละเอียดความเสี่ยง</Form.Label>
                     <Form.Control 
                     name="detail" 
                     type="text" 
                     as="textarea"
                     value={'' || inputs.detail}
                     onChange={handleChange} />
+                </Form.Group>
+                <Form.Group className="mt-3">
+                    <Form.Label>สถานที่แจ้งความเสี่ยง</Form.Label>
+                    <Form.Select 
+                        name="location" 
+                        value={'' || inputs.location}
+                        onChange={handleChange}>
+                        <option value='0'>-- สถานที่ --</option>
+                        <option>ประสานมิตร</option>
+                        <option>องครักษ์</option>
+                    </Form.Select>
                 </Form.Group>
                 <div className="d-grid mt-3">
                     <Button type="submit">
