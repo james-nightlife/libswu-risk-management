@@ -16,7 +16,7 @@ const UserManager = () => {
     }, []);
 
     const fetchData = async () => {
-        await fetch('http://127.0.0.1:9000/users', {
+        await fetch(`${process.env.REACT_APP_SERVER}/users`, {
             method: "GET",
         }).then((data) => (data.json()))
         .then((data) => {
@@ -25,7 +25,7 @@ const UserManager = () => {
     }
 
     // Pagination
-    const itemsPerPage = 5;
+    const itemsPerPage = 10;
     const [itemOffset, setItemOffset] = useState(0);
     const endOffset = itemOffset + itemsPerPage;
     const currentItems = users.slice(itemOffset, endOffset);
@@ -43,7 +43,7 @@ const UserManager = () => {
     }
 
     return(
-        <Container className='p-5'>
+        <Container className='p-3'>
             <Row>
                 <Col>
                     <div className="d-grid">

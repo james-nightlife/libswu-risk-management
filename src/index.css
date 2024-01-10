@@ -1,4 +1,4 @@
-body {
+/* body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -11,6 +11,20 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+*/
+
+body {
+  font-family: 'Srinakharinwirot' !important;
+}
+
+th {
+  font-weight: normal !important;
+}
+td, input, option, select,textarea {
+  font-family: 'Sarabun' !important;
+}
+
 
 ul[role=navigation] {
   margin-bottom: 2rem;
@@ -44,4 +58,19 @@ ul[role=navigation] li.disabled a {
 ul[role=navigation] li.disable,
 ul[role=navigation] li.disabled a {
   cursor: default;
+}
+
+
+@font-face {
+  font-family: 'Srinakharinwirot';
+  src: local('Srinakharinwirot'), url(./fonts/srinakharinwirot-regular.woff) format('woff');
+  /* other formats include: 'woff2', 'truetype, 'opentype',
+                            'embedded-opentype', and 'svg' */
+}
+
+@font-face {
+  font-family: 'Sarabun';
+  src: local('Sarabun'), url(./fonts/Sarabun-Regular.ttf) format('truetype');
+  /* other formats include: 'woff2', 'truetype, 'opentype',
+                            'embedded-opentype', and 'svg' */
 }

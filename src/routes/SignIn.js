@@ -8,7 +8,8 @@ import logo from '../components/SWU_Central_Library_TH_Color.png';
 
 /* รับ username และ password ส่งให้ api ตรวจสอบบัญชีผู้ใช้ */
 async function loginUser(credentials){
-    return fetch('http://127.0.0.1:9000/auth', {
+    console.log(`${process.env.REACT_APP_SERVER}/auth`);
+    return fetch(`${process.env.REACT_APP_SERVER}/auth`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -17,7 +18,7 @@ async function loginUser(credentials){
     }).then((data) => (data.json()))
     .catch((data) => (({
         'status': 'ok',
-        'message': 'ระบบยืนยันตัวตนมีปัญหาขัดข้องทางเทคนิค ขออภัยในความไม่สะดวก'
+        'message': `${process.env.SERVER} ระบบยืนยันตัวตนมีปัญหาขัดข้องทางเทคนิค ขออภัยในความไม่สะดวก`
     })))
 }
 

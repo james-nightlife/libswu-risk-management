@@ -2,7 +2,8 @@ import { Container, Nav, NavDropdown, Navbar } from "react-bootstrap";
 import logo from './SWU_Central_Library_TH_Color.png';
 import './web.css';
 
-function ENavbar({user}){
+function ENavbar(){
+    const user = JSON.parse(sessionStorage.getItem('user'))
     const name = user['name'];
     var adminNav;
 
@@ -23,7 +24,7 @@ function ENavbar({user}){
                     <Navbar.Brand href="https://lib.swu.ac.th" className='m-auto'>
                         <img src={logo} height="100" alt="สำนักหอสมุดกลาง มหาวิทยาลัยศรีนครินทรวิโรฒ" />
                     </Navbar.Brand>
-                    <Navbar.Brand href="/">ระบบจัดการความเสี่ยง</Navbar.Brand>
+                    <Navbar.Brand href="/">ระบบรวบรวมรายงานความเสี่ยง</Navbar.Brand>
                     <Navbar.Toggle aria-controls="navbarScroll" />
                     <Navbar.Collapse className="justify-content-end">
                         <Nav className="me-auto">

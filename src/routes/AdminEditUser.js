@@ -4,7 +4,7 @@ import Swal from "sweetalert2";
 
 // ส่ง Request เพื่อแก้ไขข้อมูลความเสี่ยง
 async function updateUser(input){
-    return fetch('http://127.0.0.1:9000/update-user', {
+    return fetch(`${process.env.REACT_APP_SERVER}/update-user`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -93,7 +93,7 @@ const AdminEditUser = () => {
 
     // ดึงข้อมูลความเสี่ยง (datatype id ความเสี่ยงต้องเป็น number)
     const fetchRiskData = async () => {
-        await fetch('http://127.0.0.1:9000/get-user', {
+        await fetch(`${process.env.REACT_APP_SERVER}/get-user`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -116,7 +116,7 @@ const AdminEditUser = () => {
     
 
     return(
-        <Container className="p-5">
+        <Container className="p-3">
             <Form onSubmit={handleSubmit}>
                 <Form.Group>
                     <Form.Label>บัวศรีไอดี</Form.Label>

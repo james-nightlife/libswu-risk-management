@@ -5,7 +5,7 @@ import '../App.css';
 function Layout({user}){
     return(
         <>
-            <ENavbar user={user} />
+            <ENavbar />
             <Outlet />
         </>
     );

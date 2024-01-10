@@ -3,7 +3,7 @@ import { Button, Container, Form } from "react-bootstrap";
 import Swal from "sweetalert2";
 
 async function submitRisk(input){
-    return fetch('http://127.0.0.1:9000/insert-risk', {
+    return fetch(`${process.env.REACT_APP_SERVER}/insert-risk`, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json"

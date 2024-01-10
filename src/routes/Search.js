@@ -9,14 +9,14 @@ import { dateToDateTime } from '../components/Simple';
 import ReactPaginate from "react-paginate";
 
 
-const Home = () => {
+const Search = () => {
     // const user = JSON.parse(sessionStorage.getItem('user'))
 
     /* ตารางรายงานความเสี่ยง */
     const [risks, setRisks] = useState([]);
 
     const fetchData = async () => {
-        await fetch(`${process.env.REACT_APP_SERVER}/risks`, {
+        await fetch('http://127.0.0.1:9000/risks', {
             method: "GET",
         }).then((data) => (data.json()))
         .then(async (data) => {
@@ -48,7 +48,8 @@ const Home = () => {
     };
 
     /* ช่องค้นหา */
-    const [inputs, setInputs] = useState({});
+    const [inputs, setInputs] = useState(JSON.parse(localStorage.getItem('search-query')));
+
     const handleChange = (e) => {
         const name = e.target.name;
         const value = e.target.value;
@@ -60,58 +61,9 @@ const Home = () => {
         localStorage.setItem('search-query', JSON.stringify(inputs));
         window.location.href = "/search"
     }
-    
+
     return(
-        <Container className='p-3'>
-            <Container>
-                <h1 className='text-center' >จำนวนรายงานความเสี่ยงทั้งหมด {risks.length} เรื่อง</h1>
-                <Row>
-                    <Col xl={6} className="mt-3">
-                        <Table>
-                            <thead>
-                                <tr>
-                                    <th>สถานที่</th>
-                                    <th>จำนวน (เรื่อง)</th>
-                                </tr>                  
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>ประสานมิตร</td>
-                                    <td>{risks.filter((obj) => obj.location === 'ประสานมิตร').length}</td>
-                                </tr>
-                                <tr>
-                                    <td>องครักษ์</td>
-                                    <td>{risks.filter((obj) => obj.location === 'องครักษ์').length}</td>
-                                </tr>
-                            </tbody>
-                        </Table>
-                    </Col>
-                    <Col xl={6} className="mt-3">
-                        <Table>
-                            <thead>
-                                <tr>
-                                    <th>สถานะ</th>
-                                    <th>จำนวน (เรื่อง)</th>
-                                </tr>                  
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>รอดำเนินการ</td>
-                                    <td>{risks.filter((obj) => obj.status === 'รอดำเนินการ').length}</td>
-                                </tr>
-                                <tr>
-                                    <td>อยู่ระหว่างการดำเนินการ</td>
-                                    <td>{risks.filter((obj) => obj.status === 'อยู่ระหว่างการดำเนินการ').length}</td>
-                                </tr>
-                                <tr>
-                                    <td>ดำเนินการแล้วเสร็จ</td>
-                                    <td>{risks.filter((obj) => obj.status === 'ดำเนินการแล้วเสร็จ').length}</td>
-                                </tr>
-                            </tbody>
-                        </Table>
-                    </Col>
-                </Row>   
-            </Container>
+        <Container className='px-5 py-3'>
             <Form onSubmit={handleFind}>
                 <Row>
                     <Col xl={9} className="mt-3">
@@ -219,4 +171,4 @@ const Home = () => {
         </Container>
     );
 }
-export default Home;
+export default Search;
