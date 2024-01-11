@@ -14,19 +14,24 @@ const Home = () => {
 
     /* ตารางรายงานความเสี่ยง */
     const [risks, setRisks] = useState([]);
+    const [raw, setRaw] = useState([]);
 
     const fetchData = async () => {
         await fetch(`${process.env.REACT_APP_SERVER}/risks`, {
             method: "GET",
         }).then((data) => (data.json()))
         .then(async (data) => {
-            await setRisks(data.data.sort((a, b) => b.id - a.id))
+            await setRaw(data.data.sort((a, b) => b.id - a.id));
         }).catch();
     }
     
     useEffect(() => {
         fetchData();
     }, []);
+
+    useEffect(() => {
+        setRisks(raw);
+    }, [raw])
 
 
     const riskEditorRoute = (e, id) => {
@@ -55,16 +60,59 @@ const Home = () => {
         setInputs(values => ({...values, [name]: value}));
     }
 
+    const filterLocation = () => {
+
+    }
+
     const handleFind = async (e) => {
-        e.preventDefault();
-        localStorage.setItem('search-query', JSON.stringify(inputs));
-        window.location.href = "/search"
+        e.preventDefault()
+        console.log(inputs)
+        var result = raw.filter(obj => {
+            const locationFilter = (
+                (obj.location === inputs.location) ||
+                (inputs.location === '') ||
+                (!inputs.location)
+            );
+            const statusFilter = (
+                (obj.status === inputs.status) 
+                || (inputs.status === '') 
+                || (!inputs.status)
+            );
+            const firstDateFilter = (
+                (new Date(obj.report_date).getTime() >= new Date(inputs.firstdate).getTime()) ||
+                (inputs.firstdate === '') || 
+                (!inputs.firstdate)
+            );
+            const lastDateFilter = (
+                (new Date(obj.report_date).getTime() <= new Date(`${inputs.enddate} 23:59:59`).getTime()) ||
+                (inputs.enddate === '') || 
+                (!inputs.enddate)
+            );
+            var keywordFilter = true;
+            if(inputs.keyword){
+                keywordFilter = (
+                    (obj.detail.toLowerCase().indexOf(inputs.keyword.toLowerCase()) !== -1) || 
+                    (obj.reporter.toLowerCase().indexOf(inputs.keyword.toLowerCase()) !== -1) ||
+                    (inputs.keyword === '') || 
+                    !inputs.keyword);
+            }
+            if(locationFilter && 
+                statusFilter && 
+                firstDateFilter && 
+                lastDateFilter && 
+                keywordFilter){
+                return true
+            }else{
+                return false
+            }
+        });
+        setRisks(result);
     }
     
     return(
         <Container className='p-3'>
             <Container>
-                <h1 className='text-center' >จำนวนรายงานความเสี่ยงทั้งหมด {risks.length} เรื่อง</h1>
+                <h1 className='text-center' >จำนวนรายงานความเสี่ยงทั้งหมด {raw.length} เรื่อง</h1>
                 <Row>
                     <Col xl={6} className="mt-3">
                         <Table>
@@ -77,11 +125,11 @@ const Home = () => {
                             <tbody>
                                 <tr>
                                     <td>ประสานมิตร</td>
-                                    <td>{risks.filter((obj) => obj.location === 'ประสานมิตร').length}</td>
+                                    <td>{raw.filter((obj) => obj.location === 'ประสานมิตร').length}</td>
                                 </tr>
                                 <tr>
                                     <td>องครักษ์</td>
-                                    <td>{risks.filter((obj) => obj.location === 'องครักษ์').length}</td>
+                                    <td>{raw.filter((obj) => obj.location === 'องครักษ์').length}</td>
                                 </tr>
                             </tbody>
                         </Table>
@@ -97,15 +145,15 @@ const Home = () => {
                             <tbody>
                                 <tr>
                                     <td>รอดำเนินการ</td>
-                                    <td>{risks.filter((obj) => obj.status === 'รอดำเนินการ').length}</td>
+                                    <td>{raw.filter((obj) => obj.status === 'รอดำเนินการ').length}</td>
                                 </tr>
                                 <tr>
                                     <td>อยู่ระหว่างการดำเนินการ</td>
-                                    <td>{risks.filter((obj) => obj.status === 'อยู่ระหว่างการดำเนินการ').length}</td>
+                                    <td>{raw.filter((obj) => obj.status === 'อยู่ระหว่างการดำเนินการ').length}</td>
                                 </tr>
                                 <tr>
                                     <td>ดำเนินการแล้วเสร็จ</td>
-                                    <td>{risks.filter((obj) => obj.status === 'ดำเนินการแล้วเสร็จ').length}</td>
+                                    <td>{raw.filter((obj) => obj.status === 'ดำเนินการแล้วเสร็จ').length}</td>
                                 </tr>
                             </tbody>
                         </Table>
@@ -144,7 +192,7 @@ const Home = () => {
                     </Col>
                     <Col xl={3} className="mt-3">
                         <Form.Group>
-                            <Form.Label>วันเริ่มต้น</Form.Label>
+                            <Form.Label>วันสิ้นสุด</Form.Label>
                             <Form.Control
                                 type="date"
                                 name="enddate"
