@@ -68,7 +68,7 @@ const SignIn = () => {
     }
     
     return(
-        <Container className="p-5">
+        <Container className="p-3">
             <div className="text-center p-3">
                 <img src={logo} height="100" alt="สำนักหอสมุดกลาง มหาวิทยาลัยศรีนครินทรวิโรฒ" />
             </div>
