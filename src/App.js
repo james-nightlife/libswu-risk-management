@@ -1,4 +1,3 @@
-import './App.css';
 import { BrowserRouter, Route, Routes} from 'react-router-dom';
 import ErrorPage from './error-page';
 import Home from './routes/Home';
@@ -10,6 +9,7 @@ import RiskEditor from './routes/RiskEditor';
 import AdminAddUser from './routes/AdminAddUser';
 import ChangePassword from './routes/ChangePassword';
 import AdminEditUser from './routes/AdminEditUser';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   var user = sessionStorage.getItem('user');

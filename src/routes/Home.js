@@ -1,9 +1,4 @@
-import "react-multi-carousel/lib/styles.css";
-
-//import '../App.css';
-import '../index.css';
 import { Button, Col, Container, Form, Row, Table } from 'react-bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import { useEffect, useState } from 'react';
 import { dateToDateTime } from '../components/Simple';
 import ReactPaginate from "react-paginate";

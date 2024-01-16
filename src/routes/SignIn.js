@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { Button, Container, Form } from "react-bootstrap";
 import Swal from "sweetalert2";
-
-import 'bootstrap/dist/css/bootstrap.min.css';
 import logo from '../components/SWU_Central_Library_TH_Color.png';
 
 
