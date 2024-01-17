@@ -12,11 +12,15 @@ const Home = () => {
     const [raw, setRaw] = useState([]);
 
     const fetchData = async () => {
-        await fetch(`${process.env.REACT_APP_SERVER}/risks`, {
+        await fetch(`${process.env.REACT_APP_SERVER}/risk/record`, {
             method: "GET",
         }).then((data) => (data.json()))
-        .then(async (data) => {
-            await setRaw(data.data.sort((a, b) => b.id - a.id));
+
+        .then((data) => {
+            if(data.length > 0){
+                setRaw(data.sort((a, b) => b.reoort_date - a.report_date));
+            }
+            
         }).catch();
     }
     
@@ -239,13 +243,13 @@ const Home = () => {
                 <tbody>
                     {currentItems && currentItems.map((data, idx) => (               
                         <tr key={idx}>  
-                            <td className="align-middle">{data.id}</td>
+                            <td className="align-middle">{idx+1}</td>
                             <td className="align-middle">{data.detail}</td>
                             <td className="align-middle">{data.location}</td>
                             <td className="align-middle">{data.reporter}</td>
                             <td className="align-middle">{dateToDateTime(data.report_date)}</td>
                             <td className="align-middle">{data.status}</td>
-                            <td className="align-middle"><Button onClick={e => riskEditorRoute(e, data.id)}>แก้ไข/ประเมิน</Button></td>
+                            <td className="align-middle"><Button onClick={e => riskEditorRoute(e, data._id)}>แก้ไข/ประเมิน</Button></td>
                         </tr> 
                     ))}
                 </tbody>

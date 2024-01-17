@@ -1,21 +1,7 @@
 import { useEffect, useState } from "react";
 import { Button, Container, Form } from "react-bootstrap";
 import Swal from "sweetalert2";
-
-// ส่ง Request เพื่อแก้ไขข้อมูลความเสี่ยง
-async function updateUser(input){
-    return fetch(`${process.env.REACT_APP_SERVER}/update-user`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(input)
-    }).then((data) => (data.json()))
-    .catch((data) => ({
-        'status': 'ok',
-        'message': 'ระบบยืนยันตัวตนมีปัญหาขัดข้องทางเทคนิค ขออภัยในความไม่สะดวก'
-    }))
-}
+import { updateUser } from "../components/RequestProcess";
 
 const AdminEditUser = () => {
     const [input, setInput] = useState([]);
@@ -31,15 +17,14 @@ const AdminEditUser = () => {
     const handleSubmit = async (e) => {
         let response;
         e.preventDefault();
-        console.log(input);
-        if(input.username &&
+        if(input.username && /*
            input.uni_id &&
            input.name &&
            input.faculty &&
-           input.status &&
-           input.role &&
+           input.status && */
+           input.role && /*
            input.faculty !== '0' &&
-           input.status !== '0' &&
+           input.status !== '0' && */
            input.role !== '0' ){
             Swal.fire({
                 title: 'ยืนยันการแก้ไข',
@@ -54,19 +39,27 @@ const AdminEditUser = () => {
                 showCancelButton: true,
             }).then(async confirm =>  {
                 if(confirm.isConfirmed){
-                    response = await updateUser({
-                        username: input.username,
-                        password: input.password,
-                        uni_id: input.uni_id,
-                        name: input.name,
-                        faculty: input.faculty,
-                        status: input.status,
-                        role: input.role
-                    })
-                    if(response.status === '201'){
+                    if(input.password){
+                        response = await updateUser({
+                            username: input.username,
+                            password: input.password, /*
+                            uni_id: input.uni_id,
+                            name: input.name,
+                            faculty: input.faculty,
+                            status: input.status, */
+                            role: input.role
+                        }, user, token)
+                    }else{
+                        response = await updateUser({
+                            username: input.username,
+                            role: input.role,
+                        }, user, token)
+                    }
+                    console.log(response)
+                    if(response.status === 200){
                         Swal.fire({
-                            title: 'Success',
-                            text: response.message,
+                            title: 'สำเร็จ',
+                            text: 'ดำเนินการแก้ไขข้อมูลผู้ใช้เรียบร้อยแล้ว',
                             icon: 'success',
                             showConfirmButton: false,
                             timer: 2000
@@ -91,19 +84,23 @@ const AdminEditUser = () => {
         }    
     }
 
+    const user = localStorage.getItem('edit_username');
+    const token = sessionStorage.getItem('token')
+
     // ดึงข้อมูลความเสี่ยง (datatype id ความเสี่ยงต้องเป็น number)
     const fetchRiskData = async () => {
-        await fetch(`${process.env.REACT_APP_SERVER}/get-user`, {
-            method: "POST",
+        await fetch(`${process.env.REACT_APP_SERVER}/user/record/${user}`, {
+            method: "GET",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                'lib-token': token
             },
-            body: JSON.stringify({
-                username: localStorage.getItem('edit_username')
-            })
         }).then((data) => (data.json()))
         .then((data) => {
-            setInput(data.user);    
+            setInput({
+                username: data.username,
+                role: data.role
+            });    
         }).catch((error) => {
             console.error('Error fetching risk data:', error);
         });
@@ -135,6 +132,7 @@ const AdminEditUser = () => {
                         onChange={handleChange}
                         value={input.password} />
                 </Form.Group>
+                {/*
                 <Form.Group>
                     <Form.Label>เลขประจำตัวบุคลากร / นิสิต</Form.Label>
                     <Form.Control
@@ -203,6 +201,7 @@ const AdminEditUser = () => {
                         <option>นิสิต</option>
                     </Form.Select>
                 </Form.Group>
+    */}
                 <Form.Group>
                     <Form.Label>สถานะการใช้งาน</Form.Label>
                     <Form.Select

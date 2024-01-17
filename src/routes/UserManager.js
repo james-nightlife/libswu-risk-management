@@ -4,8 +4,9 @@ import ReactPaginate from "react-paginate";
 import '../index.css';
 
 const UserManager = () => {
-    const session = JSON.parse(sessionStorage.getItem('user'));
-    if(session.role !== 'admin'){
+    const role = sessionStorage.getItem('role');
+    const token = sessionStorage.getItem('token');
+    if(role !== 'admin'){
         window.location.href = "/";
     }
 
@@ -16,11 +17,14 @@ const UserManager = () => {
     }, []);
 
     const fetchData = async () => {
-        await fetch(`${process.env.REACT_APP_SERVER}/users`, {
+        await fetch(`${process.env.REACT_APP_SERVER}/user/record`, {
             method: "GET",
+            headers: {
+                'lib-token': token,
+            }
         }).then((data) => (data.json()))
         .then((data) => {
-            setUsers(data.data)
+            setUsers(data)
         }).catch();
     }
 
@@ -62,8 +66,6 @@ const UserManager = () => {
                     <tr>
                         <th>ID</th>
                         <th>Username</th>
-                        <th>ชื่อ - สกุล</th>
-                        <th>ส่วนงาน</th>
                         <th>สิทธิ์ใช้งาน</th>
                         <th>จัดการ</th>
                     </tr>
@@ -73,10 +75,8 @@ const UserManager = () => {
                         <tr key={idx+itemOffset+1}>
                             <td>{idx+itemOffset+1}</td>
                             <td>{data.username}</td>
-                            <td>{data.name}</td>
-                            <td>{data.faculty}</td>
                             <td>{data.role}</td>
-                            <td className="align-middle"><Button onClick={e => handleEditButton(e, data.username)}>แก้ไข</Button></td>
+                            <td className="align-middle"><Button onClick={e => handleEditButton(e, data._id)}>แก้ไข</Button></td>
                         </tr>
                     ))}
                 </tbody>

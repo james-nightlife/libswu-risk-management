@@ -3,16 +3,18 @@ import logo from './SWU_Central_Library_TH_Color.png';
 import './web.css';
 
 function ENavbar(){
-    const user = JSON.parse(sessionStorage.getItem('user'))
-    const name = user['name'];
+    const username = sessionStorage.getItem('username');
+    const role = sessionStorage.getItem('role');
     var adminNav;
 
     const handleLogout = () => {
-        sessionStorage.removeItem("user");
+        sessionStorage.removeItem("username");
+        sessionStorage.removeItem("token");
+        sessionStorage.removeItem("role");
         window.location.href = "/";
     };
 
-    if(user.role === 'admin'){
+    if(role === 'admin'){
         adminNav = <Nav.Link href="/admin/users">จัดการผู้ใช้</Nav.Link>;
     }
     
@@ -32,7 +34,7 @@ function ENavbar(){
                             {adminNav}
                         </Nav>   
                         <Nav className="d-flex">
-                            <NavDropdown title={`สวัสดี, ${name}`}>
+                            <NavDropdown title={`สวัสดี, ${username}`}>
                                 <NavDropdown.Item href="/change-password">เปลี่ยนรหัสผ่าน</NavDropdown.Item>
                                 <NavDropdown.Item onClick={handleLogout}>ออกจากระบบ</NavDropdown.Item>
                             </NavDropdown>

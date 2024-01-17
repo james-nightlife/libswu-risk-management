@@ -1,23 +1,11 @@
 import { useState } from "react";
 import { Button, Container, Form } from "react-bootstrap";
 import Swal from "sweetalert2";
-
-async function submitRisk(input){
-    return fetch(`${process.env.REACT_APP_SERVER}/insert-risk`, {
-        method: "PUT",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(input)
-    }).then((data) => (data.json()))
-    .catch((data) => ({
-        'status': 'ok',
-        'message': 'ระบบยืนยันตัวตนมีปัญหาขัดข้องทางเทคนิค ขออภัยในความไม่สะดวก'
-    }))
-}
+import { submitRisk } from "../components/RequestProcess";
 
 const RiskReport = () => {
-    const user = JSON.parse(sessionStorage.getItem('user'));
+    const username = sessionStorage.getItem('username');
+    const token = sessionStorage.getItem('token');
     const [inputs, setInputs] = useState({});
 
     const handleChange = (e) => {
@@ -40,14 +28,14 @@ const RiskReport = () => {
             }).then(async confirm => {
                 if(confirm.isConfirmed){
                     response = await submitRisk({
-                        reporter: user.username,
+                        reporter: username,
                         detail: inputs.detail, 
                         location: inputs.location
-                    });
-                    if(response.status === '201'){
+                    }, token);
+                    if(response.status == 200){
                         Swal.fire({
                             title: 'Success',
-                            text: 'ดำเนินการเพิ่มข้อมูลความเสี่ยงเรียบร้อยแล้ว',
+                            text: response.message,
                             icon: 'success',
                             showConfirmButton: false,
                             timer: 2000
@@ -57,7 +45,7 @@ const RiskReport = () => {
                     }else{
                         Swal.fire({
                             title: 'ล้มเหลว',
-                            text: 'เกิดปัญหาขัดข้องทางเทคนิค ขออภัยในความไม่สะดวก',
+                            text: response.message,
                             icon: 'error'
                         });
                     }

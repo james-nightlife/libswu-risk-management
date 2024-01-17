@@ -2,40 +2,13 @@ import { useEffect, useState } from "react";
 import { Button, Container, Form } from "react-bootstrap";
 import { dateToDateTime } from "../components/Simple";
 import Swal from "sweetalert2";
-
-// ส่ง Request เพื่อแก้ไขข้อมูลความเสี่ยง
-async function updateRisk(input){
-    return fetch(`${process.env.REACT_APP_SERVER}/update-risk`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(input)
-    }).then((data) => (data.json()))
-    .catch((data) => ({
-        status: 'ok',
-        message: 'ระบบยืนยันตัวตนมีปัญหาขัดข้องทางเทคนิค ขออภัยในความไม่สะดวก'
-    }))
-}
-
-// ส่ง Request เพื่อประเมินความเสี่ยง
-async function deleteRisk(input){
-    return fetch(`${process.env.REACT_APP_SERVER}/delete-risk`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(input)
-    }).then((data) => (data.json()))
-    .catch((data) => ({
-        'status': 'ok',
-        'message': 'ระบบยืนยันตัวตนมีปัญหาขัดข้องทางเทคนิค ขออภัยในความไม่สะดวก'
-    }))
-}
+import { deleteRisk, updateRisk } from "../components/RequestProcess";
 
 const RiskEditor = () => {
-    const user = JSON.parse(sessionStorage.getItem('user'));
-    const id = Number(localStorage.getItem('risk_id'));
+    const username = sessionStorage.getItem('username');
+    const id = localStorage.getItem('risk_id');
+    const role = sessionStorage.getItem('role');
+    const token = sessionStorage.getItem('token');
     const [risk, setRisk] = useState([]);
     
     // ดักการลักไก่เข้าหน้าข้อมูลความเสี่ยงผ่าน Url
@@ -45,18 +18,18 @@ const RiskEditor = () => {
 
     // ดึงข้อมูลความเสี่ยง (datatype id ความเสี่ยงต้องเป็น number)
     const fetchRiskData = async () => {
-        await fetch(`${process.env.REACT_APP_SERVER}/get-risk`, {
-            method: "POST",
+        await fetch(`${process.env.REACT_APP_SERVER}/risk/record/${id}`, {
+            method: "GET",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
             },
-            body: JSON.stringify({
-                risk_id: id
-            })
         }).then((data) => (data.json()))
         .then((data) => {
-            setRisk({...data.result, old_status: data.result.status});
-            
+            if(data.status){
+                setRisk({...data, old_status: data.status}); 
+            }else{
+                setRisk({...data, old_status: 'รอดำเนินการ'}); 
+            }
         }).catch((error) => {
             console.error('Error fetching risk data:', error);
         });
@@ -68,7 +41,7 @@ const RiskEditor = () => {
 
     // ผู้รายงานความเสี่ยงสามารถแก้ไขข้อมูลความเสี่ยง
     const reporterEdit = () => {
-        if(user.username === risk.reporter){
+        if(username === risk.reporter){
             return(false)
         }else{
             return(true)
@@ -77,7 +50,7 @@ const RiskEditor = () => {
 
     // admin เป็นผู้ประเมินความเสี่ยง
     const evaluation = () => {
-        if(user.role === 'admin'){
+        if(role === 'admin'){
             return(false)
         }else{
             return(true)
@@ -85,7 +58,7 @@ const RiskEditor = () => {
     }
 
     const disabledDeleteBtn = () => {
-        if(user.role === 'admin' || user.username === risk.reporter){
+        if(role === 'admin' || username === risk.reporter){
             return(false);
         }else{
             return(true);
@@ -115,11 +88,10 @@ const RiskEditor = () => {
             }).then(async confirm =>  {
                 if(confirm.isConfirmed){
                     response = await updateRisk({
-                        id: id,
                         detail: risk.detail,
                         location: risk.location,
-                    })
-                    if(response.status === '201'){
+                    }, id, token)
+                    if(response.status == 200){
                         Swal.fire({
                             title: 'Success',
                             text: response.message,
@@ -155,8 +127,6 @@ const RiskEditor = () => {
         e.preventDefault();
         if(risk.feedback &&
             risk.status){
-            
-
             Swal.fire({
                 title: 'ยืนยันการประเมิน',
                 html: `ยืนยันการประเมินความเสี่ยง<br>
@@ -183,13 +153,12 @@ const RiskEditor = () => {
                         finalized_date = risk.finalized_date;
                     }
                     response = await updateRisk({
-                        id: id,
                         feedback: risk.feedback,
                         status: risk.status,
                         initialized_date: initialized_date,
                         finalized_date: finalized_date,        
-                    })
-                    if(response.status === '201'){
+                    }, id, token)
+                    if(response.status === 200){
                         Swal.fire({
                             title: 'Success',
                             text: response.message,
@@ -222,15 +191,13 @@ const RiskEditor = () => {
         e.preventDefault();
         Swal.fire({
             title: 'ยืนยันการลบข้อมูล',
-                text: 'ยืนยันการลบข้อมูลความเสี่ยง',
-                icon: 'warning',
-                showCancelButton: true,
+            text: 'ยืนยันการลบข้อมูลความเสี่ยง',
+            icon: 'warning',
+            showCancelButton: true,
         }).then(async confirm => {
             if(confirm.isConfirmed){
-                response = await deleteRisk({
-                    id: id,
-                })
-                if(response.status === '201'){
+                response = await deleteRisk(token, id)
+                if(response.status == 200){
                     Swal.fire({
                         title: 'Success',
                         text: response.message,
@@ -263,13 +230,13 @@ const RiskEditor = () => {
                         as="textarea"
                         onChange={handleChange}
                         disabled={reporterEdit() || (risk.old_status === 'ดำเนินการแล้วเสร็จ')}
-                        value={risk.detail} />
+                        value={'' || risk.detail} />
                 </Form.Group>
                 <Form.Group className="mt-3">
                     <Form.Label>สถานที่แจ้งความเสี่ยง</Form.Label>
                     <Form.Select 
                         name="location" 
-                        value={'' || risk.location}
+                        value={0 || risk.location}
                         onChange={handleChange}
                         disabled={reporterEdit() || (risk.old_status === 'ดำเนินการแล้วเสร็จ')}>
                         <option value='0'>-- สถานที่ --</option>
@@ -283,7 +250,7 @@ const RiskEditor = () => {
                         name="reporter" 
                         type="text" 
                         disabled 
-                        value={risk.reporter} />
+                        value={'' || risk.reporter} />
                 </Form.Group>
                 <Form.Group>
                     <Form.Label className="pt-3">วันที่รายงานความเสี่ยง</Form.Label>
@@ -291,7 +258,7 @@ const RiskEditor = () => {
                         name="report_date" 
                         type="text" 
                         disabled 
-                        value={dateToDateTime(risk.report_date)} />
+                        value={'' || dateToDateTime(risk.report_date)} />
                 </Form.Group>
                 <div className="d-grid mt-3">
                     <Button 
@@ -311,7 +278,7 @@ const RiskEditor = () => {
                         as="textarea"
                         disabled={evaluation() || (risk.old_status === 'ดำเนินการแล้วเสร็จ')}
                         onChange={handleChange}
-                        value={risk.feedback} />
+                        value={'' || risk.feedback} />
                 </Form.Group>
                 <Form.Group>
                     <Form.Label className="pt-3">สถานะการดำเนินการ</Form.Label>
@@ -320,7 +287,7 @@ const RiskEditor = () => {
                         type="text" 
                         disabled={evaluation() || (risk.old_status === 'ดำเนินการแล้วเสร็จ')}
                         onChange={handleChange}
-                        value={risk.status}>
+                        value={'รอดำเนินการ' || risk.status}>
                             {(risk.status === 'รอดำเนินการ' || !risk.status) ? <option>รอดำเนินการ</option> : '' }
                             <option>อยู่ระหว่างการดำเนินการ</option>
                             <option>ดำเนินการแล้วเสร็จ</option>
@@ -332,7 +299,7 @@ const RiskEditor = () => {
                         name="initialized_date" 
                         type="text" 
                         disabled 
-                        value={dateToDateTime(risk.initialized_date)} />
+                        value={'' || dateToDateTime(risk.initialized_date)} />
                 </Form.Group>
                 <Form.Group>
                     <Form.Label className="pt-3">วันที่ดำเนินการแล้วเสร็จ</Form.Label>
@@ -340,7 +307,7 @@ const RiskEditor = () => {
                         name="finalized_date" 
                         type="text" 
                         disabled 
-                        value={dateToDateTime(risk.finalized_date)} />
+                        value={'' || dateToDateTime(risk.finalized_date)} />
                 </Form.Group>
                 <div className="d-grid mt-3">
                     <Button 

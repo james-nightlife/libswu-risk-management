@@ -12,19 +12,17 @@ import AdminEditUser from './routes/AdminEditUser';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
-  var user = sessionStorage.getItem('user');
+  var token = sessionStorage.getItem('token');
   var room = localStorage.getItem('room');
 
-  if(!user) {
+  if(!token) {
     return <SignIn />
-  }else{
-    user = JSON.parse(user);
   }
 
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/' element={<Layout user={user} />}>
+        <Route path='/' element={<Layout />}>
           <Route index element={<Home />} />
           <Route path='*' element={<ErrorPage />} />  
           <Route path='/report' element={<RiskReport />} />
