@@ -2,9 +2,13 @@ import { useEffect, useState } from "react";
 import { Button, Container, Form } from "react-bootstrap";
 import Swal from "sweetalert2";
 import { updateUser } from "../components/RequestProcess";
+import UserEditForm from "../forms/UserEditForm";
 
 const AdminEditUser = () => {
+    // Form Input
     const [input, setInput] = useState([]);
+
+    const user = localStorage.getItem('edit_username');
 
     // อัปเดต input
     const handleChange = (e) => {
@@ -12,6 +16,50 @@ const AdminEditUser = () => {
         const value = e.target.value;
         setInput(values => ({...values, [name]: value}));
     }
+
+    useEffect(() => {
+        fetchRiskData();
+    }, []);
+
+    // ดึงข้อมูลความเสี่ยง (datatype id ความเสี่ยงต้องเป็น number)
+    const fetchRiskData = async () => {
+        await fetch(`${process.env.REACT_APP_SERVER}/user/record/${user}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                'lib-token': token
+            },
+        }).then((data) => (data.json()))
+        .then((data) => {
+            setInput({
+                username: data.username,
+                role: data.role
+            });    
+        }).then(() => {
+            
+        })
+        .catch((error) => {
+            console.error('Error fetching risk data:', error);
+        });
+    }
+
+    
+
+
+    const token = sessionStorage.getItem('token')
+    
+    const username = sessionStorage.getItem('username');
+
+    var roleDropdown = false
+
+    //เช็กว่าเป็นแอคของเจ้าของหรือไม่
+
+    if(input.username === username){
+        roleDropdown = true
+    }else{
+        roleDropdown = false
+    }
+
 
     // ตรวจสอบการเพิ่มบัญชีผู้ใช้
     const handleSubmit = async (e) => {
@@ -84,143 +132,15 @@ const AdminEditUser = () => {
         }    
     }
 
-    const user = localStorage.getItem('edit_username');
-    const token = sessionStorage.getItem('token')
+    
 
-    // ดึงข้อมูลความเสี่ยง (datatype id ความเสี่ยงต้องเป็น number)
-    const fetchRiskData = async () => {
-        await fetch(`${process.env.REACT_APP_SERVER}/user/record/${user}`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                'lib-token': token
-            },
-        }).then((data) => (data.json()))
-        .then((data) => {
-            setInput({
-                username: data.username,
-                role: data.role
-            });    
-        }).catch((error) => {
-            console.error('Error fetching risk data:', error);
-        });
-    }
 
-    useEffect(() => {
-        fetchRiskData();
-    }, []);
 
     
 
     return(
         <Container className="p-3">
-            <Form onSubmit={handleSubmit}>
-                <Form.Group>
-                    <Form.Label>บัวศรีไอดี</Form.Label>
-                    <Form.Control 
-                        type="text" 
-                        name="username"  
-                        onChange={handleChange} 
-                        value={input.username}
-                        disabled />
-                </Form.Group>
-                <Form.Group>
-                    <Form.Label>รหัสผ่าน</Form.Label>
-                    <Form.Control 
-                        type="password"
-                        name="password"
-                        onChange={handleChange}
-                        value={input.password} />
-                </Form.Group>
-                {/*
-                <Form.Group>
-                    <Form.Label>เลขประจำตัวบุคลากร / นิสิต</Form.Label>
-                    <Form.Control
-                        type="text"
-                        name="uni_id"
-                        onChange={handleChange}
-                        value={input.uni_id} />
-                </Form.Group>
-                <Form.Group>
-                    <Form.Label>ชื่อ - สกุล</Form.Label>
-                    <Form.Control
-                        type="text"
-                        name="name"
-                        onChange={handleChange}
-                        value={input.name} />
-                </Form.Group>
-                <Form.Group>
-                    <Form.Label>ส่วนงาน</Form.Label>
-                    <Form.Select 
-                        name="faculty" 
-                        onChange={handleChange}
-                        value={input.faculty}>
-                        <option value='0'>-- ส่วนงาน --</option>
-                        <option>คณะศึกษาศาสตร์</option>
-                        <option>คณะมนุษยศาสตร์</option>
-                        <option>คณะสังคมศาสตร์</option>
-                        <option>คณะวิทยาศาสตร์</option>
-                        <option>คณะพลศึกษา</option>
-                        <option>คณะแพทยศาสตร์</option>
-                        <option>คณะทันตแพทยศาสตร์</option>
-                        <option>คณะเภสัชศาสตร์</option>
-                        <option>คณะกายภาพบำบัด</option>
-                        <option>คณะพยาบาลศาสตร์</option>
-                        <option>คณะวิศวกรรมศาสตร์</option>
-                        <option>คณะศิลปกรรมศาสตร์</option>
-                        <option>วิทยาลัยนานาชาติเพื่อศึกษาความยั่งยืน</option>
-                        <option>วิทยาลัยนวัตกรรมสื่อสารสังคม</option>
-                        <option>คณะเศรษฐศาสตร์</option>
-                        <option>คณะเทคโนโลยีและนวัตกรรมผลิตภัณฑ์การเกษตร</option>
-                        <option>วิทยาลัยโพธิวิชชาลัย</option>
-                        <option>คณะวัฒนธรรมสิ่งแวดล้อมและการท่องเที่ยวเชิงนิเวศ</option>
-                        <option>วิทยาลัยอุตสาหกรรมสร้างสรรค์</option>
-                        <option>คณะบริหารธุรกิจเพื่อสังคม</option>
-                        <option>บัณฑิตวิทยาลัย</option>
-                        <option>สำนักหอสมุดกลาง</option>
-                        <option>สำนักคอมพิวเตอร์</option>
-                        <option>สำนักสื่อและเทคโนโลยีการศึกษา</option>
-                        <option>สำนักนวัตกรรมการเรียนรู้</option>
-                        <option>สำนักทดสอบทางการศึกษาและจิตวิทยา</option>
-                        <option>สถาบันวัฒนธรรมและศิลปะ</option>
-                        <option>สถาบันวิจัย พัฒนา และสาธิตการศึกษา</option>
-                        <option>สถาบันวิจัยพฤติกรรมศาสตร์</option>
-                        <option>สถาบันยุทธศาสตร์ทางปัญญาและวิจัย</option>
-                        <option>สำนักงานอธิการบดี</option>
-                        <option>สำนักงานสภามหาวิทยาลัย</option>
-                    </Form.Select>
-                </Form.Group>
-                <Form.Group>
-                    <Form.Label>สถานะ</Form.Label>
-                    <Form.Select
-                        name="status"
-                        onChange={handleChange}
-                        value={input.status}>
-                        <option value='0'>-- สถานะ --</option>
-                        <option>บุคลากร</option>
-                        <option>นิสิต</option>
-                    </Form.Select>
-                </Form.Group>
-    */}
-                <Form.Group>
-                    <Form.Label>สถานะการใช้งาน</Form.Label>
-                    <Form.Select
-                        name="role"
-                        onChange={handleChange}
-                        value={input.role}>
-                        <option value='0'>-- สถานะการใช้งาน --</option>
-                        <option value='admin'>ผู้ดูแล</option>
-                        <option value='committee'>กรรมการ</option>
-                        <option value='visitor'>ผู้ใช้ทั่วไป</option>
-                    </Form.Select>
-                </Form.Group>
-                <div className="d-grid mt-3">
-                    <Button
-                        type="submit">
-                        บันทึก
-                    </Button>
-                </div>
-            </Form>
+            <UserEditForm handleChange={handleChange} handleSubmit={handleSubmit} inputs={input} roleDropdown={roleDropdown} />
         </Container>
     );
 }

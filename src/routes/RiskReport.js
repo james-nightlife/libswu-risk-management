@@ -1,11 +1,13 @@
 import { useState } from "react";
-import { Button, Container, Form } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import Swal from "sweetalert2";
 import { submitRisk } from "../components/RequestProcess";
+import RiskReportForm from "../forms/RiskReportForm";
 
 const RiskReport = () => {
     const username = sessionStorage.getItem('username');
     const token = sessionStorage.getItem('token');
+    
     const [inputs, setInputs] = useState({});
 
     const handleChange = (e) => {
@@ -32,7 +34,7 @@ const RiskReport = () => {
                         detail: inputs.detail, 
                         location: inputs.location
                     }, token);
-                    if(response.status == 200){
+                    if(response.status === 200){
                         Swal.fire({
                             title: 'Success',
                             text: response.message,
@@ -63,33 +65,7 @@ const RiskReport = () => {
     return(
         <Container className="p-5">
             <h1>รายงานความเสี่ยง</h1>
-            <Form onSubmit={handleSubmit}>
-                <Form.Group className="mt-3">
-                    <Form.Label>รายละเอียดความเสี่ยง</Form.Label>
-                    <Form.Control 
-                    name="detail" 
-                    type="text" 
-                    as="textarea"
-                    value={'' || inputs.detail}
-                    onChange={handleChange} />
-                </Form.Group>
-                <Form.Group className="mt-3">
-                    <Form.Label>สถานที่แจ้งความเสี่ยง</Form.Label>
-                    <Form.Select 
-                        name="location" 
-                        value={'' || inputs.location}
-                        onChange={handleChange}>
-                        <option value='0'>-- สถานที่ --</option>
-                        <option>ประสานมิตร</option>
-                        <option>องครักษ์</option>
-                    </Form.Select>
-                </Form.Group>
-                <div className="d-grid mt-3">
-                    <Button type="submit">
-                        บันทึก
-                    </Button>
-                </div>
-            </Form>
+            <RiskReportForm handleChange={handleChange} handleSubmit={handleSubmit} inputs={inputs} />
         </Container>
     )
 }

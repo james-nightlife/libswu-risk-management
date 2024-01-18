@@ -1,12 +1,9 @@
 import { useState } from "react";
-import { Button, Container, Form } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import Swal from "sweetalert2";
 import logo from '../components/SWU_Central_Library_TH_Color.png';
 import { loginUser } from "../components/RequestProcess";
-
-
-
-
+import SignInForm from "../forms/SignInForm";
 
 const SignIn = () => {
     const [inputs, setInputs] = useState({});
@@ -17,10 +14,13 @@ const SignIn = () => {
         setInputs(values => ({...values, [name]: value}));
     }
 
-    const handleSubmit = async e => {
+    const handleSubmit = async (e) => {
         let response;
         e.preventDefault();
-        if(inputs.username && inputs.password){
+        if(
+            inputs.username && 
+            inputs.password
+        ){
             response = await loginUser({
                 username: inputs.username,
                 password: inputs.password,
@@ -31,11 +31,13 @@ const SignIn = () => {
                     text: response.message,
                     icon: 'success',
                     showConfirmButton: false,
-                    timer: 2000
+                    timer: 2000,
+                    allowOutsideClick: false,
                 }).then(() => {
                     sessionStorage.setItem('token', response.token);
                     sessionStorage.setItem('username', response.payload.user.username);
                     sessionStorage.setItem('role', response.role);
+                    sessionStorage.setItem('name', response.fullname);
                     window.location.href = '/';
                 })
             }else{
@@ -60,33 +62,7 @@ const SignIn = () => {
                 <img src={logo} height="100" alt="สำนักหอสมุดกลาง มหาวิทยาลัยศรีนครินทรวิโรฒ" />
             </div>
             <h1 className="text-center p-3">ลงชื่อเข้าใช้</h1>
-            <Form onSubmit={handleSubmit}>
-                <Form.Group className="p-3">
-                    <Form.Label>บัวศรีไอดี</Form.Label>
-                    <Form.Control 
-                        type="text" 
-                        name='username' 
-                        value={inputs.username || ''} 
-                        onChange={handleChange} 
-                        placeholder="กรอกบัวศรีไอดีของคุณ" 
-                    />
-                </Form.Group>
-                <Form.Group className="p-3" >
-                    <Form.Label>รหัสผ่าน</Form.Label>
-                    <Form.Control 
-                        type="password" 
-                        name='password' 
-                        value={inputs.password || ''} 
-                        onChange={handleChange} 
-                        placeholder="กรอกรหัสผ่านของคุณ" 
-                    />
-                </Form.Group>
-                <div className="d-grid p-3">
-                    <Button variant="primary" type="submit">
-                        ลงชื่อเข้าใช้
-                    </Button>
-                </div> 
-            </Form>
+            <SignInForm handleSubmit={handleSubmit} handleChange={handleChange} inputs={inputs} />
         </Container>
     );
 }

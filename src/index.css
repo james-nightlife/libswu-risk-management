@@ -44,34 +44,42 @@ td, input, option, select,textarea {
 ul[role=navigation] {
   margin-bottom: 2rem;
   display: flex;
-  flex-direction: row;
-  /*justify-content: space-between;*/
+  justify-content: center; /* Center the pagination */
   list-style-type: none;
-  padding: 0 5rem;
+  padding: 0;
+}
+
+ul[role=navigation] li {
+  margin: 0 5px; /* Add some space between pagination items */
 }
 
 ul[role=navigation] li a {
   border-radius: 7px;
-  padding: 0.1rem 1rem;
-  border: gray 1px solid;
+  padding: 0.5rem 1rem;
+  border: 1px solid #ddd;
   cursor: pointer;
+  color: #333;
+  text-decoration: none;
 }
+
 ul[role=navigation] li.previous a,
 ul[role=navigation] li.next a,
 ul[role=navigation] li.break a {
-  border-color: gray 1px solid;
+  border-color: #ddd;
 }
+
 ul[role=navigation] li.selected a {
   background-color: #0366d6;
   border-color: transparent;
   color: white;
-  min-width: 32px;
-}
-ul[role=navigation] li.disabled a {
-  color: grey;
-}
-ul[role=navigation] li.disable,
-ul[role=navigation] li.disabled a {
-  cursor: default;
 }
 
+ul[role=navigation] li.disabled a {
+  color: grey;
+  cursor: not-allowed;
+}
+
+ul[role=navigation] li.disable,
+ul[role=navigation] li.disabled a {
+  cursor: not-allowed;
+}

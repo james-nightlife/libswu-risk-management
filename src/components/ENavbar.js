@@ -1,24 +1,17 @@
 import { Container, Nav, NavDropdown, Navbar } from "react-bootstrap";
 import logo from './SWU_Central_Library_TH_Color.png';
 import './web.css';
+import { SignOut } from "../functions/SignOut";
 
 function ENavbar(){
-    const username = sessionStorage.getItem('username');
+    const username = sessionStorage.getItem('name');
     const role = sessionStorage.getItem('role');
     var adminNav;
-
-    const handleLogout = () => {
-        sessionStorage.removeItem("username");
-        sessionStorage.removeItem("token");
-        sessionStorage.removeItem("role");
-        window.location.href = "/";
-    };
 
     if(role === 'admin'){
         adminNav = <Nav.Link href="/admin/users">จัดการผู้ใช้</Nav.Link>;
     }
     
-
     return(
         <>
             <Navbar className="bg-white" sticky="top" expand='sm'>
@@ -35,8 +28,8 @@ function ENavbar(){
                         </Nav>   
                         <Nav className="d-flex">
                             <NavDropdown title={`สวัสดี, ${username}`}>
-                                <NavDropdown.Item href="/change-password">เปลี่ยนรหัสผ่าน</NavDropdown.Item>
-                                <NavDropdown.Item onClick={handleLogout}>ออกจากระบบ</NavDropdown.Item>
+                                {/* <NavDropdown.Item href="/change-password">เปลี่ยนรหัสผ่าน</NavDropdown.Item> */}
+                                <NavDropdown.Item onClick={SignOut}>ออกจากระบบ</NavDropdown.Item>
                             </NavDropdown>
                         </Nav> 
                     </Navbar.Collapse>
