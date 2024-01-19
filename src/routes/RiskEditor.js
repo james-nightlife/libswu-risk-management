@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
 import { Button, Container, Form } from "react-bootstrap";
 import Swal from "sweetalert2";
-import { deleteRisk, updateRisk } from "../components/RequestProcess";
 import RiskEditForm from "../forms/RiskEditForm";
 import RiskProcessForm from "../forms/RiskProcessForm";
+import { RiskUpdateRequest } from "../requests/RiskUpdateRequest";
+import { RiskDeleteRequest } from "../requests/RiskDeleteRequest";
+import { SignOut } from "../functions/SignOut";
 
 const RiskEditor = () => {
+    document.title = "จัดการรายงานความเสี่ยง";
 
     // ดักการลักไก่เข้าหน้าข้อมูลความเสี่ยงผ่าน Url
     const id = localStorage.getItem('risk_id');
@@ -73,19 +76,21 @@ const RiskEditor = () => {
 
     // ตรวจสอบการแก้ไขข้อมูลความเสี่ยง
     const handleEdit = async (e) => {
-        let response;
         e.preventDefault();
-        if(risk.detail &&
+        if(
+            risk.detail &&
             risk.location &&
-            risk.location !== '0'){
+            risk.location !== '0'
+        ){
             Swal.fire({
                 title: 'ยืนยันการแก้ไข',
                 text: 'ยืนยันการแก้ไขข้อมูลความเสี่ยง',
                 icon: 'warning',
                 showCancelButton: true,
+                allowOutsideClick: false,
             }).then(async confirm =>  {
                 if(confirm.isConfirmed){
-                    response = await updateRisk({
+                    const response = await RiskUpdateRequest({
                         detail: risk.detail,
                         location: risk.location,
                     }, id, token)
@@ -95,15 +100,28 @@ const RiskEditor = () => {
                             text: response.message,
                             icon: 'success',
                             showConfirmButton: false,
-                            timer: 2000
+                            timer: 2000,
+                            allowOutsideClick: false,
                          }).then(() => {
                             window.location.href = '/';
                         })
+                    }else if(response.message === 'Token Invalid'){
+                        Swal.fire({
+                            title: 'เซสชันหมดอายุ',
+                            text: 'กรุณาลงชื่อเข้าใช้อีกครั้ง',
+                            icon: 'error',
+                            showConfirmButton: false,
+                            timer: 2000,
+                            allowOutsideClick: false
+                        }).then(() => {
+                            SignOut();     
+                        });
                     }else{
                         Swal.fire({
                             title: 'ล้มเหลว',
                             text: response.message,
                             icon: 'error',
+                            allowOutsideClick: false,
                         })
                     }    
                 }
@@ -112,19 +130,19 @@ const RiskEditor = () => {
             Swal.fire({
                 title: 'ล้มเหลว',
                 text: 'โปรดระบุรายละเอียดความเสี่ยง',
-                icon: 'error'
+                icon: 'error',
+                allowOutsideClick: false,
             })
         }    
     }
 
     // ตรวจสอบข้อมูลการประเมินความเสี่ยง
     const handleEvaluation = async (e) => {
-        let response;
-        let initialized_date;
-        let finalized_date;
         e.preventDefault();
-        if(risk.feedback &&
-            risk.status){
+        if(
+            risk.feedback &&
+            risk.status
+        ){
             Swal.fire({
                 title: 'ยืนยันการประเมิน',
                 html: `ยืนยันการประเมินความเสี่ยง<br>
@@ -132,9 +150,12 @@ const RiskEditor = () => {
                         สถานะเดิม : ${risk.old_status}<br>
                         สถานะใหม่ : ${risk.status}<br>`,
                 icon: 'warning',
+                allowOutsideClick: false,
                 showCancelButton: true,
-            }).then(async confirm =>  {
+            }).then(async (confirm) =>  {
                 if(confirm.isConfirmed){
+                    let initialized_date;
+                    let finalized_date;
                     if((risk.old_status === 'รอดำเนินการ') && 
                         (risk.status === 'อยู่ระหว่างการดำเนินการ')){
                         initialized_date = new Date();
@@ -150,7 +171,7 @@ const RiskEditor = () => {
                         initialized_date = risk.initialized_date;
                         finalized_date = risk.finalized_date;
                     }
-                    response = await updateRisk({
+                    const response = await RiskUpdateRequest({
                         feedback: risk.feedback,
                         status: risk.status,
                         initialized_date: initialized_date,
@@ -158,19 +179,32 @@ const RiskEditor = () => {
                     }, id, token)
                     if(response.status === 200){
                         Swal.fire({
-                            title: 'Success',
+                            title: 'สำเร็จ',
                             text: response.message,
                             icon: 'success',
                             showConfirmButton: false,
-                            timer: 2000
+                            timer: 2000,
+                            allowOutsideClick: false,
                         }).then(() => {
                             window.location.href = '/';
                         })
+                    }else if(response.message === 'Token Invalid'){
+                        Swal.fire({
+                            title: 'เซสชันหมดอายุ',
+                            text: 'กรุณาลงชื่อเข้าใช้อีกครั้ง',
+                            icon: 'error',
+                            showConfirmButton: false,
+                            timer: 2000,
+                            allowOutsideClick: false
+                        }).then(() => {
+                            SignOut();     
+                        });
                     }else{
                         Swal.fire({
                             title: 'ล้มเหลว',
                             text: response.message,
-                            icon: 'error'
+                            icon: 'error',
+                            allowOutsideClick: false,
                         });
                     }
                 }
@@ -179,7 +213,8 @@ const RiskEditor = () => {
             Swal.fire({
                 title: 'ล้มเหลว',
                 text: 'โปรดระบุข้อมูลการประเมินความเสี่ยง',
-                icon: 'error'
+                icon: 'error',
+                allowOutsideClick: false,
             });
         }        
     }
@@ -192,24 +227,38 @@ const RiskEditor = () => {
             text: 'ยืนยันการลบข้อมูลความเสี่ยง',
             icon: 'warning',
             showCancelButton: true,
+            allowOutsideClick: false,
         }).then(async confirm => {
             if(confirm.isConfirmed){
-                response = await deleteRisk(token, id)
+                response = await RiskDeleteRequest(token, id)
                 if(response.status === 200){
                     Swal.fire({
-                        title: 'Success',
+                        title: 'สำเร็จ',
                         text: response.message,
                         icon: 'success',
                         showConfirmButton: false,
-                        timer: 2000
+                        timer: 2000,
+                        allowOutsideClick: false,
                     }).then(() => {
                         window.location.href = '/';
                     })
+                }else if(response.message === 'Token Invalid'){
+                    Swal.fire({
+                        title: 'เซสชันหมดอายุ',
+                        text: 'กรุณาลงชื่อเข้าใช้อีกครั้ง',
+                        icon: 'error',
+                        showConfirmButton: false,
+                        timer: 2000,
+                        allowOutsideClick: false
+                    }).then(() => {
+                        SignOut();     
+                    });
                 }else{
                     Swal.fire({
                         title: 'ล้มเหลว',
                         text: 'เกิดปัญหาขัดข้องทางเทคนิค ขออภัยในความไม่สะดวก',
-                        icon: 'error'
+                        icon: 'error',
+                        allowOutsideClick: false,
                     });
                 }
             }

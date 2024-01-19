@@ -1,5 +1,5 @@
 import { Button, Form } from "react-bootstrap";
-import { dateToDateTime } from "../components/Simple";
+import { DateToDatetime } from "../functions/DateToDatetime";
 
 const RiskProcessForm = ({handleProcess, isAdmin, inputs, handleChange}) => {
     return(
@@ -33,7 +33,7 @@ const RiskProcessForm = ({handleProcess, isAdmin, inputs, handleChange}) => {
                         name="initialized_date" 
                         type="text" 
                         disabled 
-                        value={'' || dateToDateTime(inputs.initialized_date)} />
+                        value={'' || DateToDatetime(inputs.initialized_date)} />
                 </Form.Group>
                 <Form.Group>
                     <Form.Label className="pt-3">วันที่ดำเนินการแล้วเสร็จ</Form.Label>
@@ -41,7 +41,7 @@ const RiskProcessForm = ({handleProcess, isAdmin, inputs, handleChange}) => {
                         name="finalized_date" 
                         type="text" 
                         disabled 
-                        value={'' || dateToDateTime(inputs.finalized_date)} />
+                        value={'' || DateToDatetime(inputs.finalized_date)} />
                 </Form.Group>
                 <div className="d-grid mt-3">
                     <Button 

@@ -1,5 +1,5 @@
 import { Button, Form } from "react-bootstrap";
-import { dateToDateTime } from "../components/Simple";
+import { DateToDatetime } from "../functions/DateToDatetime";
 
 const RiskEditForm = ({handleEdit, handleChange, inputs, isAdminOrReporter }) => {
     return(
@@ -40,7 +40,7 @@ const RiskEditForm = ({handleEdit, handleChange, inputs, isAdminOrReporter }) =>
                         name="report_date" 
                         type="text" 
                         disabled 
-                        value={'' || dateToDateTime(inputs.report_date)} />
+                        value={'' || DateToDatetime(inputs.createdAt)} />
                 </Form.Group>
                 <div className="d-grid mt-3">
                     <Button 

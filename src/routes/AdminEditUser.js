@@ -1,14 +1,19 @@
 import { useEffect, useState } from "react";
-import { Button, Container, Form } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import Swal from "sweetalert2";
-import { updateUser } from "../components/RequestProcess";
 import UserEditForm from "../forms/UserEditForm";
+import { UserUpdateRequest } from "../requests/UserUpdateRequest";
+import { SignOut } from "../functions/SignOut";
 
 const AdminEditUser = () => {
-    // Form Input
-    const [input, setInput] = useState([]);
+    document.title = "จัดการบัญชีผู้ใช้";
 
     const user = localStorage.getItem('edit_username');
+    const token = sessionStorage.getItem('token') 
+    const username = sessionStorage.getItem('username');
+
+    // Form Input
+    const [input, setInput] = useState([]);
 
     // อัปเดต input
     const handleChange = (e) => {
@@ -27,98 +32,84 @@ const AdminEditUser = () => {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
-                'lib-token': token
+                'lib-token': token,
             },
-        }).then((data) => (data.json()))
-        .then((data) => {
-            setInput({
-                username: data.username,
-                role: data.role
-            });    
-        }).then(() => {
-            
-        })
-        .catch((error) => {
+        }).then(async (res) => {
+            const status = res.status;
+            const data = await res.json();
+            if(status === 200){
+                setInput({
+                    username: data.username,
+                    role: data.role
+                });
+            }else if(status === 500){
+                handleTokenExpiration()
+            }
+        }).catch((error) => {
             console.error('Error fetching risk data:', error);
         });
     }
 
+    const handleTokenExpiration = () => {
+        Swal.fire({
+            title: 'เซสชันหมดอายุ',
+            text: 'กรุณาลงชื่อเข้าใช้อีกครั้ง',
+            icon: 'error',
+            showConfirmButton: false,
+            timer: 2000,
+            allowOutsideClick: false
+        }).then(() => {
+            setTimeout(() => {
+                SignOut();
+            }, 2000 )
+            
+        });
+    }
     
-
-
-    const token = sessionStorage.getItem('token')
-    
-    const username = sessionStorage.getItem('username');
-
-    var roleDropdown = false
-
     //เช็กว่าเป็นแอคของเจ้าของหรือไม่
-
+    var roleDropdown = false
     if(input.username === username){
         roleDropdown = true
     }else{
         roleDropdown = false
     }
 
-
     // ตรวจสอบการเพิ่มบัญชีผู้ใช้
     const handleSubmit = async (e) => {
-        let response;
         e.preventDefault();
-        if(input.username && /*
-           input.uni_id &&
-           input.name &&
-           input.faculty &&
-           input.status && */
-           input.role && /*
-           input.faculty !== '0' &&
-           input.status !== '0' && */
-           input.role !== '0' ){
+        if(
+           input.role && 
+           input.role !== '0'
+        ){
             Swal.fire({
                 title: 'ยืนยันการแก้ไข',
                 html: `บัวศรีไอดี : ${input.username} <br>
-                            เลขประจำตัวบุคลากร / นิสิต : ${input.uni_id} <br>
-                            ชื่อ - สกุล : ${input.name} <br>
-                            ส่วนงาน : ${input.faculty} <br>
-                            สถานะ : ${input.status} <br>
-                            สถานะการใช้งาน : ${input.role} <br>
-                            เปลี่ยนรหัสผ่าน : ${Boolean(input.password)}`,
+                        สถานะการใช้งาน : ${input.role} <br>`,
                 icon: 'warning',
                 showCancelButton: true,
-            }).then(async confirm =>  {
+            }).then(async (confirm) =>  {
                 if(confirm.isConfirmed){
-                    if(input.password){
-                        response = await updateUser({
-                            username: input.username,
-                            password: input.password, /*
-                            uni_id: input.uni_id,
-                            name: input.name,
-                            faculty: input.faculty,
-                            status: input.status, */
-                            role: input.role
-                        }, user, token)
-                    }else{
-                        response = await updateUser({
+                    const response = await UserUpdateRequest({
                             username: input.username,
                             role: input.role,
-                        }, user, token)
-                    }
-                    console.log(response)
+                        }, user, token);
                     if(response.status === 200){
                         Swal.fire({
                             title: 'สำเร็จ',
-                            text: 'ดำเนินการแก้ไขข้อมูลผู้ใช้เรียบร้อยแล้ว',
+                            text: response.message,
                             icon: 'success',
                             showConfirmButton: false,
-                            timer: 2000
+                            timer: 2000,
+                            allowOutsideClick: false,
                         }).then(() => {
                             window.location.href = '/admin/users';
                         })
                     }else{
                         Swal.fire({
                             title: 'ล้มเหลว',
-                            text: 'เกิดปัญหาขัดข้องทางเทคนิค ขออภัยในความไม่สะดวก',
+                            text: response.message,
                             icon: 'error',
+                            allowOutsideClick: false,
                         })
                     }  
                 }
@@ -127,16 +118,11 @@ const AdminEditUser = () => {
             Swal.fire({
                 title: 'ล้มเหลว',
                 text: 'โปรดระบุข้อมูลของผู้ใช้',
-                icon: 'error'
+                icon: 'error',
+                allowOutsideClick: false,
             })
         }    
     }
-
-    
-
-
-
-    
 
     return(
         <Container className="p-3">

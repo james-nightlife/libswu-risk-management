@@ -7,7 +7,7 @@ import Pagination from '../components/Pagination';
 
 
 const Home = () => {
-    // const user = JSON.parse(sessionStorage.getItem('user'))
+    document.title = "ระบบรวบรวมรายงานความเสี่ยง";
 
     /* ตารางรายงานความเสี่ยง */
     const [risks, setRisks] = useState([]);

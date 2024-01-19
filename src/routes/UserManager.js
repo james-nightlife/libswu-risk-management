@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button, Col, Container, Row } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import '../index.css';
 import Swal from "sweetalert2";
 import { SignOut } from "../functions/SignOut";
@@ -7,6 +7,8 @@ import UsersTable from "../table/UsersTable";
 import Pagination from "../components/Pagination";
 
 const UserManager = () => {
+    document.title = "จัดการบัญชีผู้ใช้";
+    
     // เช็ก Role
     const role = sessionStorage.getItem('role');
 
@@ -34,7 +36,7 @@ const UserManager = () => {
                 const data = await response.json();
                 setUsers(data);
             }else if(response.status === 500){
-                handleTokenExpiration()
+                handleTokenExpiration();
             }
         })
         .catch(
@@ -42,7 +44,7 @@ const UserManager = () => {
         );
     }
 
-    const handleTokenExpiration = () => {
+    const handleTokenExpiration = async () => {
         Swal.fire({
             title: 'เซสชันหมดอายุ',
             text: 'กรุณาลงชื่อเข้าใช้อีกครั้ง',
@@ -53,8 +55,7 @@ const UserManager = () => {
         }).then(() => {
             setTimeout(() => {
                 SignOut();
-            }, 2000 )
-            
+            }, 2000)
         });
     }
 
@@ -79,13 +80,6 @@ const UserManager = () => {
 
     return(
         <Container className='p-3'>
-            <Row>
-                <Col>
-                    <div className="d-grid">
-                        <Button href="/admin/users/add">เพิ่มผู้ใช้</Button>
-                    </div> 
-                </Col>
-            </Row>
             { users === null ? (
                 <p>Loading...</p>
             ) : users.length === 0 ? (
@@ -93,9 +87,14 @@ const UserManager = () => {
                 </>
             ) : (
                 <>
-                    <UsersTable handleEditButton={handleEditButton} currentItems={currentItems} itemOffset={itemOffset} />
-                    <Pagination handlePageClick={handlePageClick} pageCount={pageCount} />
-            </>
+                    <UsersTable 
+                        handleEditButton={handleEditButton} 
+                        currentItems={currentItems} 
+                        itemOffset={itemOffset} />
+                    <Pagination 
+                        handlePageClick={handlePageClick}
+                        pageCount={pageCount} />
+                </>
             )}
         </Container>
     );
