@@ -6,4 +6,4 @@ const SignOut = () => {
     window.location.href = "/";
 }
 
-module.exports = {SignOut}
+export {SignOut}

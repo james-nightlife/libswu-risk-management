@@ -25,4 +25,4 @@ const SignInRequest = async (credentials) => {
     }));
 }
 
-module.exports = {SignInRequest}
+export {SignInRequest}

@@ -30,4 +30,4 @@ const RiskDeleteRequest = async (token, id) => {
     }));
 }
 
-module.exports = {RiskDeleteRequest};
+export {RiskDeleteRequest};

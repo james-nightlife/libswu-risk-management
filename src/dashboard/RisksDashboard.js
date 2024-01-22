@@ -36,7 +36,7 @@ const RisksDashboard = ({raw}) => {
                             <tbody>
                                 <tr>
                                     <td>รอดำเนินการ</td>
-                                    <td>{raw.filter((obj) => obj.status === 'รอดำเนินการ').length}</td>
+                                    <td>{raw.filter((obj) => obj.status === 'รอดำเนินการ' || !obj.status).length}</td>
                                 </tr>
                                 <tr>
                                     <td>อยู่ระหว่างการดำเนินการ</td>

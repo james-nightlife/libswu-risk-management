@@ -34,4 +34,4 @@ const RiskReportRequest = async (input, token) => {
     }));
 }
 
-module.exports = {RiskReportRequest};
+export {RiskReportRequest};

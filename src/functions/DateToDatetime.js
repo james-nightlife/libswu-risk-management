@@ -7,4 +7,4 @@ const DateToDatetime = (data) => {
     }
 }
 
-module.exports = {DateToDatetime};
+export {DateToDatetime};

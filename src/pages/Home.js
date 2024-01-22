@@ -5,9 +5,9 @@ import RisksTable from '../table/RisksTable';
 import RisksDashboard from '../dashboard/RisksDashboard';
 import Pagination from '../components/Pagination';
 
-
 const Home = () => {
-    document.title = "ระบบรวบรวมรายงานความเสี่ยง";
+    // ชื่อหน้า
+    document.title = "ระบบรวบรวมรายงานความเสี่ยง สำนักหอสมุดกลาง มหาวิทยาลัยศรีนครินทรวิโรฒ";
 
     /* ตารางรายงานความเสี่ยง */
     const [risks, setRisks] = useState([]);
@@ -16,14 +16,14 @@ const Home = () => {
     const fetchData = async () => {
         await fetch(`${process.env.REACT_APP_SERVER}/risk/record`, {
             method: "GET",
-        }).then((data) => (data.json()))
-
-        .then((data) => {
+        })
+        .then(async (res) => {
+            const data = await res.json();
             if(data.length > 0){
-                setRaw(data.sort((a, b) => new Date(b.report_date) - new Date(a.report_date)));
-            }
-            
-        }).catch();
+                setRaw(data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)));
+            } 
+        }).catch(
+        );
     }
     
     useEffect(() => {
@@ -33,7 +33,6 @@ const Home = () => {
     useEffect(() => {
         setRisks(raw);
     }, [raw])
-
 
     const riskEditorRoute = (e, id) => {
         e.preventDefault()
@@ -62,47 +61,20 @@ const Home = () => {
     }
 
     const handleFind = async (e) => {
-        e.preventDefault()
-        console.log(inputs)
-        var result = raw.filter(obj => {
-            const locationFilter = (
-                (obj.location === inputs.location) ||
-                (inputs.location === '') ||
-                (!inputs.location)
-            );
-            const statusFilter = (
-                (obj.status === inputs.status) 
-                || (inputs.status === '') 
-                || (!inputs.status)
-            );
-            const firstDateFilter = (
-                (new Date(obj.report_date).getTime() >= new Date(inputs.firstdate).getTime()) ||
-                (inputs.firstdate === '') || 
-                (!inputs.firstdate)
-            );
-            const lastDateFilter = (
-                (new Date(obj.report_date).getTime() <= new Date(`${inputs.enddate} 23:59:59`).getTime()) ||
-                (inputs.enddate === '') || 
-                (!inputs.enddate)
-            );
-            var keywordFilter = true;
-            if(inputs.keyword){
-                keywordFilter = (
-                    (obj.detail.toLowerCase().indexOf(inputs.keyword.toLowerCase()) !== -1) || 
-                    (obj.reporter.toLowerCase().indexOf(inputs.keyword.toLowerCase()) !== -1) ||
-                    (inputs.keyword === '') || 
-                    !inputs.keyword);
-            }
-            if(locationFilter && 
-                statusFilter && 
-                firstDateFilter && 
-                lastDateFilter && 
-                keywordFilter){
-                return true
-            }else{
-                return false
-            }
-        });
+        e.preventDefault();
+        const result = raw.filter(obj => {
+            const locationFilter = obj.location === inputs.location || !inputs.location;
+            const statusFilter = inputs.status !== 'รอดำเนินการ' ? 
+              (obj.status === inputs.status || !inputs.status) :
+              (obj.status === inputs.status || !inputs.status || !obj.status);
+            const firstDateFilter = new Date(obj.createdAt).getTime() >= new Date(inputs.firstdate).getTime() || !inputs.firstdate;
+            const lastDateFilter = new Date(obj.createdAt).getTime() <= new Date(`${inputs.enddate} 23:59:59`).getTime() || !inputs.enddate;
+            const keywordFilter = !inputs.keyword ||
+              (obj.detail.toLowerCase().includes(inputs.keyword.toLowerCase()) ||
+              obj.reporter.toLowerCase().includes(inputs.keyword.toLowerCase()));
+          
+            return locationFilter && statusFilter && firstDateFilter && lastDateFilter && keywordFilter;
+          });
         setRisks(result);
     }
     

@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 import '../index.css';
-import Swal from "sweetalert2";
-import { SignOut } from "../functions/SignOut";
 import UsersTable from "../table/UsersTable";
 import Pagination from "../components/Pagination";
+import { SessionExpired } from "../functions/SessionExpired";
 
 const UserManager = () => {
     document.title = "จัดการบัญชีผู้ใช้";
@@ -45,18 +44,7 @@ const UserManager = () => {
     }
 
     const handleTokenExpiration = async () => {
-        Swal.fire({
-            title: 'เซสชันหมดอายุ',
-            text: 'กรุณาลงชื่อเข้าใช้อีกครั้ง',
-            icon: 'error',
-            showConfirmButton: false,
-            timer: 2000,
-            allowOutsideClick: false
-        }).then(() => {
-            setTimeout(() => {
-                SignOut();
-            }, 2000)
-        });
+        SessionExpired();
     }
 
     // Pagination

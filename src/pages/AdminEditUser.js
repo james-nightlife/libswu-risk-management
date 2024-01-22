@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
-import Swal from "sweetalert2";
 import UserEditForm from "../forms/UserEditForm";
 import { UserUpdateRequest } from "../requests/UserUpdateRequest";
-import { SignOut } from "../functions/SignOut";
+import { ConfirmAlert } from "../alert/ConfirmAlert";
+import { SuccessAlert } from "../alert/SuccessAlert";
+import { FailAlert } from "../alert/FailAlert";
+import { SessionExpired } from "../functions/SessionExpired";
 
 const AdminEditUser = () => {
     document.title = "จัดการบัญชีผู้ใช้";
@@ -50,20 +52,8 @@ const AdminEditUser = () => {
         });
     }
 
-    const handleTokenExpiration = () => {
-        Swal.fire({
-            title: 'เซสชันหมดอายุ',
-            text: 'กรุณาลงชื่อเข้าใช้อีกครั้ง',
-            icon: 'error',
-            showConfirmButton: false,
-            timer: 2000,
-            allowOutsideClick: false
-        }).then(() => {
-            setTimeout(() => {
-                SignOut();
-            }, 2000 )
-            
-        });
+    const handleTokenExpiration = async () => {
+        SessionExpired();
     }
     
     //เช็กว่าเป็นแอคของเจ้าของหรือไม่
@@ -81,46 +71,23 @@ const AdminEditUser = () => {
            input.role && 
            input.role !== '0'
         ){
-            Swal.fire({
+            ConfirmAlert({
                 title: 'ยืนยันการแก้ไข',
                 html: `บัวศรีไอดี : ${input.username} <br>
                         สถานะการใช้งาน : ${input.role} <br>`,
-                icon: 'warning',
-                showCancelButton: true,
-            }).then(async (confirm) =>  {
-                if(confirm.isConfirmed){
-                    const response = await UserUpdateRequest({
-                            username: input.username,
-                            role: input.role,
-                        }, user, token);
-                    if(response.status === 200){
-                        Swal.fire({
-                            title: 'สำเร็จ',
-                            text: response.message,
-                            icon: 'success',
-                            showConfirmButton: false,
-                            timer: 2000,
-                            allowOutsideClick: false,
-                        }).then(() => {
-                            window.location.href = '/admin/users';
-                        })
-                    }else{
-                        Swal.fire({
-                            title: 'ล้มเหลว',
-                            text: response.message,
-                            icon: 'error',
-                            allowOutsideClick: false,
-                        })
-                    }  
+            }, async () => {
+                const response = await UserUpdateRequest({
+                    username: input.username,
+                    role: input.role,
+                }, user, token);
+                if(response.status === 200){
+                    SuccessAlert(response.message, '/admin/users')     
+                }else{
+                    FailAlert(response.message);
                 }
-            }) 
-        }else{
-            Swal.fire({
-                title: 'ล้มเหลว',
-                text: 'โปรดระบุข้อมูลของผู้ใช้',
-                icon: 'error',
-                allowOutsideClick: false,
             })
+        }else{
+            FailAlert('โปรดระบุข้อมูลของผู้ใช้');
         }    
     }
 

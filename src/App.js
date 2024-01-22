@@ -1,12 +1,12 @@
 import { BrowserRouter, Route, Routes} from 'react-router-dom';
 import ErrorPage from './error-page';
-import Home from './routes/Home';
-import SignIn from './routes/SignIn';
-import Layout from './routes/Layout';
-import UserManager from './routes/UserManager';
-import RiskReport from './routes/RiskReport';
-import RiskEditor from './routes/RiskEditor';
-import AdminEditUser from './routes/AdminEditUser';
+import Home from './pages/Home';
+import SignIn from './pages/SignIn';
+import Layout from './pages/Layout';
+import UserManager from './pages/UserManager';
+import RiskReport from './pages/RiskReport';
+import RiskEditor from './pages/RiskEditor';
+import AdminEditUser from './pages/AdminEditUser';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {

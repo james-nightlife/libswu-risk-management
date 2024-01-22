@@ -30,4 +30,4 @@ const RiskUpdateRequest = async (input, id, token) => {
     }));
 }
 
-module.exports = {RiskUpdateRequest}
+export {RiskUpdateRequest}

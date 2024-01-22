@@ -27,4 +27,4 @@ const UserUpdateRequest = async (input, id, token) => {
     }));
 }
 
-module.exports = {UserUpdateRequest};
+export {UserUpdateRequest};
