@@ -83,3 +83,7 @@ ul[role=navigation] li.disable,
 ul[role=navigation] li.disabled a {
   cursor: not-allowed;
 }
+
+#navbar{
+  background-color: #F8C19A;
+}

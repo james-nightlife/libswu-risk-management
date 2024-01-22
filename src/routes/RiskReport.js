@@ -82,7 +82,7 @@ const RiskReport = () => {
     }
 
     return(
-        <Container className="p-5">
+        <Container className="p-3">
             <h1>รายงานความเสี่ยง</h1>
             <RiskReportForm handleChange={handleChange} handleSubmit={handleSubmit} inputs={inputs} />
         </Container>

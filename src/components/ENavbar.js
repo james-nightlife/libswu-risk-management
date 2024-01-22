@@ -14,14 +14,14 @@ function ENavbar(){
     
     return(
         <>
-            <Navbar className="bg-white" sticky="top" expand='sm'>
+            <Navbar id="navbar" sticky="top" expand='lg'>
                 <Container>
-                    <Navbar.Brand href="https://lib.swu.ac.th" className='m-auto'>
-                        <img src={logo} height="100" alt="สำนักหอสมุดกลาง มหาวิทยาลัยศรีนครินทรวิโรฒ" />
+                    <Navbar.Brand href="https://lib.swu.ac.th" className='border-dark rounded bg-white'>
+                        <img src={logo} height="50" alt="สำนักหอสมุดกลาง มหาวิทยาลัยศรีนครินทรวิโรฒ" />
                     </Navbar.Brand>
-                    <Navbar.Brand href="/">ระบบรวบรวมรายงานความเสี่ยง</Navbar.Brand>
                     <Navbar.Toggle aria-controls="navbarScroll" />
                     <Navbar.Collapse className="justify-content-end">
+                        <Navbar.Brand href="/">ระบบรวบรวมรายงานความเสี่ยง</Navbar.Brand>
                         <Nav className="me-auto">
                             <Nav.Link href="/report">รายงานความเสี่ยง</Nav.Link>
                             {adminNav}

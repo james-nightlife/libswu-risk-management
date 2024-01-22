@@ -266,7 +266,7 @@ const RiskEditor = () => {
     }
 
     return(
-        <Container className="p-5">
+        <Container className="p-3">
             <h5>รายงานความเสี่ยง</h5>
             <RiskEditForm handleEdit={handleEdit} handleChange={handleChange} isAdminOrReporter={isAdminOrReporter()} inputs={risk} />
             <RiskProcessForm handleProcess={handleEvaluation} handleChange={handleChange} isAdmin={evaluation()} inputs={risk} />
