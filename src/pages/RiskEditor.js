@@ -8,22 +8,16 @@ import { SessionExpired } from "../functions/SessionExpired";
 import { ConfirmAlert } from "../alert/ConfirmAlert";
 import { SuccessAlert } from "../alert/SuccessAlert";
 import { FailAlert } from "../alert/FailAlert";
+import { RiskProcessInputControl } from "../functions/RiskProcessInputControl";
+import { RiskEditInputControl } from "../functions/RiskEditInputControl";
 
 const RiskEditor = () => {
+    // TITLE
     document.title = "จัดการรายงานความเสี่ยง";
 
-    // ดักการลักไก่เข้าหน้าข้อมูลความเสี่ยงผ่าน Url
+    // FETCH RISK
     const id = localStorage.getItem('risk_id');
-
-    // ดึงข้อมูลความเสี่ยง (datatype id ความเสี่ยงต้องเป็น number)
-    useEffect(() => {
-        if(id){
-            fetchRiskData();
-        }else{
-            window.location.href = "/";
-        }
-        
-    }, [id]);
+    const [risk, setRisk] = useState([]);
 
     const fetchRiskData = async () => {
         await fetch(`${process.env.REACT_APP_SERVER}/risk/record/${id}`, {
@@ -31,8 +25,8 @@ const RiskEditor = () => {
             headers: {
                 "Content-Type": "application/json",
             },
-        }).then((data) => (data.json()))
-        .then((data) => {
+        }).then(async (res) => {
+            const data = await res.json()
             if(data.status){
                 setRisk({...data, old_status: data.status}); 
             }else{
@@ -43,45 +37,36 @@ const RiskEditor = () => {
         });
     }
 
-    // ผู้รายงานความเสี่ยงสามารถแก้ไขข้อมูลความเสี่ยง
-    const role = sessionStorage.getItem('role');
-    const username = sessionStorage.getItem('username');
-    const isAdminOrReporter = () => {
-        if(
-            username === risk.reporter ||
-            role === 'admin' ||
-            role === 'committee'
-        ){
-            return(false)
+    useEffect(() => {
+        if(id){
+            fetchRiskData();
         }else{
-            return(true)
+            window.location.href = "/";
         }
-    }
+    }, [id]);
 
-    // admin เป็นผู้ประเมินความเสี่ยง
-    const evaluation = () => {
-        if(
-            role === 'admin' ||
-            role === 'committee'
-        ){
-            return(false)
-        }else{
-            return(true)
+    // CONTROLLED INPUT
+    const [evaluation, setEvaluation] = useState(true);
+    const [isAdminOrReporter, setIsAdminOrReporter] = useState(true);
+
+    useEffect(() => {
+        if(risk){
+            setIsAdminOrReporter(RiskEditInputControl(risk));
+            setEvaluation(RiskProcessInputControl());
         }
-    }
+    }, [risk])
 
-    const [risk, setRisk] = useState([]);
-
-    const token = sessionStorage.getItem('token');
-    
-    // อัปเดต input
+    // ON-CHANGE
     const handleChange = (e) => {
         const name = e.target.name;
         const value = e.target.value;
         setRisk(values => ({...values, [name]: value}));
     }
 
-    // ตรวจสอบการแก้ไขข้อมูลความเสี่ยง
+    // TOKEN
+    const token = sessionStorage.getItem('token');
+
+    // EDIT RISK
     const handleEdit = async (e) => {
         e.preventDefault();
         if(
@@ -110,7 +95,7 @@ const RiskEditor = () => {
         }    
     }
 
-    // ตรวจสอบข้อมูลการประเมินความเสี่ยง
+    // RISK PROCESS
     const handleEvaluation = async (e) => {
         e.preventDefault();
         if(
@@ -126,24 +111,12 @@ const RiskEditor = () => {
             }, async () => {
                 let initialized_date;
                 let finalized_date;
-                if(
-                    (risk.old_status === 'รอดำเนินการ') && 
-                    (risk.status === 'อยู่ระหว่างการดำเนินการ')
-                ){
-                    initialized_date = new Date();
-                    finalized_date = risk.finalized_date;
-                }else if(
-                    (risk.old_status === 'อยู่ระหว่างการดำเนินการ') && 
-                    (risk.status === 'ดำเนินการแล้วเสร็จ')
-                ){
-                    initialized_date = risk.initialized_date;
+                if(risk.status === 'อยู่ระหว่างการดำเนินการ'){
+                    initialized_date = (risk.old_status === 'รอดำเนินการ' ? new Date() : risk.initialized_date)
+                    finalized_date = risk.finalized_date
+                }else if(risk.status === 'ดำเนินการแล้วเสร็จ'){
+                    initialized_date = (risk.old_status === 'รอดำเนินการ' ? new Date() : risk.initialized_date)
                     finalized_date = new Date();
-                }else if((risk.old_status === 'รอดำเนินการ') && (risk.status === 'ดำเนินการแล้วเสร็จ')){
-                    initialized_date = new Date();
-                    finalized_date = new Date();
-                }else{
-                    initialized_date = risk.initialized_date;
-                    finalized_date = risk.finalized_date;
                 }
                 const response = await RiskUpdateRequest({
                     feedback: risk.feedback,
@@ -164,6 +137,7 @@ const RiskEditor = () => {
         }        
     }
 
+    // DELETE
     const handleDelete = async (e) => {
         let response;
         e.preventDefault();
@@ -188,16 +162,16 @@ const RiskEditor = () => {
     return(
         <Container className="p-3">
             <h5>รายงานความเสี่ยง</h5>
-            <RiskEditForm handleEdit={handleEdit} handleChange={handleChange} isAdminOrReporter={isAdminOrReporter()} inputs={risk} />
-            <RiskProcessForm handleProcess={handleEvaluation} handleChange={handleChange} isAdmin={evaluation()} inputs={risk} />
+            <RiskEditForm handleEdit={handleEdit} handleChange={handleChange} isAdminOrReporter={isAdminOrReporter} inputs={risk} />
+            <RiskProcessForm handleProcess={handleEvaluation} handleChange={handleChange} isAdmin={evaluation} inputs={risk} />
             <div className="d-grid mt-3">
-                    <Button 
-                        className="btn-danger" 
-                        disabled={isAdminOrReporter() || (risk.old_status === 'ดำเนินการแล้วเสร็จ')}
-                        onClick={handleDelete}>
-                        ลบข้อมูลความเสี่ยง
-                    </Button>
-                </div>
+                <Button 
+                    className="btn-danger" 
+                    disabled={isAdminOrReporter || (risk.old_status === 'ดำเนินการแล้วเสร็จ')}
+                    onClick={handleDelete}>
+                    ลบข้อมูลความเสี่ยง
+                </Button>
+            </div>
         </Container>
     );
 };

@@ -1,6 +1,6 @@
 import { Container } from "react-bootstrap";
 
-function ErrorPage(){
+function Error404(){
     return(
         <Container className="p-3"> 
             <h1 style={{textAlign : "center"}}>
@@ -9,4 +9,4 @@ function ErrorPage(){
         </Container>
     );
 }
-export default ErrorPage;
+export default Error404;

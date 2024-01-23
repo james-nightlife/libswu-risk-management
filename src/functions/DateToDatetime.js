@@ -1,7 +1,7 @@
-const DateToDatetime = (data) => {
+const DateToDatetime = (data, locale='th-th') => {
     if(data){
         const date = new Date(data);
-        return(date.toLocaleString('th-th'));
+        return(date.toLocaleString(locale));
     }else{
         return('');
     }

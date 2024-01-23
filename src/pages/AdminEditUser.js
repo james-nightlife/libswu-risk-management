@@ -6,27 +6,16 @@ import { ConfirmAlert } from "../alert/ConfirmAlert";
 import { SuccessAlert } from "../alert/SuccessAlert";
 import { FailAlert } from "../alert/FailAlert";
 import { SessionExpired } from "../functions/SessionExpired";
+import { UserEditInputControl } from "../functions/UserEditInputControl";
 
 const AdminEditUser = () => {
+    // TITLE
     document.title = "จัดการบัญชีผู้ใช้";
-
-    const user = localStorage.getItem('edit_username');
-    const token = sessionStorage.getItem('token') 
-    const username = sessionStorage.getItem('username');
 
     // Form Input
     const [input, setInput] = useState([]);
-
-    // อัปเดต input
-    const handleChange = (e) => {
-        const name = e.target.name;
-        const value = e.target.value;
-        setInput(values => ({...values, [name]: value}));
-    }
-
-    useEffect(() => {
-        fetchRiskData();
-    }, []);
+    const user = localStorage.getItem('edit_username');
+    const token = sessionStorage.getItem('token') 
 
     // ดึงข้อมูลความเสี่ยง (datatype id ความเสี่ยงต้องเป็น number)
     const fetchRiskData = async () => {
@@ -45,25 +34,27 @@ const AdminEditUser = () => {
                     role: data.role
                 });
             }else if(status === 500){
-                handleTokenExpiration()
+                SessionExpired();
             }
         }).catch((error) => {
             console.error('Error fetching risk data:', error);
         });
     }
 
-    const handleTokenExpiration = async () => {
-        SessionExpired();
+    useEffect(() => {
+        fetchRiskData();
+    }, []);
+
+    // อัปเดต input
+    const handleChange = (e) => {
+        const name = e.target.name;
+        const value = e.target.value;
+        setInput(values => ({...values, [name]: value}));
     }
     
     //เช็กว่าเป็นแอคของเจ้าของหรือไม่
-    var roleDropdown = false
-    if(input.username === username){
-        roleDropdown = true
-    }else{
-        roleDropdown = false
-    }
-
+    var roleDropdown = UserEditInputControl(input);
+    
     // ตรวจสอบการเพิ่มบัญชีผู้ใช้
     const handleSubmit = async (e) => {
         e.preventDefault();

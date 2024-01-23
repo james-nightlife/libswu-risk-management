@@ -1,5 +1,5 @@
 import { BrowserRouter, Route, Routes} from 'react-router-dom';
-import ErrorPage from './error-page';
+import Error404 from './pages/Error404';
 import Home from './pages/Home';
 import SignIn from './pages/SignIn';
 import Layout from './pages/Layout';
@@ -21,7 +21,7 @@ function App() {
       <Routes>
         <Route path='/' element={<Layout />}>
           <Route index element={<Home />} />
-          <Route path='*' element={<ErrorPage />} />  
+          <Route path='*' element={<Error404 />} />  
           <Route path='/report' element={<RiskReport />} />
           <Route path='/risk-editor' element={<RiskEditor />} />
           <Route path='/admin/users' element={<UserManager />} />

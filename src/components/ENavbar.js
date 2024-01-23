@@ -1,6 +1,5 @@
 import { Container, Nav, NavDropdown, Navbar } from "react-bootstrap";
-import logo from './SWU_Central_Library_TH_Color.png';
-import './web.css';
+import logo from '../images/SWU_Central_Library_TH_Color.png';
 import { SignOut } from "../functions/SignOut";
 
 function ENavbar(){

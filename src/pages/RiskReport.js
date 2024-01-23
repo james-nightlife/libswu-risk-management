@@ -8,10 +8,10 @@ import { SuccessAlert } from "../alert/SuccessAlert";
 import { FailAlert } from "../alert/FailAlert";
 
 const RiskReport = () => {
+    // TITLE
     document.title = "รายงานความเสี่ยง";
-    const username = sessionStorage.getItem('username');
-    const token = sessionStorage.getItem('token');
-    
+
+    // FORM
     const [inputs, setInputs] = useState({});
 
     const handleChange = (e) => {
@@ -20,6 +20,10 @@ const RiskReport = () => {
         setInputs(values => ({...values, [name]: value}));
     }
 
+    // SUBMIT BUTTON
+    const username = sessionStorage.getItem('username');
+    const token = sessionStorage.getItem('token');
+    
     const handleSubmit = async (e) => {
         e.preventDefault();
         if(

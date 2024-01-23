@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Container } from "react-bootstrap";
 import Swal from "sweetalert2";
-import logo from '../components/SWU_Central_Library_TH_Color.png';
+import logo from '../images/SWU_Central_Library_TH_Color.png';
 import SignInForm from "../forms/SignInForm";
 import { SignInRequest } from "../requests/SignInRequest";
 

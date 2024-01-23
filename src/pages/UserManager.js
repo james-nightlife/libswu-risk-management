@@ -6,23 +6,13 @@ import Pagination from "../components/Pagination";
 import { SessionExpired } from "../functions/SessionExpired";
 
 const UserManager = () => {
+    // TITLE
     document.title = "จัดการบัญชีผู้ใช้";
-    
-    // เช็ก Role
-    const role = sessionStorage.getItem('role');
 
-    useEffect(() => {
-        if(role !== 'admin'){
-            window.location.href = "/";
-        }else{
-            fetchData();
-        }
-        
-    }, [role]);
-
-    // แสดงข้อมูลผู้ใช้
-    const token = sessionStorage.getItem('token');
+    // FETCH USERS
     const [users, setUsers] = useState([]);
+    const role = sessionStorage.getItem('role');
+    const token = sessionStorage.getItem('token');
 
     const fetchData = async () => {
         await fetch(`${process.env.REACT_APP_SERVER}/user/record`, {
@@ -35,31 +25,33 @@ const UserManager = () => {
                 const data = await response.json();
                 setUsers(data);
             }else if(response.status === 500){
-                handleTokenExpiration();
+                SessionExpired();
             }
         })
-        .catch(
+        .catch();
+    }   
 
-        );
-    }
+    useEffect(() => {
+        if(role !== 'admin'){
+            window.location.href = "/";
+        }else{
+            fetchData();
+        }
+    }, [role]);
 
-    const handleTokenExpiration = async () => {
-        SessionExpired();
-    }
-
-    // Pagination
+    // PAGINATION
     const itemsPerPage = 10;
     const [itemOffset, setItemOffset] = useState(0);
     const endOffset = itemOffset + itemsPerPage;
     const currentItems = users.slice(itemOffset, endOffset);
     const pageCount = Math.ceil(users.length / itemsPerPage);
     
-
     const handlePageClick = (event) => {
         const newOffset = (event.selected * itemsPerPage) % users.length;
         setItemOffset(newOffset);
     };
-
+    
+    // ROUTE TO EDITOR
     const handleEditButton = (e, id) => {
         e.preventDefault()
         localStorage.setItem('edit_username', id);
