@@ -73,6 +73,11 @@ const Home = () => {
         const result = FilterRisks(raw, inputs)
         setRisks(result);
     }
+
+    const handleClear = async (e) => {
+        e.preventDefault();
+        setInputs({})
+    }
     
     return(
         <Container className='p-3'>
@@ -81,7 +86,8 @@ const Home = () => {
             <SearchRisksForm 
                 handleFind={handleFind} 
                 handleChange={handleChange} 
-                inputs={inputs} />
+                inputs={inputs}
+                handleClear={handleClear} />
             <CSVLink 
                 data={clean}
                 filename='Risks_LibSWU.csv' 

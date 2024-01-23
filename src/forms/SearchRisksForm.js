@@ -1,10 +1,10 @@
 const { Form, Row, Col, Button } = require("react-bootstrap")
 
-const SearchRisksForm = ({handleFind, handleChange, inputs}) => {
+const SearchRisksForm = ({handleFind, handleChange, inputs, handleClear}) => {
     return(
         <Form onSubmit={handleFind}>
                 <Row>
-                    <Col xl={9} className="mt-3">
+                    <Col xl={6} className="mt-3">
                         <Form.Group>
                             <Form.Control
                                 type="text"
@@ -17,6 +17,15 @@ const SearchRisksForm = ({handleFind, handleChange, inputs}) => {
                         <div className="d-grid">
                             <Button type="submit">
                                 ค้นหา
+                            </Button>
+                        </div>
+                    </Col>
+                    <Col xl={3} className="mt-3">
+                        <div className="d-grid">
+                            <Button 
+                                className="btn-danger"
+                                onClick={handleClear}>
+                                ล้าง
                             </Button>
                         </div>
                     </Col>
