@@ -4,11 +4,13 @@ import Swal from "sweetalert2";
 import logo from '../images/SWU_Central_Library_TH_Color.png';
 import SignInForm from "../forms/SignInForm";
 import { SignInRequest } from "../requests/SignInRequest";
+import { FailAlert } from "../alert/FailAlert";
 
 const SignIn = () => {
-    const [inputs, setInputs] = useState({});
     document.title = "ลงชื่อเข้าใช้";
 
+    const [inputs, setInputs] = useState({});
+    
     const handleChange = (e) => {
         const name = e.target.name;
         const value = e.target.value;
@@ -41,18 +43,10 @@ const SignIn = () => {
                     window.location.href = '/';
                 })
             }else{
-                Swal.fire({
-                    title: 'ล้มเหลว',
-                    text: response.message,
-                    icon: 'error'
-                })
+                FailAlert(response.message);
             }
         }else{
-            Swal.fire({
-                title: 'ล้มเหลว',
-                text: 'โปรดระบุบัวศรีไอดีและรหัสผ่านของคุณ',
-                icon: 'error'
-            })
+            FailAlert('โปรดระบุบัวศรีไอดีและรหัสผ่านของคุณ');
         } 
     }
     
