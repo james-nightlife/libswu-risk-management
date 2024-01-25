@@ -46,7 +46,7 @@ const RiskEditForm = ({handleEdit, handleChange, inputs, isAdminOrReporter }) =>
                     <Button 
                         type="submit" 
                         disabled={isAdminOrReporter || (inputs.old_status === 'ดำเนินการแล้วเสร็จ')}>
-                        แก้ไขข้อมูล
+                        แก้ไขรายงาน
                     </Button>
                 </div>
             </Form>

@@ -34,7 +34,7 @@ const RisksTable = ({currentItems, riskEditorRoute, itemOffset}) => {
                             <td className="align-middle">{DateToDatetime(data.createdAt)}</td>
                             <td className="align-middle"><Button variant={data.color}>{data.status || 'รอดำเนินการ'}</Button></td>
                             <td className="align-middle">
-                                <Button onClick={e => riskEditorRoute(e, data._id)}>แก้ไข/ประเมิน</Button>
+                                <Button onClick={e => riskEditorRoute(e, data._id)}>แก้ไข/พิจารณา</Button>
                             </td>
                         </tr> 
                     )})}

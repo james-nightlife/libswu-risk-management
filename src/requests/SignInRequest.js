@@ -16,7 +16,7 @@ const SignInRequest = async (credentials) => {
         }else{
             return ({...data,
                 status: status,
-                message: `ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง`,
+                message: `ชื่อผู้ใช้งานหรือรหัสผ่านไม่ถูกต้อง`,
            });
         }
     }).catch((data) => ({

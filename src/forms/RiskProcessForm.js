@@ -4,7 +4,7 @@ import { DateToDatetime } from "../functions/DateToDatetime";
 const RiskProcessForm = ({handleProcess, isAdmin, inputs, handleChange}) => {
     return(
         <Form onSubmit={handleProcess}>
-                <h5 className="pt-3">การพิจารณาความเสี่ยง</h5>
+                <h5 className="pt-3">การพิจารณาการดำเนินการเกี่ยวกับความเสี่ยง</h5>
                 <Form.Group>
                     <Form.Label className="pt-3">การดำเนินการ</Form.Label>
                     <Form.Control 
@@ -47,7 +47,7 @@ const RiskProcessForm = ({handleProcess, isAdmin, inputs, handleChange}) => {
                     <Button 
                         type="submit" 
                         disabled={isAdmin || (inputs.old_status === 'ดำเนินการแล้วเสร็จ')}>
-                        ประเมินความเสี่ยง
+                        พิจารณาการดำเนินการ
                     </Button>
                 </div>
             </Form>

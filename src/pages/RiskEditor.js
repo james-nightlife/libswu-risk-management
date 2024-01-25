@@ -76,7 +76,9 @@ const RiskEditor = () => {
         ){
             ConfirmAlert({
                 title: 'ยืนยันการแก้ไข',
-                text: 'ยืนยันการแก้ไขข้อมูลความเสี่ยง',
+                html: `ยืนยันการแก้ไขรายงานความเสี่ยง <br>
+                    รายละเอียด : ${risk.detail} <br>
+                    สถานที่แจ้ง : ${risk.location}`,
             }, async () => {
                 const response = await RiskUpdateRequest({
                     detail: risk.detail,
@@ -91,7 +93,7 @@ const RiskEditor = () => {
                 }
             });
         }else{
-            FailAlert('โปรดระบุข้อมูลการประเมินความเสี่ยง');
+            FailAlert('โปรดระบุรายละเอียดความเสี่ยง');
         }    
     }
 
@@ -103,8 +105,8 @@ const RiskEditor = () => {
             risk.status
         ){
             ConfirmAlert({
-                title: 'ยืนยันการประเมิน',
-                html: `ยืนยันการประเมินความเสี่ยง<br>
+                title: 'ยืนยันการพิจารณา',
+                html: `ยืนยันการพิจารณาการดำเนินการเกี่ยวกับความเสี่ยง<br>
                         การดำเนินการ : ${risk.feedback}<br>
                         สถานะเดิม : ${risk.old_status}<br>
                         สถานะใหม่ : ${risk.status}<br>`,
@@ -133,7 +135,7 @@ const RiskEditor = () => {
                 }
             })
         }else{
-            FailAlert('โปรดระบุข้อมูลการประเมินความเสี่ยง');
+            FailAlert('โปรดระบุการดำเนินการเกี่ยวกับความเสี่ยง');
         }        
     }
 
@@ -142,8 +144,8 @@ const RiskEditor = () => {
         let response;
         e.preventDefault();
         ConfirmAlert({
-            title: 'ยืนยันการลบข้อมูล',
-            text: 'ยืนยันการลบข้อมูลความเสี่ยง',
+            title: 'ยืนยันการลบ',
+            text: 'ยืนยันการลบรายงานความเสี่ยง',
             icon: 'warning',
             showCancelButton: true,
             allowOutsideClick: false,
@@ -169,7 +171,7 @@ const RiskEditor = () => {
                     className="btn-danger" 
                     disabled={isAdminOrReporter || (risk.old_status === 'ดำเนินการแล้วเสร็จ')}
                     onClick={handleDelete}>
-                    ลบข้อมูลความเสี่ยง
+                    ลบรายงาน
                 </Button>
             </div>
         </Container>

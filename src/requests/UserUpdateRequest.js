@@ -12,7 +12,7 @@ const UserUpdateRequest = async (input, id, token) => {
         if(status === 200){
             return({...response,
                 status: status,
-                message: 'ดำเนินการแก้ไขรายงานความเสี่ยงเรียบร้อยแล้ว',
+                message: 'ดำเนินการแก้ไขข้อมูลผู้ใช้งานเรียบร้อยแล้ว',
            });
         }else{
             return({...response,
