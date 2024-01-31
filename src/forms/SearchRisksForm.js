@@ -1,8 +1,10 @@
-const { Form, Row, Col, Button } = require("react-bootstrap")
+const { Form, Row, Col, Button, Container } = require("react-bootstrap")
 
 const SearchRisksForm = ({handleFind, handleChange, inputs, handleClear}) => {
     return(
-        <Form onSubmit={handleFind}>
+        <>
+            <h1 className="text-center">ค้นหา</h1>
+            <Form onSubmit={handleFind}>
                 <Row>
                     <Col xl={6} className="mt-3">
                         <Form.Group>
@@ -10,6 +12,7 @@ const SearchRisksForm = ({handleFind, handleChange, inputs, handleClear}) => {
                                 type="text"
                                 name="keyword"
                                 onChange={handleChange}
+                                placeholder="ค้นหาคำสำคัญ เช่น รายละเอียด ผู้แจ้ง เป็นต้น"
                                 value={inputs.keyword || ''} />
                         </Form.Group>
                     </Col>
@@ -80,6 +83,8 @@ const SearchRisksForm = ({handleFind, handleChange, inputs, handleClear}) => {
                     </Col>
                 </Row>  
             </Form>
+            <hr />
+        </>    
     )
 }
 

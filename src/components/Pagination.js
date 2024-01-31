@@ -2,7 +2,9 @@ import ReactPaginate from "react-paginate";
 
 const Pagination = ({handlePageClick, pageCount}) => {
     return(
-        <ReactPaginate
+        <>
+            <ReactPaginate
+                className='pt-3'
                 breakLabel='...'
                 nextLabel='Next >'
                 onPageChange={handlePageClick}
@@ -11,6 +13,8 @@ const Pagination = ({handlePageClick, pageCount}) => {
                 previousLabel='< Previous'
                 renderOnZeroPageCount={null}
             />
+            <hr />
+        </> 
     );
 }
 

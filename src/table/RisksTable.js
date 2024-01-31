@@ -1,9 +1,10 @@
-import { Badge, Button, Table } from "react-bootstrap";
+import {Button, Table } from "react-bootstrap";
 import { DateToDatetime } from "../functions/DateToDatetime";
 
 const RisksTable = ({currentItems, riskEditorRoute, itemOffset}) => {
     return(
-        <Table responsive className="mt-3">
+        <>
+            <Table responsive className="mt-3">
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -34,12 +35,13 @@ const RisksTable = ({currentItems, riskEditorRoute, itemOffset}) => {
                             <td className="align-middle">{DateToDatetime(data.createdAt)}</td>
                             <td className="align-middle"><Button variant={data.color}>{data.status || 'รอดำเนินการ'}</Button></td>
                             <td className="align-middle">
-                                <Button onClick={e => riskEditorRoute(e, data._id)}>แก้ไข/พิจารณา</Button>
+                                <Button onClick={e => riskEditorRoute(e, data._id)}>เรียกดู</Button>
                             </td>
                         </tr> 
                     )})}
                 </tbody>
             </Table>
+        </>
     )
 }
 

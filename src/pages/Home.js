@@ -81,8 +81,6 @@ const Home = () => {
     
     return(
         <Container className='p-3'>
-            <RisksDashboard 
-                raw={raw} />
             <SearchRisksForm 
                 handleFind={handleFind} 
                 handleChange={handleChange} 
@@ -91,7 +89,7 @@ const Home = () => {
             <CSVLink 
                 data={clean}
                 filename='Risks_LibSWU.csv' 
-                className='btn btn-primary mt-3'>
+                className='btn btn-primary'>
                     บันทึกเป็น CSV
             </CSVLink>
             { raw === null ? (
@@ -110,6 +108,8 @@ const Home = () => {
                         pageCount={pageCount} /> 
                 </>
             )}
+            <RisksDashboard 
+                raw={raw} />
         </Container>
     );
 }
