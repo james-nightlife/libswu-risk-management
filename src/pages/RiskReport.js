@@ -16,7 +16,7 @@ const RiskReport = () => {
 
     const handleChange = (e) => {
         const name = e.target.name;
-        const value = e.target.value;
+        const value = (e.target.type === 'file' && e.target.files.length !== 0 ? URL.createObjectURL(e.target.files[0]) : e.target.value);
         setInputs(values => ({...values, [name]: value}));
     }
 
