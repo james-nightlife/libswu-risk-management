@@ -28,8 +28,11 @@ const RiskReport = () => {
         e.preventDefault();
         if(
             inputs.detail &&
-            inputs.location &&
-            inputs.location !== '0'
+            inputs.building &&
+            inputs.building !== '0' &&
+            inputs.floor &&
+            inputs.floor !== '0' &&
+            inputs.room
         ){
             ConfirmAlert({
                 title: 'ยืนยันการรายงาน',
@@ -38,7 +41,11 @@ const RiskReport = () => {
                 const response = await RiskReportRequest({
                     reporter: username,
                     detail: inputs.detail, 
-                    location: inputs.location
+                    building: inputs.building,
+                    floor: inputs.floor,
+                    room: inputs.room,
+                    image: inputs.image,
+
                 }, token);
                 if(response.status === 200){
                     SuccessAlert(response.message)

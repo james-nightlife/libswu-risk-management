@@ -28,9 +28,16 @@ const RiskEditor = () => {
         }).then(async (res) => {
             const data = await res.json()
             if(data.status){
-                setRisk({...data, old_status: data.status}); 
+                setRisk({
+                    ...data, 
+                    old_status: data.status,
+                }); 
             }else{
-                setRisk({...data, old_status: 'รอดำเนินการ'}); 
+                setRisk({
+                    ...data, 
+                    old_status: 'รอดำเนินการ',
+                    status: 'รอดำเนินการ',
+                }); 
             }
         }).catch((error) => {
             console.error('Error fetching risk data:', error);
@@ -104,6 +111,7 @@ const RiskEditor = () => {
             risk.feedback &&
             risk.status
         ){
+            
             ConfirmAlert({
                 title: 'ยืนยันการพิจารณา',
                 html: `ยืนยันการพิจารณาการดำเนินการเกี่ยวกับความเสี่ยง<br>

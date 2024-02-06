@@ -13,7 +13,7 @@ const RiskProcessForm = ({handleProcess, isAdmin, inputs, handleChange}) => {
                         as="textarea"
                         disabled={isAdmin || (inputs.old_status === 'ดำเนินการแล้วเสร็จ')}
                         onChange={handleChange}
-                        value={'' || inputs.feedback} />
+                        value={inputs.feedback || '' } />
                 </Form.Group>
                 <Form.Group>
                     <Form.Label className="pt-3">สถานะการดำเนินการ</Form.Label>
@@ -21,10 +21,12 @@ const RiskProcessForm = ({handleProcess, isAdmin, inputs, handleChange}) => {
                         name="status" 
                         disabled={isAdmin || (inputs.old_status === 'ดำเนินการแล้วเสร็จ')}
                         onChange={handleChange}
-                        value={'' || inputs.status}>
-                            {(inputs.status === 'รอดำเนินการ' || !inputs.status) ? <option>รอดำเนินการ</option> : '' }
-                            <option>อยู่ระหว่างการดำเนินการ</option>
-                            <option>ดำเนินการแล้วเสร็จ</option>
+                        value={inputs.status || '' }>
+                            {(inputs.status === 'รอดำเนินการ' || !inputs.status) &&
+                                (<option value='รอดำเนินการ'>รอดำเนินการ</option>) 
+                            }
+                            <option value='อยู่ระหว่างการดำเนินการ'>อยู่ระหว่างการดำเนินการ</option>
+                            <option value='ดำเนินการแล้วเสร็จ'>ดำเนินการแล้วเสร็จ</option>
                     </Form.Select>
                 </Form.Group>
                 <Form.Group>
@@ -33,7 +35,7 @@ const RiskProcessForm = ({handleProcess, isAdmin, inputs, handleChange}) => {
                         name="initialized_date" 
                         type="text" 
                         disabled 
-                        value={'' || DateToDatetime(inputs.initialized_date)} />
+                        value={DateToDatetime(inputs.initialized_date) || ''} />
                 </Form.Group>
                 <Form.Group>
                     <Form.Label className="pt-3">วันที่ดำเนินการแล้วเสร็จ</Form.Label>
@@ -41,7 +43,7 @@ const RiskProcessForm = ({handleProcess, isAdmin, inputs, handleChange}) => {
                         name="finalized_date" 
                         type="text" 
                         disabled 
-                        value={'' || DateToDatetime(inputs.finalized_date)} />
+                        value={DateToDatetime(inputs.finalized_date) || '' } />
                 </Form.Group>
                 <div className="d-grid mt-3">
                     <Button 
