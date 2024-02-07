@@ -79,7 +79,9 @@ const RiskEditForm = ({handleEdit, handleChange, inputs, isAdminOrReporter }) =>
                     <Form.Select 
                         name="level" 
                         value={inputs.level || ''}
-                        onChange={handleChange}>
+                        onChange={handleChange}
+                        disabled={isAdminOrReporter || (inputs.old_status === 'ดำเนินการแล้วเสร็จ')}
+                        >
                         <option value='0'>-- ระดับ --</option>
                         <option>1</option>
                         <option>2</option>
