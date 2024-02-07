@@ -79,17 +79,26 @@ const RiskEditor = () => {
         if(
             risk.detail &&
             risk.location &&
-            risk.location !== '0'
+            risk.location !== '0' &&
+            risk.floors && 
+            risk.floors !== '0' &&
+            risk.places && 
+            risk.level &&
+            risk.level !== '0'
         ){
             ConfirmAlert({
                 title: 'ยืนยันการแก้ไข',
                 html: `ยืนยันการแก้ไขรายงานความเสี่ยง <br>
                     รายละเอียด : ${risk.detail} <br>
-                    สถานที่แจ้ง : ${risk.location}`,
+                    สถานที่แจ้ง : ${risk.location} ชั้น ${risk.floors} ${risk.places}<br>
+                    ระดับความเสี่ยง : ${risk.level}`,
             }, async () => {
                 const response = await RiskUpdateRequest({
                     detail: risk.detail,
                     location: risk.location,
+                    floors: risk.floors,
+                    places: risk.places,
+                    level: risk.level,
                 }, id, token)
                 if(response.status === 200){
                     SuccessAlert(response.message);

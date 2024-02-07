@@ -18,8 +18,8 @@ const RiskReportForm = ({handleSubmit, inputs, handleChange}) => {
                 <Form.Group className="mt-3">
                     <Form.Label>อาคาร</Form.Label>
                     <Form.Select 
-                        name="building" 
-                        value={inputs.building || '' }
+                        name="location" 
+                        value={inputs.location || '' }
                         onChange={handleChange}>
                         <option value='0'>-- อาคาร --</option>
                         <option>ประสานมิตร</option>
@@ -30,17 +30,25 @@ const RiskReportForm = ({handleSubmit, inputs, handleChange}) => {
                 <Form.Group className="mt-3">
                     <Form.Label>ชั้น</Form.Label>
                     <Form.Select 
-                        name="floor" 
-                        value={inputs.floor || ''}
+                        name="floors" 
+                        value={inputs.floors || ''}
                         onChange={handleChange}>
                         <option value='0'>-- ชั้น --</option>
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                        <option>5</option>
-                        <option>6</option>
-                        {(inputs.building === 'ประสานมิตร') ?
+                        {(inputs.location && inputs.location !== '0') ? (
+                            <>
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                                <option>6</option>
+                            </>
+                        ) : (
+                            <>
+                            </>
+                        )
+                        }
+                        {(inputs.location === 'ประสานมิตร') ?
                             (
                                 <>
                                     <option>7</option>
@@ -57,15 +65,30 @@ const RiskReportForm = ({handleSubmit, inputs, handleChange}) => {
                 <Form.Group className="mt-3">
                     <Form.Label>ห้อง / จุดที่พบความเสี่ยง</Form.Label>
                     <Form.Control 
-                        name="room" 
+                        name="places" 
                         type='text'
-                        value={inputs.room || ''}
+                        value={inputs.places || ''}
                         onChange={handleChange} />
                 </Form.Group>
 
+                <Form.Group className="mt-3">
+                    <Form.Label>ระดับความเสี่ยง</Form.Label>
+                    <Form.Select 
+                        name="level" 
+                        value={inputs.level || ''}
+                        onChange={handleChange}>
+                        <option value='0'>-- ระดับ --</option>
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                    </Form.Select>
+                </Form.Group>
 
                 <Form.Group className="mt-3">
-                    <Form.Label>ไฟล์ภาพประกอบ</Form.Label>
+                    <Form.Label>ไฟล์ภาพประกอบ (ถ้ามี)</Form.Label>
+                    <p>*อยู่ระหว่างการทดสอบ</p>
                     <Form.Control
                         name="image"
                         type="file"
