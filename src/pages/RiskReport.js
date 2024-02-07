@@ -47,6 +47,14 @@ const RiskReport = () => {
                     floors: inputs.floors,
                     places: inputs.places,
                     level: inputs.level,
+                    feedback: [
+                        {
+                            date: new Date(),
+                            status: 'รอดำเนินการ',
+                            comment: 'รายงานความเสี่ยงเข้าระบบฯ แล้ว'
+                        }
+                    ],
+                    status: 'รอดำเนินการ',
 
                 }, token);
                 if(response.status === 200){

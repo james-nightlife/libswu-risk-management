@@ -117,14 +117,14 @@ const RiskEditor = () => {
     const handleEvaluation = async (e) => {
         e.preventDefault();
         if(
-            risk.feedback &&
+            risk.comment &&
             risk.status
         ){
             
             ConfirmAlert({
                 title: 'ยืนยันการพิจารณา',
                 html: `ยืนยันการพิจารณาการดำเนินการเกี่ยวกับความเสี่ยง<br>
-                        การดำเนินการ : ${risk.feedback}<br>
+                        การดำเนินการ : ${risk.comment}<br>
                         สถานะเดิม : ${risk.old_status}<br>
                         สถานะใหม่ : ${risk.status}<br>`,
             }, async () => {
@@ -138,7 +138,15 @@ const RiskEditor = () => {
                     finalized_date = new Date();
                 }
                 const response = await RiskUpdateRequest({
-                    feedback: risk.feedback,
+                    feedback: [
+                        ...risk.feedback,
+                        {
+                            date: new Date(),
+                            status: risk.status,
+                            comment: risk.comment,
+                            user: sessionStorage.getItem('username')
+                        },
+                    ],
                     status: risk.status,
                     initialized_date: initialized_date,
                     finalized_date: finalized_date,        

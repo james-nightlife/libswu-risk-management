@@ -1,20 +1,34 @@
-import { Button, Form } from "react-bootstrap";
+import { Button, Card, Container, Form } from "react-bootstrap";
 import { DateToDatetime } from "../functions/DateToDatetime";
 
 const RiskProcessForm = ({handleProcess, isAdmin, inputs, handleChange}) => {
     return(
         <Form onSubmit={handleProcess}>
                 <h5 className="pt-3">การพิจารณาการดำเนินการเกี่ยวกับความเสี่ยง</h5>
+                { 
+                    inputs.feedback && inputs.feedback.map((data, idx) => {
+                        return(
+                            <Card className="mt-3">
+                                <Card.Header>{data.status}</Card.Header>
+                                <Card.Body className="p-3">
+                                    <p>การดำเนินการ : {data.comment}</p>
+                                    <p>ดำเนินการโดย {data.user} เมื่อวันที่ {DateToDatetime(data.date)} </p>
+                                </Card.Body>
+                            </Card>
+                        )
+                    }).reverse()
+                }
                 <Form.Group>
                     <Form.Label className="pt-3">การดำเนินการ</Form.Label>
                     <Form.Control 
-                        name="feedback" 
+                        name="comment" 
                         type="text" 
                         as="textarea"
                         disabled={isAdmin || (inputs.old_status === 'ดำเนินการแล้วเสร็จ')}
                         onChange={handleChange}
-                        value={inputs.feedback || '' } />
+                        value={inputs.comment || '' } />
                 </Form.Group>
+
                 <Form.Group>
                     <Form.Label className="pt-3">สถานะการดำเนินการ</Form.Label>
                     <Form.Select 
@@ -22,13 +36,14 @@ const RiskProcessForm = ({handleProcess, isAdmin, inputs, handleChange}) => {
                         disabled={isAdmin || (inputs.old_status === 'ดำเนินการแล้วเสร็จ')}
                         onChange={handleChange}
                         value={inputs.status || '' }>
-                            {(inputs.status === 'รอดำเนินการ' || !inputs.status) &&
-                                (<option value='รอดำเนินการ'>รอดำเนินการ</option>) 
+                            {(inputs.old_status === 'รอดำเนินการ' || !inputs.old_status) &&
+                                (<option>รอดำเนินการ</option>) 
                             }
-                            <option value='อยู่ระหว่างการดำเนินการ'>อยู่ระหว่างการดำเนินการ</option>
-                            <option value='ดำเนินการแล้วเสร็จ'>ดำเนินการแล้วเสร็จ</option>
+                            <option>อยู่ระหว่างการดำเนินการ</option>
+                            <option>ดำเนินการแล้วเสร็จ</option>
                     </Form.Select>
                 </Form.Group>
+
                 <Form.Group>
                     <Form.Label className="pt-3">วันที่เริ่มดำเนินการ</Form.Label>
                     <Form.Control 
@@ -37,6 +52,7 @@ const RiskProcessForm = ({handleProcess, isAdmin, inputs, handleChange}) => {
                         disabled 
                         value={DateToDatetime(inputs.initialized_date) || ''} />
                 </Form.Group>
+
                 <Form.Group>
                     <Form.Label className="pt-3">วันที่ดำเนินการแล้วเสร็จ</Form.Label>
                     <Form.Control 
@@ -45,6 +61,7 @@ const RiskProcessForm = ({handleProcess, isAdmin, inputs, handleChange}) => {
                         disabled 
                         value={DateToDatetime(inputs.finalized_date) || '' } />
                 </Form.Group>
+
                 <div className="d-grid mt-3">
                     <Button 
                         type="submit" 
