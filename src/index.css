@@ -36,7 +36,7 @@ th {
   font-weight: normal !important;
 }
 
-td, input, option, select,textarea {
+td, input, option, select, textarea, p.card-text {
   font-family: 'Sarabun' !important;
 }
 

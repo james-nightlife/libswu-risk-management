@@ -4,15 +4,25 @@ import { DateToDatetime } from "../functions/DateToDatetime";
 const RiskProcessForm = ({handleProcess, isAdmin, inputs, handleChange}) => {
     return(
         <Form onSubmit={handleProcess}>
-                <h5 className="pt-3">การพิจารณาการดำเนินการเกี่ยวกับความเสี่ยง</h5>
+                <h5 className="pt-3">การพิจารณาการดำเนินการเกี่ยวกับความเสี่ยง (เรียงจากล่าสุดไปเริ่มต้น)</h5>
                 { 
                     inputs.feedback && inputs.feedback.map((data, idx) => {
                         return(
-                            <Card className="mt-3">
-                                <Card.Header>{data.status}</Card.Header>
+                            <Card 
+                                className="mt-3"
+                                bg={
+                                    data.status === 'ดำเนินการแล้วเสร็จ' ?
+                                    'success' : 
+                                    data.status === 'อยู่ระหว่างการดำเนินการ' ?
+                                    'warning' :
+                                    'danger'
+                                    } 
+                                text='white' 
+                                key={`process-${idx}`}>
+                                <Card.Header>ระยะที่ {idx+1} : {data.status}</Card.Header>
                                 <Card.Body className="p-3">
-                                    <p>การดำเนินการ : {data.comment}</p>
-                                    <p>ดำเนินการโดย {data.user} เมื่อวันที่ {DateToDatetime(data.date)} </p>
+                                    <Card.Title>{data.comment}</Card.Title>
+                                    <Card.Text>ดำเนินการโดย {data.user} เมื่อวันที่ {DateToDatetime(data.date)} </Card.Text>
                                 </Card.Body>
                             </Card>
                         )

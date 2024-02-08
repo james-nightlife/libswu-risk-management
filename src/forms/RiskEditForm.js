@@ -44,23 +44,14 @@ const RiskEditForm = ({handleEdit, handleChange, inputs, isAdminOrReporter }) =>
                                 <option>4</option>
                                 <option>5</option>
                                 <option>6</option>
+                                <option>7</option>
+                                <option>8</option>
                             </>
                         ) : (
                             <>
                             </>
                         )
                         }
-                        {(inputs.location === 'ประสานมิตร') ?
-                            (
-                                <>
-                                    <option>7</option>
-                                    <option>8</option>
-                                </>
-                            )
-                        : (
-                            <>
-                            </>
-                        )}
                     </Form.Select>
                 </Form.Group>
 

@@ -23,7 +23,7 @@ const UserManager = () => {
         }).then(async (response) => {
             if(response.status === 200){
                 const data = await response.json();
-                setUsers(data);
+                setUsers(data.sort((a, b) => (a.username > b.username) ? 1 : (b.username > a.username) ? -1 : 0));
             }else if(response.status === 500){
                 SessionExpired();
             }
