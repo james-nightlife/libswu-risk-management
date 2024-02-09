@@ -7,7 +7,7 @@ const RisksTable = ({currentItems, riskEditorRoute, itemOffset}) => {
             <Table responsive className="mt-3">
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <th>ที่</th>
                         <th>รายละเอียด</th>
                         <th>สถานที่แจ้ง</th>
                         <th>ผู้แจ้ง</th>

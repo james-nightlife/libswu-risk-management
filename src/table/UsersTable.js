@@ -6,8 +6,8 @@ const UsersTable = ({currentItems, handleEditButton, itemOffset}) => {
         <Table className="mt-3" responsive>
                 <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Username</th>
+                        <th>ที่</th>
+                        <th>ชื่อผู้ใช้</th>
                         <th>สิทธิ์ใช้งาน</th>
                         <th>วันที่สร้างผู้ใช้</th>
                         <th>วันที่ลงชื่อเข้าใช้ล่าสุด</th>

@@ -20,7 +20,7 @@ function ENavbar(){
                     <img src={logo} height="50" alt="สำนักหอสมุดกลาง มหาวิทยาลัยศรีนครินทรวิโรฒ" />
                 </Navbar.Brand>
                 <Navbar.Toggle aria-controls="navbarScroll" />
-                <Navbar.Collapse className="justify-content-end">
+                <Navbar.Collapse className="justify-content-end mt-2">
                     <Navbar.Brand href="/">ระบบรวบรวมรายงานความเสี่ยง</Navbar.Brand>
                     <Nav className="me-auto">
                         <Nav.Link href="/report">รายงานความเสี่ยง</Nav.Link>

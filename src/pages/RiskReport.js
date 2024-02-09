@@ -51,8 +51,9 @@ const RiskReport = () => {
                         {
                             date: new Date(),
                             status: 'รอดำเนินการ',
-                            comment: 'รายงานความเสี่ยงเข้าระบบฯ แล้ว'
-                        }
+                            comment: 'รายงานความเสี่ยงเข้าระบบฯ แล้ว',
+                            user: username,
+                        },
                     ],
                     status: 'รอดำเนินการ',
 
