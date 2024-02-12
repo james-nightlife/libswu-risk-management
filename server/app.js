@@ -5,7 +5,12 @@ const cors = require('cors')
 
 const app = express();
 app.use(cors())
-const upload = multer({ dest: 'uploads/' });
+const upload = multer({
+  dest: 'uploads/' ,
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + path.extname(file.originalname)) //Appending extension
+  }
+});
 
 // Handle file uploads
 app.post('/risk/upload', upload.single('file'), (req, res) => {
