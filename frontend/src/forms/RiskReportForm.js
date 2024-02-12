@@ -1,6 +1,6 @@
 import { Button, Form, Image } from "react-bootstrap";
 
-const RiskReportForm = ({handleSubmit, inputs, handleChange}) => {
+const RiskReportForm = ({handleSubmit, inputs, handleChange, imageUrl}) => {
     return(
         <>
             <Form onSubmit={handleSubmit}>
@@ -85,10 +85,12 @@ const RiskReportForm = ({handleSubmit, inputs, handleChange}) => {
                         type="file"
                         onChange={handleChange}
                         accept="image/*" />
+                        {inputs.image && 
                         <Image 
                             className="mt-3" 
-                            src={inputs.image || '' }
+                            src={imageUrl}
                             fluid />
+                        }
                 </Form.Group>
 
                 <div className="d-grid mt-3">

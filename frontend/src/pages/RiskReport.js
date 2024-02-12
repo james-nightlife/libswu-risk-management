@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 import RiskReportForm from "../forms/RiskReportForm";
 import { RiskReportRequest } from "../requests/RiskReportRequest";
@@ -7,16 +7,27 @@ import { SessionExpired } from "../functions/SessionExpired";
 import { SuccessAlert } from "../alert/SuccessAlert";
 import { FailAlert } from "../alert/FailAlert";
 
+
 const RiskReport = () => {
     // TITLE
     document.title = "รายงานความเสี่ยง";
 
     // FORM
     const [inputs, setInputs] = useState({});
+    const [imageUrl, setImageUrl] = useState('');
+
+    useEffect(() => {
+        if(inputs.image){
+            const url = URL.createObjectURL(inputs.image)
+            setImageUrl(url);
+            return () => URL.revokeObjectURL(url);
+        }
+    }, [inputs.image])
 
     const handleChange = (e) => {
         const name = e.target.name;
-        const value = (e.target.type === 'file' && e.target.files.length !== 0 ? URL.createObjectURL(e.target.files[0]) : e.target.value);
+        const value = ((e.target.type === 'file' && e.target.files.length !== 0) ? 
+                            e.target.files[0] : e.target.value);
         setInputs(values => ({...values, [name]: value}));
     }
 
@@ -36,10 +47,19 @@ const RiskReport = () => {
             inputs.level &&
             inputs.level !== '0'
         ){
+            if(inputs.image){
+                const formData = new FormData();
+                formData.append('file', inputs.image);
+                const res = await fetch('http://127.0.0.1:3001/risk/upload', {
+                    method: 'POST', 
+                    body: formData
+                })
+            }
             ConfirmAlert({
                 title: 'ยืนยันการรายงาน',
                 text: 'ยืนยันการรายงานความเสี่ยง',
             }, async () => {
+                
                 const response = await RiskReportRequest({
                     reporter: username,
                     detail: inputs.detail, 
@@ -75,7 +95,11 @@ const RiskReport = () => {
     return(
         <Container className="p-3">
             <h1>รายงานความเสี่ยง</h1>
-            <RiskReportForm handleChange={handleChange} handleSubmit={handleSubmit} inputs={inputs} />
+            <RiskReportForm 
+                handleChange={handleChange} 
+                handleSubmit={handleSubmit} 
+                inputs={inputs} 
+                imageUrl={imageUrl} />
         </Container>
     )
 }
