@@ -88,7 +88,8 @@ const RiskEditForm = ({handleEdit, handleChange, inputs, isAdminOrReporter, imag
                         name="newimage"
                         type="file"
                         onChange={handleChange}
-                        accept="image/*" />
+                        accept="image/*"
+                        disabled={isAdminOrReporter || (inputs.old_status === 'ดำเนินการแล้วเสร็จ')} />
                         {
                             inputs.newimage ? 
                             (
