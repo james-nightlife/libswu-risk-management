@@ -6,6 +6,7 @@ import { ConfirmAlert } from "../alert/ConfirmAlert";
 import { SessionExpired } from "../functions/SessionExpired";
 import { SuccessAlert } from "../alert/SuccessAlert";
 import { FailAlert } from "../alert/FailAlert";
+import { UploadImageRequest } from "../requests/UploadImageRequest";
 
 
 const RiskReport = () => {
@@ -48,18 +49,17 @@ const RiskReport = () => {
             inputs.level !== '0'
         ){
             if(inputs.image){
-                const formData = new FormData();
-                formData.append('file', inputs.image);
-                const res = await fetch('http://127.0.0.1:3001/risk/upload', {
-                    method: 'POST', 
-                    body: formData
-                })
+                
             }
             ConfirmAlert({
                 title: 'ยืนยันการรายงาน',
                 text: 'ยืนยันการรายงานความเสี่ยง',
             }, async () => {
-                
+                const formData = new FormData();
+                formData.append('file', inputs.image);
+                const filename = await UploadImageRequest({
+                    image: inputs.image
+                })
                 const response = await RiskReportRequest({
                     reporter: username,
                     detail: inputs.detail, 
@@ -67,6 +67,7 @@ const RiskReport = () => {
                     floors: inputs.floors,
                     places: inputs.places,
                     level: inputs.level,
+                    image: filename,
                     feedback: [
                         {
                             date: new Date(),
