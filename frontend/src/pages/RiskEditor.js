@@ -10,6 +10,7 @@ import { SuccessAlert } from "../alert/SuccessAlert";
 import { FailAlert } from "../alert/FailAlert";
 import { RiskProcessInputControl } from "../functions/RiskProcessInputControl";
 import { RiskEditInputControl } from "../functions/RiskEditInputControl";
+import { UploadImageRequest } from "../requests/UploadImageRequest";
 
 const RiskEditor = () => {
     // TITLE
@@ -18,6 +19,7 @@ const RiskEditor = () => {
     // FETCH RISK
     const id = localStorage.getItem('risk_id');
     const [risk, setRisk] = useState([]);
+    const [imageUrl, setImageUrl] = useState('');
 
     const fetchRiskData = async () => {
         await fetch(`${process.env.REACT_APP_SERVER}/risk/record/${id}`, {
@@ -66,9 +68,21 @@ const RiskEditor = () => {
     // ON-CHANGE
     const handleChange = (e) => {
         const name = e.target.name;
-        const value = e.target.value;
+        const value = (
+            (e.target.type === 'file' && e.target.files.length !== 0) ? 
+            e.target.files[0] : 
+            e.target.value
+        );
         setRisk(values => ({...values, [name]: value}));
     }
+
+    useEffect(() => {
+        if(risk.newimage){
+            const url = URL.createObjectURL(risk.newimage)
+            setImageUrl(url);
+            return () => URL.revokeObjectURL(url);
+        }
+    }, [risk.newimage])
 
     // TOKEN
     const token = sessionStorage.getItem('token');
@@ -93,12 +107,21 @@ const RiskEditor = () => {
                     สถานที่แจ้ง : ${risk.location} ชั้น ${risk.floors} ${risk.places}<br>
                     ระดับความเสี่ยง : ${risk.level}`,
             }, async () => {
+                let filename;
+                if(risk.newimage){
+                    const formData = new FormData();
+                    formData.append('file', risk.newimage);
+                    filename = await UploadImageRequest({
+                        image: risk.newimage
+                    })
+                }
                 const response = await RiskUpdateRequest({
                     detail: risk.detail,
                     location: risk.location,
                     floors: risk.floors,
                     places: risk.places,
                     level: risk.level,
+                    image: (filename || risk.image)
                 }, id, token)
                 if(response.status === 200){
                     SuccessAlert(response.message);
@@ -189,8 +212,17 @@ const RiskEditor = () => {
     return(
         <Container className="p-3">
             <h5>รายงานความเสี่ยง</h5>
-            <RiskEditForm handleEdit={handleEdit} handleChange={handleChange} isAdminOrReporter={isAdminOrReporter} inputs={risk} />
-            <RiskProcessForm handleProcess={handleEvaluation} handleChange={handleChange} isAdmin={evaluation} inputs={risk} />
+            <RiskEditForm 
+                handleEdit={handleEdit} 
+                handleChange={handleChange} 
+                isAdminOrReporter={isAdminOrReporter} 
+                inputs={risk} 
+                imageUrl={imageUrl} />
+            <RiskProcessForm 
+                handleProcess={handleEvaluation} 
+                handleChange={handleChange} 
+                isAdmin={evaluation} 
+                inputs={risk} />
             <div className="d-grid mt-3">
                 <Button 
                     className="btn-danger" 

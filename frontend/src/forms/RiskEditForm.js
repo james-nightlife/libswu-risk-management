@@ -1,7 +1,7 @@
-import { Button, Form } from "react-bootstrap";
+import { Button, Form, Image } from "react-bootstrap";
 import { DateToDatetime } from "../functions/DateToDatetime";
 
-const RiskEditForm = ({handleEdit, handleChange, inputs, isAdminOrReporter }) => {
+const RiskEditForm = ({handleEdit, handleChange, inputs, isAdminOrReporter, imageUrl }) => {
     return(
         <Form onSubmit={handleEdit}>
                 <Form.Group>
@@ -80,6 +80,36 @@ const RiskEditForm = ({handleEdit, handleChange, inputs, isAdminOrReporter }) =>
                         <option>4</option>
                         <option>5</option>
                     </Form.Select>
+                </Form.Group>
+
+                <Form.Group className="mt-3">
+                    <Form.Label>ไฟล์ภาพประกอบ (ถ้ามี)</Form.Label>
+                    <Form.Control
+                        name="newimage"
+                        type="file"
+                        onChange={handleChange}
+                        accept="image/*" />
+                        {
+                            inputs.newimage ? 
+                            (
+                                <Image 
+                                    className="mt-3" 
+                                    src={imageUrl}
+                                    fluid />
+                            ) :
+                            inputs.image ?
+                            (
+                                <Image 
+                                    className="mt-3" 
+                                    src={`${process.env.REACT_APP_UPLOAD_SERVER}/uploads/${inputs.image}`}
+                                    fluid />
+                            ) :
+                            (
+                                <>
+                                </>
+                            )
+                        
+                        }
                 </Form.Group>
 
                 <Form.Group>

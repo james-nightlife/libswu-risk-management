@@ -79,7 +79,6 @@ const RiskReportForm = ({handleSubmit, inputs, handleChange, imageUrl}) => {
 
                 <Form.Group className="mt-3">
                     <Form.Label>ไฟล์ภาพประกอบ (ถ้ามี)</Form.Label>
-                    <p>*อยู่ระหว่างการทดสอบ</p>
                     <Form.Control
                         name="image"
                         type="file"

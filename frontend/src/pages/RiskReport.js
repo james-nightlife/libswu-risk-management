@@ -48,18 +48,18 @@ const RiskReport = () => {
             inputs.level &&
             inputs.level !== '0'
         ){
-            if(inputs.image){
-                
-            }
             ConfirmAlert({
                 title: 'ยืนยันการรายงาน',
                 text: 'ยืนยันการรายงานความเสี่ยง',
             }, async () => {
-                const formData = new FormData();
-                formData.append('file', inputs.image);
-                const filename = await UploadImageRequest({
-                    image: inputs.image
-                })
+                let filename;
+                if(inputs.image){
+                    const formData = new FormData();
+                    formData.append('file', inputs.image);
+                    filename = await UploadImageRequest({
+                        image: inputs.image
+                    })
+                }
                 const response = await RiskReportRequest({
                     reporter: username,
                     detail: inputs.detail, 
