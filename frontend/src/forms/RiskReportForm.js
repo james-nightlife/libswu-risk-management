@@ -4,7 +4,6 @@ const RiskReportForm = ({handleSubmit, inputs, handleChange, imageUrl}) => {
     return(
         <>
             <Form onSubmit={handleSubmit}>
-
                 <Form.Group className="mt-3">
                     <Form.Label>รายละเอียดความเสี่ยง</Form.Label>
                     <Form.Control 
