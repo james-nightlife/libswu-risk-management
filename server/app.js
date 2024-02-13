@@ -2,6 +2,7 @@ const express = require('express');
 const multer = require('multer');
 const path = require('path');
 const cors = require('cors')
+const fs = require('fs')
 
 const app = express();
 app.use(cors())
@@ -31,7 +32,26 @@ app.post('/risk/upload', upload.single('file'), (req, res) => {
 });
 
 // Serve static files
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '/uploads')));
+
+const uploadDir = path.join(__dirname, '/uploads');
+
+// Serve uploaded files statically
+app.use('/uploads', express.static(uploadDir));
+
+app.get('/view', (req, res) => {
+  // Get list of files in the upload directory
+  fs.readdir(uploadDir, (err, files) => {
+    if (err) {
+      return res.status(500).send('Error reading upload directory');
+    }
+
+    // Render HTML with links to the files
+    const fileLinks = files.map(file => `<a href="/uploads/${file}">${file}</a>`).join('<br>');
+    res.send(`<h1>Uploaded Files</h1>${fileLinks}`);
+  });
+});
+
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
