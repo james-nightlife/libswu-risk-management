@@ -83,8 +83,7 @@ const RiskReportForm = ({handleSubmit, inputs, handleChange, imageUrl}) => {
                         name="image"
                         type="file"
                         onChange={handleChange}
-                        accept="image/*"
-                        disabled={isAdminOrReporter || (inputs.old_status === 'ดำเนินการแล้วเสร็จ')} />
+                        accept="image/*" />
                         {inputs.image && 
                         <Image 
                             className="mt-3" 
