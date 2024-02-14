@@ -1,10 +1,8 @@
-import { Container } from 'react-bootstrap';
+import { Button, Container } from 'react-bootstrap';
 import { useEffect, useState } from 'react';
 import SearchRisksForm from '../forms/SearchRisksForm';
 import RisksTable from '../table/RisksTable';
 import RisksDashboard from '../dashboard/RisksDashboard';
-import Pagination from '../components/Pagination';
-import { CSVLink } from 'react-csv';
 import { ExportRisksToCSV } from '../functions/ExportsRiskToCSV';
 import { FilterRisks } from '../functions/FilterRisks';
 
@@ -81,17 +79,18 @@ const Home = () => {
     
     return(
         <Container className='p-3'>
+            <Container className='p-3 border rounded'>
+                <div className="d-grid">
+                    <Button href="/report">รายงานความเสี่ยง</Button>
+                </div> 
+            </Container>
+            <hr />
             <SearchRisksForm 
                 handleFind={handleFind} 
                 handleChange={handleChange} 
                 inputs={inputs}
                 handleClear={handleClear} />
-            <CSVLink 
-                data={clean}
-                filename='Risks_LibSWU.csv' 
-                className='btn btn-primary'>
-                    บันทึกเป็น CSV
-            </CSVLink>
+            <hr />
             { raw === null ? (
                 <p>Loading...</p>
             ) : raw.length === 0 ? (
@@ -102,14 +101,16 @@ const Home = () => {
                     <RisksTable 
                         currentItems={currentItems}
                         riskEditorRoute={riskEditorRoute}
-                        itemOffset={itemOffset} />
-                    <Pagination 
+                        itemOffset={itemOffset}
                         handlePageClick={handlePageClick}
-                        pageCount={pageCount} /> 
+                        pageCount={pageCount}
+                        clean={clean} />
+                    <hr />
                 </>
             )}
             <RisksDashboard 
                 raw={raw} />
+            <hr />
         </Container>
     );
 }

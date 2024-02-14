@@ -2,8 +2,8 @@ import { Col, Container, Row, Table } from "react-bootstrap";
 
 const RisksDashboard = ({raw}) => {
     return(
-        <Container>
-            <h1 className='text-center' >จำนวนรายงานความเสี่ยงทั้งหมด {raw.length} เรื่อง</h1>
+        <Container className="p-3 border rounded">
+            <h1 className='text-center'>จำนวนรายงานความเสี่ยงทั้งหมด {raw.length} เรื่อง</h1>
             <Row>
                 <Col xl={6} className="mt-3">
                     <Table>
@@ -50,7 +50,6 @@ const RisksDashboard = ({raw}) => {
                     </Table>
                 </Col>
             </Row>
-            <hr />
         </Container>     
     );
 }

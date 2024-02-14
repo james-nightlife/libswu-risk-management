@@ -211,26 +211,29 @@ const RiskEditor = () => {
 
     return(
         <Container className="p-3">
-            <h5>รายงานความเสี่ยง</h5>
             <RiskEditForm 
                 handleEdit={handleEdit} 
                 handleChange={handleChange} 
                 isAdminOrReporter={isAdminOrReporter} 
                 inputs={risk} 
                 imageUrl={imageUrl} />
+            <hr />
             <RiskProcessForm 
                 handleProcess={handleEvaluation} 
                 handleChange={handleChange} 
                 isAdmin={evaluation} 
                 inputs={risk} />
-            <div className="d-grid mt-3">
-                <Button 
-                    className="btn-danger" 
-                    disabled={isAdminOrReporter || (risk.old_status === 'ดำเนินการแล้วเสร็จ')}
-                    onClick={handleDelete}>
-                    ลบรายงาน
-                </Button>
-            </div>
+            <hr />
+            <Container className="border rounded p-3">
+                <div className="d-grid">
+                    <Button 
+                        className="btn-danger" 
+                        disabled={isAdminOrReporter || (risk.old_status === 'ดำเนินการแล้วเสร็จ')}
+                        onClick={handleDelete}>
+                        ลบรายงาน
+                    </Button>
+                </div>
+            </Container>
         </Container>
     );
 };

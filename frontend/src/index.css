@@ -71,3 +71,7 @@ ul[role=navigation] li.disabled a {
 #navbar{
   background-color: #BCD85D;
 }
+
+#preview{
+  max-height: 800px;
+}

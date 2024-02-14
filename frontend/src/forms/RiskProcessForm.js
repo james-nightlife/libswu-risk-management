@@ -3,8 +3,9 @@ import { DateToDatetime } from "../functions/DateToDatetime";
 
 const RiskProcessForm = ({handleProcess, isAdmin, inputs, handleChange}) => {
     return(
-        <Form onSubmit={handleProcess}>
-                <h5 className="pt-3">การพิจารณาการดำเนินการเกี่ยวกับความเสี่ยง (เรียงจากล่าสุดไปเริ่มต้น)</h5>
+        <Container className="p-3 border rounded">
+            <Form onSubmit={handleProcess}>
+                <h1>การพิจารณาการดำเนินการเกี่ยวกับความเสี่ยง (เรียงจากล่าสุดไปเริ่มต้น)</h1>
                 { 
                     inputs.feedback && inputs.feedback.map((data, idx) => {
                         return(
@@ -80,6 +81,8 @@ const RiskProcessForm = ({handleProcess, isAdmin, inputs, handleChange}) => {
                     </Button>
                 </div>
             </Form>
+        </Container>
+        
     )
 }
 

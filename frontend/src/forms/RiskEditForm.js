@@ -1,11 +1,13 @@
-import { Button, Form, Image } from "react-bootstrap";
+import { Button, Container, Form, Image } from "react-bootstrap";
 import { DateToDatetime } from "../functions/DateToDatetime";
 
 const RiskEditForm = ({handleEdit, handleChange, inputs, isAdminOrReporter, imageUrl }) => {
     return(
-        <Form onSubmit={handleEdit}>
-                <Form.Group>
-                    <Form.Label className="pt-3">รายละเอียดความเสี่ยง</Form.Label>
+        <Container className="p-3 border rounded">
+            <h1 className="text-center">รายงานความเสี่ยง</h1>
+            <Form onSubmit={handleEdit}>
+                <Form.Group className="pt-3">
+                    <Form.Label>รายละเอียดความเสี่ยง</Form.Label>
                     <Form.Control 
                         name="detail" 
                         type="text" 
@@ -36,7 +38,7 @@ const RiskEditForm = ({handleEdit, handleChange, inputs, isAdminOrReporter, imag
                         onChange={handleChange}
                         disabled={isAdminOrReporter || (inputs.old_status === 'ดำเนินการแล้วเสร็จ')} >
                         <option value='0'>-- ชั้น --</option>
-                        {(inputs.location && inputs.location !== '0') ? (
+                        {(inputs.location && inputs.location !== '0') && (
                             <>
                                 <option>1</option>
                                 <option>2</option>
@@ -47,11 +49,7 @@ const RiskEditForm = ({handleEdit, handleChange, inputs, isAdminOrReporter, imag
                                 <option>7</option>
                                 <option>8</option>
                             </>
-                        ) : (
-                            <>
-                            </>
-                        )
-                        }
+                        )}
                     </Form.Select>
                 </Form.Group>
 
@@ -71,8 +69,7 @@ const RiskEditForm = ({handleEdit, handleChange, inputs, isAdminOrReporter, imag
                         name="level" 
                         value={inputs.level || ''}
                         onChange={handleChange}
-                        disabled={isAdminOrReporter || (inputs.old_status === 'ดำเนินการแล้วเสร็จ')}
-                        >
+                        disabled={isAdminOrReporter || (inputs.old_status === 'ดำเนินการแล้วเสร็จ')} >
                         <option value='0'>-- ระดับ --</option>
                         <option>1</option>
                         <option>2</option>
@@ -91,25 +88,30 @@ const RiskEditForm = ({handleEdit, handleChange, inputs, isAdminOrReporter, imag
                         accept="image/*"
                         disabled={isAdminOrReporter || (inputs.old_status === 'ดำเนินการแล้วเสร็จ')} />
                         {
-                            inputs.newimage ? 
-                            (
-                                <Image 
-                                    className="mt-3" 
-                                    src={imageUrl}
-                                    fluid />
+                            inputs.newimage ?(
+                                <Container className="text-center mt-3 p-3">
+                                    <Image 
+                                        id="preview"
+                                        className="mt-3" 
+                                        src={imageUrl}
+                                        fluid />
+                                </Container>
                             ) :
-                            inputs.image ?
-                            (
-                                <Image 
-                                    className="mt-3" 
-                                    src={`${process.env.REACT_APP_UPLOAD_SERVER}/uploads/${inputs.image}`}
-                                    fluid />
-                            ) :
-                            (
-                                <>
-                                </>
-                            )
-                        
+                            inputs.image && (
+                                <Container className="text-center mt-3 p-3">
+                                    <a 
+                                        href={`${process.env.REACT_APP_UPLOAD_SERVER}/uploads/${inputs.image}`}
+                                        target="_blank"
+                                        rel="noreferrer">
+                                    <Image 
+                                        id="preview"
+                                        className="mt-3" 
+                                        src={`${process.env.REACT_APP_UPLOAD_SERVER}/uploads/${inputs.image}`}
+                                        fluid
+                                        />
+                                    </a>
+                                </Container>  
+                            ) 
                         }
                 </Form.Group>
 
@@ -139,6 +141,8 @@ const RiskEditForm = ({handleEdit, handleChange, inputs, isAdminOrReporter, imag
                     </Button>
                 </div>
             </Form>
+        </Container>
+        
     );
 }
 

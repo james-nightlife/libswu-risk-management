@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Container } from "react-bootstrap";
+import { Col, Container, Image, Row } from "react-bootstrap";
 import Swal from "sweetalert2";
 import logo from '../images/SWU_Central_Library_TH_Color.png';
 import SignInForm from "../forms/SignInForm";
@@ -52,17 +52,25 @@ const SignIn = () => {
     
     return(
         <Container className="p-3">
-            <div className="text-center p-3">
-                <img 
-                    src={logo}
-                    height="100"
-                    alt="สำนักหอสมุดกลาง มหาวิทยาลัยศรีนครินทรวิโรฒ" />
-            </div>
-            <h1 className="text-center p-3">ลงชื่อเข้าใช้</h1>
-            <SignInForm 
-                handleSubmit={handleSubmit} 
-                handleChange={handleChange} 
-                inputs={inputs} />
+            <Row>
+                <Col sm></Col>
+                <Col sm>
+                    <Container className="p-3 border rounded">
+                        <div className="text-center p-3">
+                            <Image 
+                                src={logo}
+                                height={100}
+                                alt="สำนักหอสมุดกลาง มหาวิทยาลัยศรีนครินทรวิโรฒ" />
+                        </div>
+                        <SignInForm 
+                            handleSubmit={handleSubmit} 
+                            handleChange={handleChange} 
+                            inputs={inputs} />
+                    </Container>  
+                </Col>
+                <Col sm></Col>
+            </Row>
+             
         </Container>
     );
 }

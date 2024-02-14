@@ -2,7 +2,9 @@ import { Button, Form } from "react-bootstrap";
 
 const SignInForm = ({handleSubmit, handleChange, inputs}) => {
     return(
-        <Form onSubmit={handleSubmit}>
+        <>
+            <h1 className="text-center p-3">ลงชื่อเข้าใช้</h1>
+            <Form onSubmit={handleSubmit}>
                 <Form.Group className="p-3">
                     <Form.Label>บัวศรีไอดี</Form.Label>
                     <Form.Control 
@@ -29,6 +31,8 @@ const SignInForm = ({handleSubmit, handleChange, inputs}) => {
                     </Button>
                 </div> 
             </Form>
+        </>
+        
     )   
 }
 

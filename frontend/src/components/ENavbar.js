@@ -23,7 +23,6 @@ function ENavbar(){
                 <Navbar.Collapse className="justify-content-end mt-2">
                     <Navbar.Brand href="/">ระบบรวบรวมรายงานความเสี่ยง</Navbar.Brand>
                     <Nav className="me-auto">
-                        <Nav.Link href="/report">รายงานความเสี่ยง</Nav.Link>
                         {adminNav}
                     </Nav>   
                     <Nav className="d-flex">

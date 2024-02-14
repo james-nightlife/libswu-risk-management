@@ -2,8 +2,8 @@ const { Form, Row, Col, Button, Container } = require("react-bootstrap")
 
 const SearchRisksForm = ({handleFind, handleChange, inputs, handleClear}) => {
     return(
-        <>
-            <h1 className="text-center">ค้นหา</h1>
+        <Container className="border rounded p-3">
+            <h1 className="text-center">ค้นหารายงานความเสี่ยง</h1>
             <Form onSubmit={handleFind}>
                 <Row>
                     <Col xl={6} className="mt-3">
@@ -83,8 +83,7 @@ const SearchRisksForm = ({handleFind, handleChange, inputs, handleClear}) => {
                     </Col>
                 </Row>  
             </Form>
-            <hr />
-        </>    
+        </Container>    
     )
 }
 

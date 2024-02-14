@@ -1,10 +1,12 @@
-import {Button, Table } from "react-bootstrap";
+import {Button, Container, Table } from "react-bootstrap";
 import { DateToDatetime } from "../functions/DateToDatetime";
+import Pagination from "../components/Pagination";
+import { CSVLink } from "react-csv";
 
-const RisksTable = ({currentItems, riskEditorRoute, itemOffset}) => {
+const RisksTable = ({currentItems, riskEditorRoute, itemOffset, handlePageClick, pageCount, clean}) => {
     return(
-        <>
-            <Table responsive className="mt-3">
+        <Container className="border rounded p-3">
+            <Table responsive>
                 <thead>
                     <tr>
                         <th>ที่</th>
@@ -33,7 +35,11 @@ const RisksTable = ({currentItems, riskEditorRoute, itemOffset}) => {
                             <td className="align-middle">{data.location}</td>
                             <td className="align-middle">{data.reporter}</td>
                             <td className="align-middle">{DateToDatetime(data.createdAt)}</td>
-                            <td className="align-middle"><Button variant={data.color}>{data.status || 'รอดำเนินการ'}</Button></td>
+                            <td className="align-middle">
+                                <div className="d-grid">
+                                    <Button variant={data.color}>{data.status || 'รอดำเนินการ'}</Button>
+                                </div>          
+                            </td>
                             <td className="align-middle">
                                 <Button onClick={e => riskEditorRoute(e, data._id)}>เรียกดู</Button>
                             </td>
@@ -41,7 +47,19 @@ const RisksTable = ({currentItems, riskEditorRoute, itemOffset}) => {
                     )})}
                 </tbody>
             </Table>
-        </>
+            <Pagination
+                handlePageClick={handlePageClick}
+                pageCount={pageCount} />
+            <div className="d-grid">
+                <CSVLink 
+                    data={clean}
+                    filename='Risks_LibSWU.csv' 
+                    className='btn btn-primary'>
+                        บันทึกเป็น CSV
+                </CSVLink> 
+            </div>
+            
+        </Container>
     )
 }
 

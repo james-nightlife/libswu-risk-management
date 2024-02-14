@@ -1,8 +1,9 @@
-import { Button, Form, Image } from "react-bootstrap";
+import { Button, Container, Form, Image } from "react-bootstrap";
 
 const RiskReportForm = ({handleSubmit, inputs, handleChange, imageUrl}) => {
     return(
-        <>
+        <Container className="p-3 border rounded">
+            <h1 className="text-center">รายงานความเสี่ยง</h1>
             <Form onSubmit={handleSubmit}>
                 <Form.Group className="mt-3">
                     <Form.Label>รายละเอียดความเสี่ยง</Form.Label>
@@ -33,22 +34,19 @@ const RiskReportForm = ({handleSubmit, inputs, handleChange, imageUrl}) => {
                         value={inputs.floors || ''}
                         onChange={handleChange}>
                         <option value='0'>-- ชั้น --</option>
-                        {(inputs.location && inputs.location !== '0') ? (
-                            <>
-                                <option>1</option>
-                                <option>2</option>
-                                <option>3</option>
-                                <option>4</option>
-                                <option>5</option>
-                                <option>6</option>
-                                <option>7</option>
-                                <option>8</option>
-                            </>
-                        ) : (
-                            <>
-                            </>
-                        )
-                        }
+                        {
+                            (inputs.location && inputs.location !== '0') && (
+                                <>
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                    <option>6</option>
+                                    <option>7</option>
+                                    <option>8</option>
+                                </>
+                        )}
                     </Form.Select>
                 </Form.Group>
 
@@ -83,12 +81,14 @@ const RiskReportForm = ({handleSubmit, inputs, handleChange, imageUrl}) => {
                         type="file"
                         onChange={handleChange}
                         accept="image/*" />
-                        {inputs.image && 
-                        <Image 
-                            className="mt-3" 
-                            src={imageUrl}
-                            fluid />
-                        }
+                        {
+                            inputs.image && (
+                                <Container className="text-center mt-3 p-3">
+                                    <Image 
+                                        src={imageUrl}
+                                        height={'800px'} />
+                                </Container>
+                        )}
                 </Form.Group>
 
                 <div className="d-grid mt-3">
@@ -97,7 +97,7 @@ const RiskReportForm = ({handleSubmit, inputs, handleChange, imageUrl}) => {
                     </Button>
                 </div>
             </Form>
-        </>
+        </Container>
     );
 }
 
