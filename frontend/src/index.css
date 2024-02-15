@@ -16,14 +16,21 @@ body {
   font-family: 'Srinakharinwirot' !important;
 }
 
-th {
-  font-weight: normal !important;
-}
-
 td, input, option, select, textarea, p.card-text {
   font-family: 'Sarabun' !important;
 }
 
+th, h2 {
+  font-weight: normal !important;
+}
+
+#navbar{
+  background-color: #BCD85D;
+}
+
+#preview{
+  max-height: 800px;
+}
 
 ul[role=navigation] {
   margin-bottom: 2rem;
@@ -68,10 +75,3 @@ ul[role=navigation] li.disabled a {
   cursor: not-allowed;
 }
 
-#navbar{
-  background-color: #BCD85D;
-}
-
-#preview{
-  max-height: 800px;
-}

@@ -55,7 +55,7 @@ const RisksTable = ({currentItems, riskEditorRoute, itemOffset, handlePageClick,
                     data={clean}
                     filename='Risks_LibSWU.csv' 
                     className='btn btn-primary'>
-                        บันทึกเป็น CSV
+                        บันทึกรายงานเป็นไฟล์ CSV
                 </CSVLink> 
             </div>
             

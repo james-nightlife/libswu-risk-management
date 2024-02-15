@@ -1,14 +1,17 @@
-import { Button, Container } from 'react-bootstrap';
+
 import { useEffect, useState } from 'react';
-import SearchRisksForm from '../forms/SearchRisksForm';
-import RisksTable from '../table/RisksTable';
-import RisksDashboard from '../dashboard/RisksDashboard';
+import { Button, Container } from 'react-bootstrap';
 import { ExportRisksToCSV } from '../functions/ExportsRiskToCSV';
 import { FilterRisks } from '../functions/FilterRisks';
 
+import SearchRisksForm from '../forms/SearchRisksForm';
+import RisksTable from '../table/RisksTable';
+import RisksDashboard from '../dashboard/RisksDashboard';
+import RiskReportButton from '../button/RiskReportButton';
+
 const Home = () => {
     // TITLE
-    document.title = "ระบบรวบรวมรายงานความเสี่ยง สำนักหอสมุดกลาง มหาวิทยาลัยศรีนครินทรวิโรฒ";
+    document.title = "ระบบรวบรวมรายงานความเสี่ยงภายในอาคารสำนักหอสมุดกลางและห้องสมุดองครักษ์ มหาวิทยาลัยศรีนครินทรวิโรฒ";
 
     // FETCH RISKS
     const [raw, setRaw] = useState([]);
@@ -79,11 +82,7 @@ const Home = () => {
     
     return(
         <Container className='p-3'>
-            <Container className='p-3 border rounded'>
-                <div className="d-grid">
-                    <Button href="/report">รายงานความเสี่ยง</Button>
-                </div> 
-            </Container>
+            <RiskReportButton />
             <hr />
             <SearchRisksForm 
                 handleFind={handleFind} 
@@ -93,10 +92,7 @@ const Home = () => {
             <hr />
             { raw === null ? (
                 <p>Loading...</p>
-            ) : raw.length === 0 ? (
-                <>
-                </>
-            ) : (
+            ) : raw.length > 0 && (
                 <>
                     <RisksTable 
                         currentItems={currentItems}
