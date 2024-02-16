@@ -25,9 +25,14 @@ const RiskEditForm = ({handleEdit, handleChange, inputs}) => {
     return(
         <Container className="p-3 border rounded">
             <h1 className="text-center">รายงานความเสี่ยง</h1>
+            <div className="text-end">
+                <div id="form-asterisk" className="p">*</div> = จำเป็นต้องกรอกข้อมูล
+            </div>
             <Form onSubmit={handleEdit}>
                 <Form.Group className="pt-3">
-                    <Form.Label>รายละเอียดความเสี่ยง</Form.Label>
+                    <Form.Label>
+                        รายละเอียดความเสี่ยง<div id="form-asterisk" className="p">*</div>
+                    </Form.Label>
                     <Form.Control 
                         name="detail" 
                         type="text" 
@@ -38,7 +43,9 @@ const RiskEditForm = ({handleEdit, handleChange, inputs}) => {
                 </Form.Group>
 
                 <Form.Group className="mt-3">
-                    <Form.Label>อาคาร</Form.Label>
+                    <Form.Label>
+                        อาคาร<div id="form-asterisk" className="p">*</div>
+                    </Form.Label>
                     <Form.Select 
                         name="location" 
                         value={inputs.location || '0'}
@@ -51,7 +58,9 @@ const RiskEditForm = ({handleEdit, handleChange, inputs}) => {
                 </Form.Group>
 
                 <Form.Group className="mt-3">
-                    <Form.Label>ชั้น</Form.Label>
+                    <Form.Label>
+                        ชั้น<div id="form-asterisk" className="p">*</div>
+                    </Form.Label>
                     <Form.Select 
                         name="floors" 
                         value={inputs.floors || ''}
@@ -74,7 +83,9 @@ const RiskEditForm = ({handleEdit, handleChange, inputs}) => {
                 </Form.Group>
 
                 <Form.Group className="mt-3">
-                    <Form.Label>ห้อง / จุดที่พบความเสี่ยง</Form.Label>
+                    <Form.Label>
+                        ห้อง / จุดที่พบความเสี่ยง<div id="form-asterisk" className="p">*</div>
+                    </Form.Label>
                     <Form.Control 
                         name="places" 
                         type='text'
@@ -84,7 +95,9 @@ const RiskEditForm = ({handleEdit, handleChange, inputs}) => {
                 </Form.Group>
 
                 <Form.Group className="mt-3">
-                    <Form.Label>ระดับความเสี่ยง</Form.Label>
+                    <Form.Label>
+                        ระดับความเสี่ยง<div id="form-asterisk" className="p">*</div>
+                    </Form.Label>
                     <Form.Select 
                         name="level" 
                         value={inputs.level || ''}

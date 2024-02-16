@@ -21,7 +21,9 @@ const RiskProcessForm = ({handleProcess, inputs, handleChange, setInputs}) => {
     return(
         <Container className="p-3 border rounded">
             <Form onSubmit={handleProcess}>
-                <h1>การพิจารณาการดำเนินการเกี่ยวกับความเสี่ยง (เรียงจากล่าสุดไปเริ่มต้น)</h1>
+                <h2 className="text-center">
+                    การดำเนินการเกี่ยวกับความเสี่ยง
+                </h2>
                 { 
                     inputs.feedback && inputs.feedback.map((data, idx) => {
                         return(

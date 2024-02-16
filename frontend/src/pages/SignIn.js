@@ -24,7 +24,7 @@ const SignIn = () => {
             inputs.password
         ){
             const response = await SignInRequest({
-                username: inputs.username,
+                username: inputs.username.toLowerCase().trim(),
                 password: inputs.password,
             });
             if(response.status === 200){
