@@ -75,3 +75,7 @@ ul[role=navigation] li.disabled a {
   cursor: not-allowed;
 }
 
+#form-asterisk{
+  color: #FF0000;
+  display: inline
+}

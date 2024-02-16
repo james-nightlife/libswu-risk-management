@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Container } from "react-bootstrap";
 import RiskReportForm from "../forms/RiskReportForm";
 import { RiskReportRequest } from "../requests/RiskReportRequest";
@@ -15,21 +15,15 @@ const RiskReport = () => {
 
     // FORM
     const [inputs, setInputs] = useState({});
-    const [imageUrl, setImageUrl] = useState('');
-
-    useEffect(() => {
-        if(inputs.image){
-            const url = URL.createObjectURL(inputs.image)
-            setImageUrl(url);
-            return () => URL.revokeObjectURL(url);
-        }
-    }, [inputs.image])
 
     const handleChange = (e) => {
         const name = e.target.name;
-        const value = ((e.target.type === 'file' && e.target.files.length !== 0) ? 
-                            e.target.files[0] : e.target.value);
+        const value = e.target.value;
         setInputs(values => ({...values, [name]: value}));
+
+        if(e.target.type === 'file'  && e.target.files.length !== 0){
+            setInputs(values => ({...values, imagefile: e.target.files[0]}))
+        }
     }
 
     // SUBMIT BUTTON
@@ -53,11 +47,11 @@ const RiskReport = () => {
                 text: 'ยืนยันการรายงานความเสี่ยง',
             }, async () => {
                 let filename;
-                if(inputs.image){
+                if(inputs.imagefile){
                     const formData = new FormData();
-                    formData.append('file', inputs.image);
+                    formData.append('file', inputs.imagefile);
                     filename = await UploadImageRequest({
-                        image: inputs.image
+                        image: inputs.imagefile
                     })
                 }
                 const response = await RiskReportRequest({
@@ -99,7 +93,7 @@ const RiskReport = () => {
                 handleChange={handleChange} 
                 handleSubmit={handleSubmit} 
                 inputs={inputs} 
-                imageUrl={imageUrl} />
+                setInputs={setInputs} />
         </Container>
     )
 }

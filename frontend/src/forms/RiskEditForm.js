@@ -1,7 +1,27 @@
 import { Button, Container, Form, Image } from "react-bootstrap";
 import { DateToDatetime } from "../functions/DateToDatetime";
+import { RiskEditInputControl } from "../functions/RiskEditInputControl";
+import { useEffect, useState } from "react";
 
-const RiskEditForm = ({handleEdit, handleChange, inputs, isAdminOrReporter, imageUrl }) => {
+const RiskEditForm = ({handleEdit, handleChange, inputs}) => {
+    // CONTROLLED INPUT
+    const [isAdminOrReporter, setIsAdminOrReporter] = useState(true);
+    const [imageUrl, setImageUrl] = useState('');
+
+    useEffect(() => {
+        if(inputs){
+            setIsAdminOrReporter(RiskEditInputControl(inputs));
+        }
+    }, [inputs])
+
+    useEffect(() => {
+        if(inputs.newimage){
+            const url = URL.createObjectURL(inputs.newimage)
+            setImageUrl(url);
+            return () => URL.revokeObjectURL(url);
+        }
+    }, [inputs.newimage])
+
     return(
         <Container className="p-3 border rounded">
             <h1 className="text-center">รายงานความเสี่ยง</h1>

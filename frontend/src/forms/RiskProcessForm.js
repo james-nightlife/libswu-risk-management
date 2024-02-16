@@ -1,7 +1,23 @@
 import { Button, Card, Container, Form } from "react-bootstrap";
 import { DateToDatetime } from "../functions/DateToDatetime";
+import { RiskProcessInputControl } from "../functions/RiskProcessInputControl";
+import { useEffect, useState } from "react";
 
-const RiskProcessForm = ({handleProcess, isAdmin, inputs, handleChange}) => {
+const RiskProcessForm = ({handleProcess, inputs, handleChange, setInputs}) => {
+    const [processInput, setProcessInput] = useState(true);
+    const [statusInput, setStatusInput] = useState(true);
+    const [submitProcessButton, setSubmitProcessButton] = useState(true);
+
+    useEffect(() => {
+        setProcessInput(RiskProcessInputControl())
+        setStatusInput(RiskProcessInputControl() || !inputs.comment)
+        setSubmitProcessButton(RiskProcessInputControl() || !inputs.comment)
+        setInputs((inputs.comment ? inputs : {
+            ...inputs, 
+            status: inputs.old_status,
+        }))
+    }, [inputs.comment])
+
     return(
         <Container className="p-3 border rounded">
             <Form onSubmit={handleProcess}>
@@ -35,7 +51,7 @@ const RiskProcessForm = ({handleProcess, isAdmin, inputs, handleChange}) => {
                         name="comment" 
                         type="text" 
                         as="textarea"
-                        disabled={isAdmin || (inputs.old_status === 'ดำเนินการแล้วเสร็จ')}
+                        disabled={processInput || (inputs.old_status === 'ดำเนินการแล้วเสร็จ')}
                         onChange={handleChange}
                         value={inputs.comment || '' } />
                 </Form.Group>
@@ -44,7 +60,7 @@ const RiskProcessForm = ({handleProcess, isAdmin, inputs, handleChange}) => {
                     <Form.Label className="pt-3">สถานะการดำเนินการ</Form.Label>
                     <Form.Select 
                         name="status" 
-                        disabled={isAdmin || (inputs.old_status === 'ดำเนินการแล้วเสร็จ')}
+                        disabled={statusInput || (inputs.old_status === 'ดำเนินการแล้วเสร็จ')}
                         onChange={handleChange}
                         value={inputs.status || '' }>
                             {(inputs.old_status === 'รอดำเนินการ' || !inputs.old_status) &&
@@ -76,7 +92,7 @@ const RiskProcessForm = ({handleProcess, isAdmin, inputs, handleChange}) => {
                 <div className="d-grid mt-3">
                     <Button 
                         type="submit" 
-                        disabled={isAdmin || (inputs.old_status === 'ดำเนินการแล้วเสร็จ')}>
+                        disabled={submitProcessButton || (inputs.old_status === 'ดำเนินการแล้วเสร็จ')}>
                         พิจารณาการดำเนินการ
                     </Button>
                 </div>

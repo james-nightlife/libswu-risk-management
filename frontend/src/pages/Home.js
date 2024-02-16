@@ -69,11 +69,10 @@ const Home = () => {
         setInputs(values => ({...values, [name]: value}));
     }
 
-    const handleFind = async (e) => {
-        e.preventDefault();
+    useEffect(() => {
         const result = FilterRisks(raw, inputs)
         setRisks(result);
-    }
+    }, [inputs])
 
     const handleClear = async (e) => {
         e.preventDefault();
@@ -85,7 +84,6 @@ const Home = () => {
             <RiskReportButton />
             <hr />
             <SearchRisksForm 
-                handleFind={handleFind} 
                 handleChange={handleChange} 
                 inputs={inputs}
                 handleClear={handleClear} />

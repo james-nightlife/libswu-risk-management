@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button, Container } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import RiskEditForm from "../forms/RiskEditForm";
 import RiskProcessForm from "../forms/RiskProcessForm";
 import { RiskUpdateRequest } from "../requests/RiskUpdateRequest";
@@ -8,9 +8,8 @@ import { SessionExpired } from "../functions/SessionExpired";
 import { ConfirmAlert } from "../alert/ConfirmAlert";
 import { SuccessAlert } from "../alert/SuccessAlert";
 import { FailAlert } from "../alert/FailAlert";
-import { RiskProcessInputControl } from "../functions/RiskProcessInputControl";
-import { RiskEditInputControl } from "../functions/RiskEditInputControl";
 import { UploadImageRequest } from "../requests/UploadImageRequest";
+import RiskDeleteButton from "../button/RiskDeleteButton";
 
 const RiskEditor = () => {
     // TITLE
@@ -19,8 +18,7 @@ const RiskEditor = () => {
     // FETCH RISK
     const id = localStorage.getItem('risk_id');
     const [risk, setRisk] = useState([]);
-    const [imageUrl, setImageUrl] = useState('');
-
+    
     const fetchRiskData = async () => {
         await fetch(`${process.env.REACT_APP_SERVER}/risk/record/${id}`, {
             method: "GET",
@@ -54,17 +52,6 @@ const RiskEditor = () => {
         }
     }, [id]);
 
-    // CONTROLLED INPUT
-    const [evaluation, setEvaluation] = useState(true);
-    const [isAdminOrReporter, setIsAdminOrReporter] = useState(true);
-
-    useEffect(() => {
-        if(risk){
-            setIsAdminOrReporter(RiskEditInputControl(risk));
-            setEvaluation(RiskProcessInputControl());
-        }
-    }, [risk])
-
     // ON-CHANGE
     const handleChange = (e) => {
         const name = e.target.name;
@@ -75,14 +62,6 @@ const RiskEditor = () => {
         );
         setRisk(values => ({...values, [name]: value}));
     }
-
-    useEffect(() => {
-        if(risk.newimage){
-            const url = URL.createObjectURL(risk.newimage)
-            setImageUrl(url);
-            return () => URL.revokeObjectURL(url);
-        }
-    }, [risk.newimage])
 
     // TOKEN
     const token = sessionStorage.getItem('token');
@@ -214,26 +193,17 @@ const RiskEditor = () => {
             <RiskEditForm 
                 handleEdit={handleEdit} 
                 handleChange={handleChange} 
-                isAdminOrReporter={isAdminOrReporter} 
-                inputs={risk} 
-                imageUrl={imageUrl} />
+                inputs={risk} />
             <hr />
             <RiskProcessForm 
                 handleProcess={handleEvaluation} 
                 handleChange={handleChange} 
-                isAdmin={evaluation} 
-                inputs={risk} />
+                inputs={risk}
+                setInputs={setRisk} />
             <hr />
-            <Container className="border rounded p-3">
-                <div className="d-grid">
-                    <Button 
-                        className="btn-danger" 
-                        disabled={isAdminOrReporter || (risk.old_status === 'ดำเนินการแล้วเสร็จ')}
-                        onClick={handleDelete}>
-                        ลบรายงาน
-                    </Button>
-                </div>
-            </Container>
+            <RiskDeleteButton 
+                inputs={risk}
+                handleDelete={handleDelete} />
         </Container>
     );
 };
