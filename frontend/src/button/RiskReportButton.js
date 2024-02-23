@@ -4,10 +4,10 @@ const RiskReportButton = () => {
     return(
         <Container className='p-3 border rounded'>
             <div className="d-grid">
-                <Button href="/report">
-                    <h2 className="m-0 p-1">
-                        คลิกที่นี่เพื่อรายงานความเสี่ยง
-                    </h2>
+                <Button 
+                    id="home-reportbutton"
+                    href="/report">                   
+                    คลิกที่นี่เพื่อรายงานความเสี่ยง
                 </Button>
             </div> 
         </Container>

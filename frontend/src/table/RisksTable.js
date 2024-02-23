@@ -9,13 +9,13 @@ const RisksTable = ({currentItems, riskEditorRoute, itemOffset, handlePageClick,
             <Table responsive>
                 <thead>
                     <tr>
-                        <th>ที่</th>
-                        <th>รายละเอียด</th>
-                        <th>สถานที่แจ้ง</th>
-                        <th>ผู้แจ้ง</th>
-                        <th>วันที่รายงาน</th>
-                        <th>สถานะการดำเนินการ</th>
-                        <th>จัดการ</th>
+                        <th className="fit">ที่</th>
+                        <th className="fit">รายละเอียด</th>
+                        <th className="fit">สถานที่แจ้ง</th>
+                        <th className="fit">ผู้แจ้ง</th>
+                        <th className="fit">วันที่รายงาน</th>
+                        <th className="fit">สถานะการดำเนินการ</th>
+                        <th className="fit">จัดการ</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -30,12 +30,12 @@ const RisksTable = ({currentItems, riskEditorRoute, itemOffset, handlePageClick,
 
                         return(               
                         <tr key={idx+itemOffset+1}>  
-                            <td className="align-middle">{idx+itemOffset+1}</td>
-                            <td className="align-middle">{data.detail}</td>
-                            <td className="align-middle">{data.location}</td>
-                            <td className="align-middle">{data.reporter}</td>
-                            <td className="align-middle">{DateToDatetime(data.createdAt)}</td>
-                            <td className="align-middle">
+                            <td className="align-middle fit">{idx+itemOffset+1}</td>
+                            <td className="align-middle fit">{data.detail}</td>
+                            <td className="align-middle fit">{data.location}</td>
+                            <td className="align-middle fit">{data.reporter}</td>
+                            <td className="align-middle fit">{DateToDatetime(data.createdAt)}</td>
+                            <td className="align-middle fit">
                                 <div className="d-grid">
                                     <Button variant={data.color}>{data.status || 'รอดำเนินการ'}</Button>
                                 </div>          
@@ -53,11 +53,10 @@ const RisksTable = ({currentItems, riskEditorRoute, itemOffset, handlePageClick,
             <div className="d-grid">
                 <CSVLink 
                     data={clean}
+                    id="home-exportbutton"
                     filename='Risks_LibSWU.csv' 
                     className='btn btn-primary'>
-                        <h2 className="m-0 p-1">
                             บันทึกรายงานเป็นไฟล์ CSV
-                        </h2>
                 </CSVLink> 
             </div>
             

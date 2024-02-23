@@ -32,6 +32,12 @@ th, h2 {
   max-height: 800px;
 }
 
+#home-reportbutton, 
+#home-exportbutton,
+#signin-button {
+  font-size: 20pt;
+}
+
 ul[role=navigation] {
   margin-bottom: 2rem;
   display: flex;
@@ -78,4 +84,10 @@ ul[role=navigation] li.disabled a {
 #form-asterisk{
   color: #FF0000;
   display: inline
+}
+
+.table td.fit, 
+.table th.fit {
+    white-space: nowrap;
+    width: 1%;
 }

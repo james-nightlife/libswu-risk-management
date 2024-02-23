@@ -26,7 +26,10 @@ const SignInForm = ({handleSubmit, handleChange, inputs}) => {
                     />
                 </Form.Group>
                 <div className="d-grid p-3">
-                    <Button variant="primary" type="submit">
+                    <Button 
+                        id="signin-button"
+                        variant="primary" 
+                        type="submit">
                         ลงชื่อเข้าใช้
                     </Button>
                 </div> 
