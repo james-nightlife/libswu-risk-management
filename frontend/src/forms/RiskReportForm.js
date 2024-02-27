@@ -2,6 +2,14 @@ import { useEffect, useState } from "react";
 import { Button, Container, Form, Image } from "react-bootstrap";
 
 const RiskReportForm = ({handleSubmit, inputs, handleChange, setInputs}) => {
+
+    // INPUTS
+    const [riskChecked, setRiskChecked] = useState(false);
+    const [maChecked, setMaChecked] = useState(false);
+    const [typeInput, setTypeInput] = useState([]);
+
+    const [subTypeInput, setSubTypeInput] = useState(true);
+    const [detailInput, setDetailInput] = useState(true)
     const [locationInput, setLocationInput] = useState(true);
     const [floorsInput, setFloorsInput] = useState(true);
     const [placesInput, setPlacesInput] = useState(true);
@@ -9,7 +17,81 @@ const RiskReportForm = ({handleSubmit, inputs, handleChange, setInputs}) => {
     const [imageInput, setImageInput] = useState(true);
     const [submitButton, setSubmitButton] = useState(true);
     const [imageUrl, setImageUrl] = useState('');
+
     
+
+    // HANDLE CHECKBOXES
+    const handleRiskChecked = async () => {
+        setRiskChecked(!riskChecked);
+    }
+
+    const handleMaChecked = async () => {
+        setMaChecked(!maChecked);
+    }
+
+    useEffect(() => {
+        setTypeInputEffect('risk', riskChecked)
+    }, [riskChecked])
+
+    useEffect(() => {
+        setTypeInputEffect('ma', maChecked)
+    }, [maChecked])
+
+    useEffect(() => {
+        setInputs(values => ({...values, type: typeInput}));
+    }, [typeInput])
+
+    const setTypeInputEffect = async (type, checked) => {
+        const updateTypeInput = [...typeInput];
+        if(checked && !updateTypeInput.includes(type)){
+            updateTypeInput.push(type)
+        }else if(!checked && updateTypeInput.includes(type)){
+            const idx = updateTypeInput.indexOf(type)
+            if(idx !== -1){
+                const rm = updateTypeInput.splice(idx, 1)
+            }
+        }   
+        setTypeInput(updateTypeInput)
+    }
+
+    /* HANDLE TYPE INPUT */
+    useEffect(() => {
+        setSubTypeInput((inputs.type && inputs.type.length > 0) ? false : true)
+        setDetailInput((inputs.type && inputs.type.length > 0) ? detailInput : true)
+        setLocationInput((inputs.type && inputs.type.length > 0) ? locationInput : true)
+        setFloorsInput((inputs.type && inputs.type.length > 0) ? floorsInput : true)
+        setPlacesInput((inputs.type && inputs.type.length > 0) ? placesInput : true)
+        setLevelInput((inputs.type && inputs.type.length > 0) ? inputs.type.includes('risk') ? inputs.places ? false : true : true : true)
+        setImageInput((inputs.type && inputs.type.length > 0) ? inputs.type.includes('risk') ? inputs.level ? false : true : inputs.places ? false : true : true)
+        setSubmitButton((inputs.type && inputs.type.length > 0) ? inputs.type.includes('risk') ? inputs.level ? false : true : inputs.places ? false : true : true)
+        setInputs((inputs.type && inputs.type.length > 0) ? (!inputs.type.includes('risk')) ? {
+            type: inputs.type,
+            subtype: inputs.subtype,
+            detail: inputs.detail,
+            location: inputs.location,
+            floors: inputs.floors,
+            places: inputs.places,
+        } : inputs :  {
+            type: inputs.type,
+        })
+    }, [inputs.type])
+
+    /* HANDLE SUB-TYPE INPUT */
+    useEffect(() => {
+        setDetailInput((inputs.subtype && inputs.subtype !== '0') ? false : true)
+        setLocationInput((inputs.subtype && inputs.subtype !== '0') ? locationInput : true)
+        setFloorsInput((inputs.subtype && inputs.subtype !== '0') ? floorsInput : true)
+        setPlacesInput((inputs.subtype && inputs.subtype !== '0') ? placesInput : true)
+        setLevelInput((inputs.subtype && inputs.subtype !== '0') ? levelInput : true)
+        setImageInput((inputs.subtype && inputs.subtype !== '0') ? imageInput : true)
+        setSubmitButton((inputs.subtype && inputs.subtype !== '0') ? submitButton : true)
+        setInputs((inputs.subtype && inputs.subtype !== '0') ? inputs : {
+            type: inputs.type,
+            subtype: inputs.subtype
+        })
+    }, [inputs.subtype])
+
+    /* HANDLE DETAIL INPUT */
     useEffect(() => {
         setLocationInput(inputs.detail ? false : true)
         setFloorsInput(inputs.detail ? floorsInput : true)
@@ -17,9 +99,14 @@ const RiskReportForm = ({handleSubmit, inputs, handleChange, setInputs}) => {
         setLevelInput(inputs.detail ? levelInput : true)
         setImageInput(inputs.detail ? imageInput : true)
         setSubmitButton(inputs.detail ? submitButton : true)
-        setInputs(inputs.detail ? inputs : {detail: inputs.detail})
+        setInputs(inputs.detail ? inputs : {
+            type: inputs.type,
+            subtype: inputs.subtype,
+            detail: inputs.detail
+        })
     }, [inputs.detail])
 
+    /* HANDLE LOCATION INPUT */
     useEffect(() => {
         setFloorsInput((inputs.location && inputs.location !== '0') ? false : true)
         setPlacesInput((inputs.location && inputs.location !== '0') ? placesInput : true)
@@ -27,28 +114,36 @@ const RiskReportForm = ({handleSubmit, inputs, handleChange, setInputs}) => {
         setImageInput((inputs.location && inputs.location !== '0') ? imageInput : true)
         setSubmitButton((inputs.location && inputs.location !== '0') ? submitButton : true)
         setInputs((inputs.location && inputs.location !== '0') ? inputs : {
+            type: inputs.type,
+            subtype: inputs.subtype,
             detail: inputs.detail,
             location: inputs.location
         })
     }, [inputs.location])
 
+    /* HANDLE FLOORS INPUT */
     useEffect(() => {
         setPlacesInput((inputs.floors && inputs.floors !== '0') ? false : true)
         setLevelInput((inputs.floors && inputs.floors !== '0') ? levelInput : true)
         setImageInput((inputs.floors && inputs.floors !== '0') ? imageInput : true)
         setSubmitButton((inputs.floors && inputs.floors !== '0') ? submitButton : true)
         setInputs((inputs.floors && inputs.floors !== '0') ? inputs : {
+            type: inputs.type,
+            subtype: inputs.subtype,
             detail: inputs.detail,
             location: inputs.location,
             floors: inputs.floors,
         })
     }, [inputs.floors])
 
+    /* HANDLE PLACES INPUT */
     useEffect(() => {
-        setLevelInput((inputs.places && inputs.places !== '0') ? false : true)
-        setImageInput((inputs.places && inputs.places !== '0') ? imageInput : true)
-        setSubmitButton((inputs.places && inputs.places !== '0') ? submitButton : true)
+        setLevelInput((inputs.places && inputs.places !== '0') ? (inputs.type.includes('risk')) ? false : true : true)
+        setImageInput((inputs.places && inputs.places !== '0') ? (inputs.type.includes('risk')) ? imageInput : false : true)
+        setSubmitButton((inputs.places && inputs.places !== '0') ? ((inputs.type.includes('risk'))) ? submitButton : false : true)
         setInputs((inputs.places && inputs.places !== '0') ? inputs : {
+            type: inputs.type,
+            subtype: inputs.subtype,
             detail: inputs.detail,
             location: inputs.location,
             floors: inputs.floors,
@@ -56,10 +151,13 @@ const RiskReportForm = ({handleSubmit, inputs, handleChange, setInputs}) => {
         })
     }, [inputs.places])
 
+    /* HANDLE LEVEL INPUT */
     useEffect(() => {
         setImageInput((inputs.level && inputs.level !== '0') ? false : true)
         setSubmitButton((inputs.level && inputs.level !== '0') ? false : true)
         setInputs((inputs.level && inputs.level !== '0') ? inputs : {
+            type: inputs.type,
+            subtype: inputs.subtype,
             detail: inputs.detail,
             location: inputs.location,
             floors: inputs.floors,
@@ -68,6 +166,8 @@ const RiskReportForm = ({handleSubmit, inputs, handleChange, setInputs}) => {
         })
     }, [inputs.level])
 
+
+    /* HANDLE PREVIEW IMAGE */
     useEffect(() => {
         if(inputs.imagefile){
             const url = URL.createObjectURL(inputs.imagefile)
@@ -83,6 +183,47 @@ const RiskReportForm = ({handleSubmit, inputs, handleChange, setInputs}) => {
                 <div id="form-asterisk" className="p">*</div> = จำเป็นต้องกรอกข้อมูล
             </div>
             <Form onSubmit={handleSubmit}>
+                
+                {/* TYPE CHECKBOXES */}
+                <Form.Group className="mt-3">
+                    <Form.Label>
+                        ประเภทการรายงาน<div id="form-asterisk" className="p">*</div>
+                    </Form.Label>
+                    <Form.Check
+                        type="checkbox"
+                        checked={riskChecked}
+                        onChange={handleRiskChecked}
+                        label="รายงานความเสี่ยง" />
+                    <Form.Check
+                        type="checkbox"
+                        onChange={handleMaChecked}
+                        checked={maChecked}
+                        label="รายงานแจ้งซ่อม" />
+                </Form.Group>
+
+                {/* SUB-TYPE INPUT */}
+                <Form.Group className="mt-3">
+                    <Form.Label>
+                        ประเภทของความเสี่ยง<div id="form-asterisk" className="p">*</div>
+                    </Form.Label>
+                    <Form.Select
+                        name="subtype"
+                        value={inputs.subtype || ''} 
+                        onChange={handleChange}
+                        disabled={subTypeInput} >
+                        <option value={0}>-- ประเภท --</option>
+                        <option>คอมพิวเตอร์/อุปกรณ์</option>
+                        <option>ไฟฟ้า</option>
+                        <option>ประปา</option>
+                        <option>ลิฟท์</option>
+                        <option>เครื่องปรับอากาศ</option>
+                        <option>โต๊ะ เก้าอี้</option>
+                        <option>อาคารสถานที่</option>
+                        <option>อื่น ๆ</option>
+                    </Form.Select>
+                </Form.Group>
+
+                {/* DETAIL INPUT */}
                 <Form.Group className="mt-3">
                     <Form.Label>
                         รายละเอียดความเสี่ยง<div id="form-asterisk" className="p">*</div>
@@ -92,9 +233,11 @@ const RiskReportForm = ({handleSubmit, inputs, handleChange, setInputs}) => {
                     type="text" 
                     as="textarea"
                     value={inputs.detail || ''}
+                    disabled={detailInput}
                     onChange={handleChange} />
                 </Form.Group>
 
+                {/* LOCATION INPUT */}
                 <Form.Group className="mt-3">
                     <Form.Label>
                         อาคาร<div id="form-asterisk" className="p">*</div>
@@ -110,6 +253,7 @@ const RiskReportForm = ({handleSubmit, inputs, handleChange, setInputs}) => {
                     </Form.Select>
                 </Form.Group>
 
+                {/* FLOORS INPUT */}
                 <Form.Group className="mt-3">
                     <Form.Label>
                         ชั้น<div id="form-asterisk" className="p">*</div>
@@ -136,6 +280,7 @@ const RiskReportForm = ({handleSubmit, inputs, handleChange, setInputs}) => {
                     </Form.Select>
                 </Form.Group>
 
+                {/* PLACES INPUT */}
                 <Form.Group className="mt-3">
                     <Form.Label>
                         ห้อง / จุดที่พบความเสี่ยง<div id="form-asterisk" className="p">*</div>
@@ -148,6 +293,7 @@ const RiskReportForm = ({handleSubmit, inputs, handleChange, setInputs}) => {
                         disabled={placesInput} />
                 </Form.Group>
 
+                {/* LEVEL INPUT */}
                 <Form.Group className="mt-3">
                     <Form.Label>
                         ระดับความเสี่ยง<div id="form-asterisk" className="p">*</div>
@@ -166,6 +312,7 @@ const RiskReportForm = ({handleSubmit, inputs, handleChange, setInputs}) => {
                     </Form.Select>
                 </Form.Group>
 
+                {/* IMAGE INPUT */}
                 <Form.Group className="mt-3">
                     <Form.Label>ไฟล์ภาพประกอบ (ถ้ามี)</Form.Label>
                     <Form.Control
@@ -176,6 +323,7 @@ const RiskReportForm = ({handleSubmit, inputs, handleChange, setInputs}) => {
                         accept="image/*"
                         disabled={imageInput} />
                         {
+                            /* PREVIEW */
                             inputs.image && (
                                 <Container className="text-center mt-3 p-3">
                                     <Image 
@@ -187,6 +335,7 @@ const RiskReportForm = ({handleSubmit, inputs, handleChange, setInputs}) => {
                         )}
                 </Form.Group>
 
+                {/* SUBMIT BUTTON */}
                 <div className="d-grid mt-3">
                     <Button 
                         type="submit"

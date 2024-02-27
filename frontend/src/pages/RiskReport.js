@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 import RiskReportForm from "../forms/RiskReportForm";
 import { RiskReportRequest } from "../requests/RiskReportRequest";
@@ -16,7 +16,7 @@ const RiskReport = () => {
     // FORM
     const [inputs, setInputs] = useState({});
 
-    const handleChange = (e) => {
+    const handleChange = async (e) => {
         const name = e.target.name;
         const value = e.target.value;
         setInputs(values => ({...values, [name]: value}));
@@ -25,6 +25,12 @@ const RiskReport = () => {
             setInputs(values => ({...values, imagefile: e.target.files[0]}))
         }
     }
+
+    useEffect(() => {
+        console.log(inputs)
+    }, [inputs])
+
+
 
     // SUBMIT BUTTON
     const username = sessionStorage.getItem('username');
