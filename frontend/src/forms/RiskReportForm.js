@@ -140,7 +140,7 @@ const RiskReportForm = ({handleSubmit, inputs, handleChange, setInputs}) => {
     useEffect(() => {
         setLevelInput((inputs.places && inputs.places !== '0') ? (inputs.type.includes('risk')) ? false : true : true)
         setImageInput((inputs.places && inputs.places !== '0') ? (inputs.type.includes('risk')) ? imageInput : false : true)
-        setSubmitButton((inputs.places && inputs.places !== '0') ? ((inputs.type.includes('risk'))) ? submitButton : false : true)
+        setSubmitButton((inputs.places && inputs.places !== '0') ? (inputs.type.includes('risk')) ? submitButton : false : true)
         setInputs((inputs.places && inputs.places !== '0') ? inputs : {
             type: inputs.type,
             subtype: inputs.subtype,
