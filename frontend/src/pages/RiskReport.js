@@ -26,12 +26,6 @@ const RiskReport = () => {
         }
     }
 
-    useEffect(() => {
-        console.log(inputs)
-    }, [inputs])
-
-
-
     // SUBMIT BUTTON
     const username = sessionStorage.getItem('username');
     const token = sessionStorage.getItem('token');
