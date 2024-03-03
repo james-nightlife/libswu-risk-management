@@ -4,13 +4,21 @@ import { RiskEditInputControl } from "../functions/RiskEditInputControl";
 import { useEffect, useState } from "react";
 
 const RiskEditForm = ({handleEdit, handleChange, inputs}) => {
+    // INPUTS
+    const [riskChecked, setRiskChecked] = useState(false);
+    const [maChecked, setMaChecked] = useState(false);
+
     // CONTROLLED INPUT
     const [isAdminOrReporter, setIsAdminOrReporter] = useState(true);
     const [imageUrl, setImageUrl] = useState('');
 
-    useEffect(() => {
+    useEffect(() => { 
         if(inputs){
             setIsAdminOrReporter(RiskEditInputControl(inputs));
+        }
+        if(inputs.type){
+            setRiskChecked(inputs.type.includes('รายงานความเสี่ยง'));
+            setMaChecked(inputs.type.includes('รายงานแจ้งซ่อม'));
         }
     }, [inputs])
 
@@ -25,10 +33,30 @@ const RiskEditForm = ({handleEdit, handleChange, inputs}) => {
     return(
         <Container className="p-3 border rounded">
             <h1 className="text-center">รายงานความเสี่ยง</h1>
+
             <div className="text-end">
                 <div id="form-asterisk" className="p">*</div> = จำเป็นต้องกรอกข้อมูล
             </div>
+
             <Form onSubmit={handleEdit}>
+
+                {/* TYPE CHECKBOXES */}
+                <Form.Group className="mt-3">
+                    <Form.Label>
+                        ประเภทการรายงาน<div id="form-asterisk" className="p">*</div>
+                    </Form.Label>
+                    <Form.Check
+                        type="checkbox"
+                        checked={riskChecked}
+                        disabled
+                        label="รายงานความเสี่ยง" />
+                    <Form.Check
+                        type="checkbox"
+                        disabled
+                        checked={maChecked}
+                        label="รายงานแจ้งซ่อม" />
+                </Form.Group>
+
                 <Form.Group className="pt-3">
                     <Form.Label>
                         รายละเอียดความเสี่ยง<div id="form-asterisk" className="p">*</div>
@@ -102,7 +130,17 @@ const RiskEditForm = ({handleEdit, handleChange, inputs}) => {
                         name="level" 
                         value={inputs.level || ''}
                         onChange={handleChange}
-                        disabled={isAdminOrReporter || (inputs.old_status === 'ดำเนินการแล้วเสร็จ')} >
+                        disabled={
+                            isAdminOrReporter || 
+                            (
+                                inputs.risk_status && inputs.risk_status.length > 0 &&
+                                inputs.risk_status[inputs.risk_status.length - 1].status === 'ดำเนินการแล้วเสร็จ'
+                            ) ||
+                            (
+                                inputs.type &&
+                                !inputs.type.includes('รายงานความเสี่ยง')
+                            )
+                        } >
                         <option value='0'>-- ระดับ --</option>
                         <option>1</option>
                         <option>2</option>

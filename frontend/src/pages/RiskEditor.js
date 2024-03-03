@@ -10,6 +10,7 @@ import { SuccessAlert } from "../alert/SuccessAlert";
 import { FailAlert } from "../alert/FailAlert";
 import { UploadImageRequest } from "../requests/UploadImageRequest";
 import RiskDeleteButton from "../button/RiskDeleteButton";
+import MaProcessForm from "../forms/MaProcessForm";
 
 const RiskEditor = () => {
     // TITLE
@@ -27,16 +28,29 @@ const RiskEditor = () => {
             },
         }).then(async (res) => {
             const data = await res.json()
-            if(data.status){
+            console.log(data)
+            if(data.risk_status){
                 setRisk({
                     ...data, 
-                    old_status: data.status,
+                    old_risk_status: data.risk_status[data.risk_status.length - 1],
                 }); 
             }else{
                 setRisk({
                     ...data, 
-                    old_status: 'รอดำเนินการ',
-                    status: 'รอดำเนินการ',
+                    old_risk_status: 'รอดำเนินการ',
+                    new_risk_status: 'รอดำเนินการ',
+                }); 
+            }
+            if(data.ma_status){
+                setRisk({
+                    ...data, 
+                    old_ma_status: data.ma_status[data.ma_status.length - 1],
+                }); 
+            }else{
+                setRisk({
+                    ...data, 
+                    old_ma_status: 'รอดำเนินการ',
+                    new_ma_status: 'รอดำเนินการ',
                 }); 
             }
         }).catch((error) => {
@@ -71,20 +85,17 @@ const RiskEditor = () => {
         e.preventDefault();
         if(
             risk.detail &&
-            risk.location &&
-            risk.location !== '0' &&
-            risk.floors && 
-            risk.floors !== '0' &&
-            risk.places && 
-            risk.level &&
-            risk.level !== '0'
+            risk.location && risk.location !== '0' &&
+            risk.floors && risk.floors !== '0' &&
+            risk.places || 
+            (risk.type.includes('รายงานความเสี่ยง') && risk.level && risk.level !== '0')
         ){
             ConfirmAlert({
                 title: 'ยืนยันการแก้ไข',
                 html: `ยืนยันการแก้ไขรายงานความเสี่ยง <br>
                     รายละเอียด : ${risk.detail} <br>
                     สถานที่แจ้ง : ${risk.location} ชั้น ${risk.floors} ${risk.places}<br>
-                    ระดับความเสี่ยง : ${risk.level}`,
+                    ระดับความเสี่ยง : ${risk.level || 'ไม่เป็นความเสี่ยง'}`,
             }, async () => {
                 let filename;
                 if(risk.newimage){
@@ -200,6 +211,13 @@ const RiskEditor = () => {
                 handleChange={handleChange} 
                 inputs={risk}
                 setInputs={setRisk} />
+            <hr />
+            <MaProcessForm
+                handleProcess={handleEvaluation} 
+                handleChange={handleChange} 
+                inputs={risk}
+                setInputs={setRisk}
+                />
             <hr />
             <RiskDeleteButton 
                 inputs={risk}

@@ -3,7 +3,7 @@ import { DateToDatetime } from "../functions/DateToDatetime";
 import { RiskProcessInputControl } from "../functions/RiskProcessInputControl";
 import { useEffect, useState } from "react";
 
-const RiskProcessForm = ({handleProcess, inputs, handleChange, setInputs}) => {
+const MaProcessForm = ({handleProcess, inputs, handleChange, setInputs}) => {
     const [processInput, setProcessInput] = useState(true);
     const [statusInput, setStatusInput] = useState(true);
     const [submitProcessButton, setSubmitProcessButton] = useState(true);
@@ -21,13 +21,14 @@ const RiskProcessForm = ({handleProcess, inputs, handleChange, setInputs}) => {
     return(
         <Container className="p-3 border rounded">
             <h2 className="text-center">
-                การดำเนินการเกี่ยวกับความเสี่ยง
+                การดำเนินการซ่อมบำรุง
             </h2>
             {
-                inputs.risk_status && inputs.risk_status.length > 0 ? (
+                inputs.ma_status && inputs.ma_status.length > 0 ? (
                     <Form onSubmit={handleProcess}>
                         { 
-                            inputs.risk_status && inputs.risk_status.map((data, idx) => {
+                            // TIMELINE
+                            inputs.ma_status && inputs.ma_status.map((data, idx) => {
                                 return(
                                     <Card 
                                         className="mt-3"
@@ -55,7 +56,10 @@ const RiskProcessForm = ({handleProcess, inputs, handleChange, setInputs}) => {
                                 name="comment" 
                                 type="text" 
                                 as="textarea"
-                                disabled={processInput || (inputs.old_status === 'ดำเนินการแล้วเสร็จ')}
+                                disabled={
+                                    processInput || 
+                                    (inputs.old_status === 'ดำเนินการแล้วเสร็จ')
+                                }
                                 onChange={handleChange}
                                 value={inputs.comment || '' } />
                         </Form.Group>
@@ -103,7 +107,7 @@ const RiskProcessForm = ({handleProcess, inputs, handleChange, setInputs}) => {
                     </Form>    
                 ) : (
                     <>
-                        ไม่เป็นความเสี่ยง
+                        <>ไม่เป็นรายงานแจ้งซ่อม</>
                     </>
                 )
             }            
@@ -111,4 +115,4 @@ const RiskProcessForm = ({handleProcess, inputs, handleChange, setInputs}) => {
     )
 }
 
-export default RiskProcessForm;
+export default MaProcessForm;

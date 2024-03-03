@@ -14,7 +14,8 @@ const RisksTable = ({currentItems, riskEditorRoute, itemOffset, handlePageClick,
                         <th className="fit">สถานที่แจ้ง</th>
                         <th className="fit">ผู้แจ้ง</th>
                         <th className="fit">วันที่รายงาน</th>
-                        <th className="fit">สถานะการดำเนินการ</th>
+                        <th>สถานะความเสี่ยง</th>
+                        <th>สถานะแจ้งซ่อม</th>
                         <th className="fit">จัดการ</th>
                     </tr>
                 </thead>
@@ -37,7 +38,24 @@ const RisksTable = ({currentItems, riskEditorRoute, itemOffset, handlePageClick,
                             <td className="align-middle fit">{DateToDatetime(data.createdAt)}</td>
                             <td className="align-middle fit">
                                 <div className="d-grid">
-                                    <Button variant={data.color}>{data.status || 'รอดำเนินการ'}</Button>
+                                    <Button variant={data.color}>
+                                        {
+                                            data.risk_status && data.risk_status.length > 0 ?
+                                            data.risk_status[data.risk_status.length - 1].status :
+                                            'รอดำเนินการ'
+                                        }
+                                        </Button>
+                                </div>          
+                            </td>
+                            <td className="align-middle fit">
+                                <div className="d-grid">
+                                    <Button variant={data.color}>
+                                        {
+                                            data.ma_status && data.ma_status.length > 0 ?
+                                            data.ma_status[data.ma_status.length - 1].status :
+                                            'รอดำเนินการ'
+                                        }
+                                    </Button>
                                 </div>          
                             </td>
                             <td className="align-middle">

@@ -30,11 +30,11 @@ const RiskReportForm = ({handleSubmit, inputs, handleChange, setInputs}) => {
     }
 
     useEffect(() => {
-        setTypeInputEffect('risk', riskChecked)
+        setTypeInputEffect('รายงานความเสี่ยง', riskChecked)
     }, [riskChecked])
 
     useEffect(() => {
-        setTypeInputEffect('ma', maChecked)
+        setTypeInputEffect('รายงานแจ้งซ่อม', maChecked)
     }, [maChecked])
 
     useEffect(() => {
@@ -54,8 +54,136 @@ const RiskReportForm = ({handleSubmit, inputs, handleChange, setInputs}) => {
         setTypeInput(updateTypeInput)
     }
 
-ย
+    /* HANDLE TYPE INPUT */
+    useEffect(() => {
+        console.log('type changed')
+        setSubTypeInput((inputs.type && inputs.type.length > 0) ? false : true)
+        setDetailInput((inputs.type && inputs.type.length > 0) ? detailInput : true)
+        setLocationInput((inputs.type && inputs.type.length > 0) ? locationInput : true)
+        setFloorsInput((inputs.type && inputs.type.length > 0) ? floorsInput : true)
+        setPlacesInput((inputs.type && inputs.type.length > 0) ? placesInput : true)
+        setLevelInput((inputs.type && inputs.type.length > 0) ? 
+                            (inputs.type.includes('รายงานความเสี่ยง')) ? 
+                            inputs.places ? false : true : 
+                            true : 
+                            true)
+        setImageInput((inputs.type && inputs.type.length > 0) ? 
+                            (inputs.type.includes('รายงานความเสี่ยง')) ?
+                            (inputs.level && inputs.level !== '0') ? false : true :
+                            inputs.places ? false : true : 
+                            true)
+        setSubmitButton((inputs.type && inputs.type.length > 0) ?
+                            (inputs.type.includes('รายงานความเสี่ยง')) ? 
+                            (inputs.level && inputs.level !== '0') ? false : true :
+                            inputs.places ? false : true : 
+                            true)
+        setInputs((inputs.type && inputs.type.length > 0) ? (inputs.type.includes('รายงานความเสี่ยง')) ? inputs : {
+            type: inputs.type,
+            subtype: inputs.subtype,
+            detail: inputs.detail,
+            location: inputs.location,
+            floors: inputs.floors,
+            places: inputs.places,
+        } : {
+            type: inputs.type,
+        })
+    }, [inputs.type])
 
+    /* HANDLE SUB-TYPE INPUT */
+    useEffect(() => {
+        console.log('subtype changed')
+        setDetailInput((inputs.subtype && inputs.subtype !== '0') ? false : true)
+        setLocationInput((inputs.subtype && inputs.subtype !== '0') ? locationInput : true)
+        setFloorsInput((inputs.subtype && inputs.subtype !== '0') ? floorsInput : true)
+        setPlacesInput((inputs.subtype && inputs.subtype !== '0') ? placesInput : true)
+        setLevelInput((inputs.subtype && inputs.subtype !== '0') ? levelInput : true)
+        setImageInput((inputs.subtype && inputs.subtype !== '0') ? imageInput : true)
+        setSubmitButton((inputs.subtype && inputs.subtype !== '0') ? submitButton : true)
+        setInputs((inputs.subtype && inputs.subtype !== '0') ? inputs : {
+            type: inputs.type,
+            subtype: inputs.subtype
+        })
+    }, [inputs.subtype])
+
+    /* HANDLE DETAIL INPUT */
+    useEffect(() => {
+        console.log('detail changed')
+        setLocationInput(inputs.detail ? false : true)
+        setFloorsInput(inputs.detail ? floorsInput : true)
+        setPlacesInput(inputs.detail ? placesInput : true)
+        setLevelInput(inputs.detail ? levelInput : true)
+        setImageInput(inputs.detail ? imageInput : true)
+        setSubmitButton(inputs.detail ? submitButton : true)
+        setInputs(inputs.detail ? inputs : {
+            type: inputs.type,
+            subtype: inputs.subtype,
+            detail: inputs.detail
+        })
+    }, [inputs.detail])
+
+    /* HANDLE LOCATION INPUT */
+    useEffect(() => {
+        console.log('location changed')
+        setFloorsInput((inputs.location && inputs.location !== '0') ? false : true)
+        setPlacesInput((inputs.location && inputs.location !== '0') ? placesInput : true)
+        setLevelInput((inputs.location && inputs.location !== '0') ? levelInput : true)
+        setImageInput((inputs.location && inputs.location !== '0') ? imageInput : true)
+        setSubmitButton((inputs.location && inputs.location !== '0') ? submitButton : true)
+        setInputs((inputs.location && inputs.location !== '0') ? inputs : {
+            type: inputs.type,
+            subtype: inputs.subtype,
+            detail: inputs.detail,
+            location: inputs.location
+        })
+    }, [inputs.location])
+
+    /* HANDLE FLOORS INPUT */
+    useEffect(() => {
+        console.log('floors changed')
+        setPlacesInput((inputs.floors && inputs.floors !== '0') ? false : true)
+        setLevelInput((inputs.floors && inputs.floors !== '0') ? levelInput : true)
+        setImageInput((inputs.floors && inputs.floors !== '0') ? imageInput : true)
+        setSubmitButton((inputs.floors && inputs.floors !== '0') ? submitButton : true)
+        setInputs((inputs.floors && inputs.floors !== '0') ? inputs : {
+            type: inputs.type,
+            subtype: inputs.subtype,
+            detail: inputs.detail,
+            location: inputs.location,
+            floors: inputs.floors,
+        })
+    }, [inputs.floors])
+
+    /* HANDLE PLACES INPUT */
+    useEffect(() => {
+        console.log('places changed')
+        setLevelInput((typeInput.includes('รายงานความเสี่ยง') && inputs.places) ? false : true)
+        setImageInput((typeInput.includes('รายงานความเสี่ยง') && inputs.places) ?  imageInput : (inputs.places) ? false : true)
+        setSubmitButton((typeInput.includes('รายงานความเสี่ยง') && inputs.places) ?  imageInput : (inputs.places) ? false : true)
+        setInputs((typeInput.includes('รายงานความเสี่ยง') && inputs.places) ? inputs : {
+            type: inputs.type,
+            subtype: inputs.subtype,
+            detail: inputs.detail,
+            location: inputs.location,
+            floors: inputs.floors,
+            places: inputs.places,
+        })
+    }, [inputs.places])
+
+    /* HANDLE LEVEL INPUT */
+    useEffect(() => {
+        console.log('level changed')
+        setImageInput((typeInput.includes('รายงานความเสี่ยง') && inputs.level && inputs.level !== '0') ? false :  (inputs.places) ? false : true)
+        setSubmitButton((typeInput.includes('รายงานความเสี่ยง') && inputs.level && inputs.level !== '0') ? false : (inputs.places) ? false : true)
+        setInputs((typeInput.includes('รายงานความเสี่ยง') && inputs.level && inputs.level !== '0') ? inputs : {
+            type: inputs.type,
+            subtype: inputs.subtype,
+            detail: inputs.detail,
+            location: inputs.location,
+            floors: inputs.floors,
+            places: inputs.places,
+            level: inputs.level,
+        })
+    }, [inputs.level])
 
     /* HANDLE PREVIEW IMAGE */
     useEffect(() => {
