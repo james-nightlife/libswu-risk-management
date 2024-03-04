@@ -10,55 +10,72 @@ const RisksTable = ({currentItems, riskEditorRoute, itemOffset, handlePageClick,
                 <thead>
                     <tr>
                         <th className="fit">ที่</th>
-                        <th className="fit">รายละเอียด</th>
+                        <th>รายละเอียด</th>
                         <th className="fit">สถานที่แจ้ง</th>
                         <th className="fit">ผู้แจ้ง</th>
                         <th className="fit">วันที่รายงาน</th>
-                        <th>สถานะความเสี่ยง</th>
-                        <th>สถานะแจ้งซ่อม</th>
+                        <th className="fit">สถานะความเสี่ยง</th>
+                        <th className="fit">สถานะแจ้งซ่อม</th>
                         <th className="fit">จัดการ</th>
                     </tr>
                 </thead>
                 <tbody>
                     {currentItems && currentItems.map((data, idx) => {
-                        if(data.status === 'รอดำเนินการ' || !data.status){
-                            data.color = 'danger';
-                        }else if(data.status === 'อยู่ระหว่างการดำเนินการ'){
-                            data.color = 'warning';
-                        }else if(data.status === 'ดำเนินการแล้วเสร็จ'){
-                            data.color = 'success';
-                        }
+                        data.risk_color = (
+                            data.risk_status && 
+                            data.risk_status.length > 0 && 
+                            data.risk_status[data.risk_status.length - 1].status === 'รอดำเนินการ' ? 'danger' :
+                            data.risk_status && 
+                            data.risk_status.length > 0 && 
+                            data.risk_status[data.risk_status.length - 1].status === 'อยู่ระหว่างการดำเนินการ' ? 'warning' :
+                            data.risk_status && 
+                            data.risk_status.length > 0 && 
+                            data.risk_status[data.risk_status.length - 1].status === 'ดำเนินการแล้วเสร็จ' ? 'success' :
+                            'dark'
+                        )
+                        data.ma_color = (
+                            data.ma_status && 
+                            data.ma_status.length > 0 && 
+                            data.ma_status[data.ma_status.length - 1].status === 'รอดำเนินการ' ? 'danger' :
+                            data.ma_status && 
+                            data.ma_status.length > 0 && 
+                            data.ma_status[data.ma_status.length - 1].status === 'อยู่ระหว่างการดำเนินการ' ? 'warning' :
+                            data.ma_status && 
+                            data.ma_status.length > 0 && 
+                            data.ma_status[data.ma_status.length - 1].status === 'ดำเนินการแล้วเสร็จ' ? 'success' :
+                            'dark'
+                        )
 
                         return(               
                         <tr key={idx+itemOffset+1}>  
                             <td className="align-middle fit">{idx+itemOffset+1}</td>
-                            <td className="align-middle fit">{data.detail}</td>
+                            <td className="align-middle">{data.detail}</td>
                             <td className="align-middle fit">{data.location}</td>
                             <td className="align-middle fit">{data.reporter}</td>
                             <td className="align-middle fit">{DateToDatetime(data.createdAt)}</td>
                             <td className="align-middle fit">
                                 <div className="d-grid">
-                                    <Button variant={data.color}>
+                                    <Button variant={data.risk_color}>
                                         {
                                             data.risk_status && data.risk_status.length > 0 ?
                                             data.risk_status[data.risk_status.length - 1].status :
-                                            'รอดำเนินการ'
+                                            'ไม่เป็นความเสี่ยง'
                                         }
                                         </Button>
                                 </div>          
                             </td>
                             <td className="align-middle fit">
                                 <div className="d-grid">
-                                    <Button variant={data.color}>
+                                    <Button variant={data.ma_color}>
                                         {
                                             data.ma_status && data.ma_status.length > 0 ?
                                             data.ma_status[data.ma_status.length - 1].status :
-                                            'รอดำเนินการ'
+                                            'ไม่แจ้งซ่อม'
                                         }
                                     </Button>
                                 </div>          
                             </td>
-                            <td className="align-middle">
+                            <td className="align-middle fit">
                                 <Button onClick={e => riskEditorRoute(e, data._id)}>เรียกดู</Button>
                             </td>
                         </tr> 

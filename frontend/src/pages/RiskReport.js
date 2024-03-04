@@ -63,6 +63,7 @@ const RiskReport = () => {
                 const response = await RiskReportRequest({
                     reporter: username,
                     type: inputs.type,
+                    sub_type: inputs.subtype,
                     detail: inputs.detail, 
                     location: inputs.location,
                     floors: inputs.floors,

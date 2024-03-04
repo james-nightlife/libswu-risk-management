@@ -1,7 +1,7 @@
 import { Button, Card, Container, Form } from "react-bootstrap";
 import { DateToDatetime } from "../functions/DateToDatetime";
-import { RiskProcessInputControl } from "../functions/RiskProcessInputControl";
 import { useEffect, useState } from "react";
+import { MaProcessInputControl } from "../functions/MaProcessInputControl";
 
 const MaProcessForm = ({handleProcess, inputs, handleChange, setInputs}) => {
     const [processInput, setProcessInput] = useState(true);
@@ -9,14 +9,15 @@ const MaProcessForm = ({handleProcess, inputs, handleChange, setInputs}) => {
     const [submitProcessButton, setSubmitProcessButton] = useState(true);
 
     useEffect(() => {
-        setProcessInput(RiskProcessInputControl())
-        setStatusInput(RiskProcessInputControl() || !inputs.comment)
-        setSubmitProcessButton(RiskProcessInputControl() || !inputs.comment)
-        setInputs((inputs.comment ? inputs : {
+        setProcessInput(MaProcessInputControl(inputs.sub_type))
+        setStatusInput(MaProcessInputControl(inputs.sub_type) || !inputs.ma_comment)
+        setSubmitProcessButton(MaProcessInputControl(inputs.sub_type) || !inputs.ma_comment)
+        setInputs((inputs.ma_comment ? inputs : {
             ...inputs, 
-            status: inputs.old_status,
+            status: inputs.old_ma_status,
         }))
-    }, [inputs.comment])
+    }, [inputs.ma_comment, inputs.sub_type])
+
 
     return(
         <Container className="p-3 border rounded">
@@ -27,7 +28,7 @@ const MaProcessForm = ({handleProcess, inputs, handleChange, setInputs}) => {
                 inputs.ma_status && inputs.ma_status.length > 0 ? (
                     <Form onSubmit={handleProcess}>
                         { 
-                            // TIMELINE
+                            /** TIMELINE */
                             inputs.ma_status && inputs.ma_status.map((data, idx) => {
                                 return(
                                     <Card 
@@ -50,28 +51,31 @@ const MaProcessForm = ({handleProcess, inputs, handleChange, setInputs}) => {
                                 )
                             }).reverse()
                         }
+
+                        {/** COMMENT INPUT */}
                         <Form.Group>
                             <Form.Label className="pt-3">การดำเนินการ</Form.Label>
                             <Form.Control 
-                                name="comment" 
+                                name="ma_comment" 
                                 type="text" 
                                 as="textarea"
                                 disabled={
                                     processInput || 
-                                    (inputs.old_status === 'ดำเนินการแล้วเสร็จ')
+                                    (inputs.old_ma_status === 'ดำเนินการแล้วเสร็จ')
                                 }
                                 onChange={handleChange}
-                                value={inputs.comment || '' } />
+                                value={inputs.ma_comment || ''} />
                         </Form.Group>
 
+                        {/** STATUS INPUT  */}
                         <Form.Group>
                             <Form.Label className="pt-3">สถานะการดำเนินการ</Form.Label>
                             <Form.Select 
                                 name="status" 
-                                disabled={statusInput || (inputs.old_status === 'ดำเนินการแล้วเสร็จ')}
+                                disabled={statusInput || (inputs.old_ma_status === 'ดำเนินการแล้วเสร็จ')}
                                 onChange={handleChange}
-                                value={inputs.status || '' }>
-                                    {(inputs.old_status === 'รอดำเนินการ' || !inputs.old_status) &&
+                                value={inputs.old_ma_status || ''}>
+                                    {(inputs.old_ma_status === 'รอดำเนินการ' || !inputs.old_ma_status) &&
                                         (<option>รอดำเนินการ</option>) 
                                     }
                                     <option>อยู่ระหว่างการดำเนินการ</option>
@@ -79,6 +83,7 @@ const MaProcessForm = ({handleProcess, inputs, handleChange, setInputs}) => {
                             </Form.Select>
                         </Form.Group>
 
+                        {/** INITIALIZED DATE  */}        
                         <Form.Group>
                             <Form.Label className="pt-3">วันที่เริ่มดำเนินการ</Form.Label>
                             <Form.Control 
@@ -88,6 +93,7 @@ const MaProcessForm = ({handleProcess, inputs, handleChange, setInputs}) => {
                                 value={DateToDatetime(inputs.initialized_date) || ''} />
                         </Form.Group>
 
+                        {/** FINALIZED DATE  */}
                         <Form.Group>
                             <Form.Label className="pt-3">วันที่ดำเนินการแล้วเสร็จ</Form.Label>
                             <Form.Control 
@@ -97,10 +103,11 @@ const MaProcessForm = ({handleProcess, inputs, handleChange, setInputs}) => {
                                 value={DateToDatetime(inputs.finalized_date) || '' } />
                         </Form.Group>
 
+                        {/** SUBMIT BUTTON  */}
                         <div className="d-grid mt-3">
                             <Button 
                                 type="submit" 
-                                disabled={submitProcessButton || (inputs.old_status === 'ดำเนินการแล้วเสร็จ')}>
+                                disabled={submitProcessButton || (inputs.old_ma_status === 'ดำเนินการแล้วเสร็จ')}>
                                 พิจารณาการดำเนินการ
                             </Button>
                         </div>

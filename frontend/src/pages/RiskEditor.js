@@ -13,10 +13,10 @@ import RiskDeleteButton from "../button/RiskDeleteButton";
 import MaProcessForm from "../forms/MaProcessForm";
 
 const RiskEditor = () => {
-    // TITLE
+    /** TITLE */
     document.title = "จัดการรายงานความเสี่ยง";
 
-    // FETCH RISK
+    /** FETCH RISK */
     const id = localStorage.getItem('risk_id');
     const [risk, setRisk] = useState([]);
     
@@ -28,31 +28,12 @@ const RiskEditor = () => {
             },
         }).then(async (res) => {
             const data = await res.json()
+            setRisk({
+                ...data,
+                old_risk_status: data.risk_status ? data.risk_status[data.risk_status.length - 1] : 'รอดำเนินการ',
+                old_ma_status: data.ma_status ? data.ma_status[data.ma_status.length - 1] : 'รอดำเนินการ',
+            });
             console.log(data)
-            if(data.risk_status){
-                setRisk({
-                    ...data, 
-                    old_risk_status: data.risk_status[data.risk_status.length - 1],
-                }); 
-            }else{
-                setRisk({
-                    ...data, 
-                    old_risk_status: 'รอดำเนินการ',
-                    new_risk_status: 'รอดำเนินการ',
-                }); 
-            }
-            if(data.ma_status){
-                setRisk({
-                    ...data, 
-                    old_ma_status: data.ma_status[data.ma_status.length - 1],
-                }); 
-            }else{
-                setRisk({
-                    ...data, 
-                    old_ma_status: 'รอดำเนินการ',
-                    new_ma_status: 'รอดำเนินการ',
-                }); 
-            }
         }).catch((error) => {
             console.error('Error fetching risk data:', error);
         });
@@ -84,10 +65,10 @@ const RiskEditor = () => {
     const handleEdit = async (e) => {
         e.preventDefault();
         if(
-            risk.detail &&
+            (risk.detail &&
             risk.location && risk.location !== '0' &&
             risk.floors && risk.floors !== '0' &&
-            risk.places || 
+            risk.places) || 
             (risk.type.includes('รายงานความเสี่ยง') && risk.level && risk.level !== '0')
         ){
             ConfirmAlert({

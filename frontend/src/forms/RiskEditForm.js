@@ -57,6 +57,29 @@ const RiskEditForm = ({handleEdit, handleChange, inputs}) => {
                         label="รายงานแจ้งซ่อม" />
                 </Form.Group>
 
+                {/* SUBTYPE INPUT */}
+                <Form.Group className="mt-3">
+                    <Form.Label>
+                        ประเภทของความเสี่ยง<div id="form-asterisk" className="p">*</div>
+                    </Form.Label>
+                    <Form.Select
+                        name="subtype"
+                        value={inputs.sub_type || ''} 
+                        onChange={handleChange}
+                        disabled >
+                        <option value={0}>-- ประเภท --</option>
+                        <option>คอมพิวเตอร์/อุปกรณ์</option>
+                        <option>ไฟฟ้า</option>
+                        <option>ประปา</option>
+                        <option>ลิฟท์</option>
+                        <option>เครื่องปรับอากาศ</option>
+                        <option>โต๊ะ เก้าอี้</option>
+                        <option>อาคารสถานที่</option>
+                        <option>อื่น ๆ</option>
+                    </Form.Select>
+                </Form.Group>
+
+
                 <Form.Group className="pt-3">
                     <Form.Label>
                         รายละเอียดความเสี่ยง<div id="form-asterisk" className="p">*</div>

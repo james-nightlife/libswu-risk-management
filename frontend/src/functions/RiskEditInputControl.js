@@ -3,8 +3,8 @@ const RiskEditInputControl = (risk) => {
     const username = sessionStorage.getItem('username');
     if(
         username === risk.reporter ||
-        role === 'admin' ||
-        role === 'committee'
+        role.includes('admin')||
+        role.includes('committee')
     ){
         return(false)
     }else{

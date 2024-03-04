@@ -27,6 +27,7 @@ const RiskProcessForm = ({handleProcess, inputs, handleChange, setInputs}) => {
                 inputs.risk_status && inputs.risk_status.length > 0 ? (
                     <Form onSubmit={handleProcess}>
                         { 
+                            /** TIMELINES */
                             inputs.risk_status && inputs.risk_status.map((data, idx) => {
                                 return(
                                     <Card 
@@ -49,6 +50,8 @@ const RiskProcessForm = ({handleProcess, inputs, handleChange, setInputs}) => {
                                 )
                             }).reverse()
                         }
+
+                        {/** COMMENT INPUT */}
                         <Form.Group>
                             <Form.Label className="pt-3">การดำเนินการ</Form.Label>
                             <Form.Control 
