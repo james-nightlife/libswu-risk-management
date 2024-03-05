@@ -9,14 +9,20 @@ const RiskProcessForm = ({handleProcess, inputs, handleChange, setInputs}) => {
     const [submitProcessButton, setSubmitProcessButton] = useState(true);
 
     useEffect(() => {
+        console.log('RiskProcessForm : inputs.risk_comment is changed')
+        console.log(inputs.risk_comment)
         setProcessInput(RiskProcessInputControl())
-        setStatusInput(RiskProcessInputControl() || !inputs.comment)
-        setSubmitProcessButton(RiskProcessInputControl() || !inputs.comment)
-        setInputs((inputs.comment ? inputs : {
-            ...inputs, 
-            status: inputs.old_status,
-        }))
-    }, [inputs.comment])
+        setStatusInput(RiskProcessInputControl() || !inputs.risk_comment)
+        setSubmitProcessButton(RiskProcessInputControl() || !inputs.risk_comment)
+        setInputs((
+            inputs.risk_comment ? 
+            inputs : 
+            inputs.old_risk_status && inputs.old_risk_status.status ? {
+                ...inputs, 
+                risk_status: inputs.old_risk_status.status,
+            } : inputs
+        ))
+    }, [inputs.risk_comment])
 
     return(
         <Container className="p-3 border rounded">
@@ -55,22 +61,22 @@ const RiskProcessForm = ({handleProcess, inputs, handleChange, setInputs}) => {
                         <Form.Group>
                             <Form.Label className="pt-3">การดำเนินการ</Form.Label>
                             <Form.Control 
-                                name="comment" 
+                                name="risk_comment" 
                                 type="text" 
                                 as="textarea"
-                                disabled={processInput || (inputs.old_status === 'ดำเนินการแล้วเสร็จ')}
+                                disabled={processInput || (inputs.old_risk_status.status === 'ดำเนินการแล้วเสร็จ')}
                                 onChange={handleChange}
-                                value={inputs.comment || '' } />
+                                value={inputs.risk_comment || '' } />
                         </Form.Group>
 
                         <Form.Group>
                             <Form.Label className="pt-3">สถานะการดำเนินการ</Form.Label>
                             <Form.Select 
-                                name="status" 
-                                disabled={statusInput || (inputs.old_status === 'ดำเนินการแล้วเสร็จ')}
+                                name="risk_status" 
+                                disabled={statusInput || (inputs.old_risk_status.status === 'ดำเนินการแล้วเสร็จ')}
                                 onChange={handleChange}
-                                value={inputs.status || '' }>
-                                    {(inputs.old_status === 'รอดำเนินการ' || !inputs.old_status) &&
+                                value={inputs.risk_status || '' }>
+                                    {(inputs.old_risk_status.status === 'รอดำเนินการ' || !inputs.old_risk_status.status) &&
                                         (<option>รอดำเนินการ</option>) 
                                     }
                                     <option>อยู่ระหว่างการดำเนินการ</option>
@@ -81,25 +87,25 @@ const RiskProcessForm = ({handleProcess, inputs, handleChange, setInputs}) => {
                         <Form.Group>
                             <Form.Label className="pt-3">วันที่เริ่มดำเนินการ</Form.Label>
                             <Form.Control 
-                                name="initialized_date" 
+                                name="risk_initialized_date" 
                                 type="text" 
                                 disabled 
-                                value={DateToDatetime(inputs.initialized_date) || ''} />
+                                value={DateToDatetime(inputs.riskinitialized_date) || ''} />
                         </Form.Group>
 
                         <Form.Group>
                             <Form.Label className="pt-3">วันที่ดำเนินการแล้วเสร็จ</Form.Label>
                             <Form.Control 
-                                name="finalized_date" 
+                                name="risk_finalized_date" 
                                 type="text" 
                                 disabled 
-                                value={DateToDatetime(inputs.finalized_date) || '' } />
+                                value={DateToDatetime(inputs.risk_finalized_date) || '' } />
                         </Form.Group>
 
                         <div className="d-grid mt-3">
                             <Button 
                                 type="submit" 
-                                disabled={submitProcessButton || (inputs.old_status === 'ดำเนินการแล้วเสร็จ')}>
+                                disabled={submitProcessButton || (inputs.old_risk_status.status === 'ดำเนินการแล้วเสร็จ')}>
                                 พิจารณาการดำเนินการ
                             </Button>
                         </div>

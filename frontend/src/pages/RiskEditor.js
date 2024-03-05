@@ -18,7 +18,7 @@ const RiskEditor = () => {
 
     /** FETCH RISK */
     const id = localStorage.getItem('risk_id');
-    const [risk, setRisk] = useState([]);
+    const [risk, setRisk] = useState({});
     
     const fetchRiskData = async () => {
         await fetch(`${process.env.REACT_APP_SERVER}/risk/record/${id}`, {
@@ -33,13 +33,14 @@ const RiskEditor = () => {
                 old_risk_status: data.risk_status ? data.risk_status[data.risk_status.length - 1] : 'รอดำเนินการ',
                 old_ma_status: data.ma_status ? data.ma_status[data.ma_status.length - 1] : 'รอดำเนินการ',
             });
-            console.log(data)
         }).catch((error) => {
             console.error('Error fetching risk data:', error);
         });
     }
 
     useEffect(() => {
+        console.log('RiskEditor : id is changed')
+        console.log(`id = ${id}`)
         if(id){
             fetchRiskData();
         }else{

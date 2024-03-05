@@ -9,14 +9,20 @@ const MaProcessForm = ({handleProcess, inputs, handleChange, setInputs}) => {
     const [submitProcessButton, setSubmitProcessButton] = useState(true);
 
     useEffect(() => {
+        console.log('MaProcessForm : ma_comment is changed')
+        console.log(inputs.ma_comment)
         setProcessInput(MaProcessInputControl(inputs.sub_type))
         setStatusInput(MaProcessInputControl(inputs.sub_type) || !inputs.ma_comment)
         setSubmitProcessButton(MaProcessInputControl(inputs.sub_type) || !inputs.ma_comment)
-        setInputs((inputs.ma_comment ? inputs : {
-            ...inputs, 
-            status: inputs.old_ma_status,
-        }))
-    }, [inputs.ma_comment, inputs.sub_type])
+        setInputs((
+            inputs.ma_comment ? 
+            inputs : 
+            inputs.old_ma_status && inputs.old_ma_status.status ? {
+                ...inputs, 
+                ma_status: inputs.old_ma_status.status,
+            } : inputs
+        ))
+    }, [inputs.ma_comment])
 
 
     return(
@@ -61,7 +67,7 @@ const MaProcessForm = ({handleProcess, inputs, handleChange, setInputs}) => {
                                 as="textarea"
                                 disabled={
                                     processInput || 
-                                    (inputs.old_ma_status === 'ดำเนินการแล้วเสร็จ')
+                                    (inputs.old_ma_status.status === 'ดำเนินการแล้วเสร็จ')
                                 }
                                 onChange={handleChange}
                                 value={inputs.ma_comment || ''} />
@@ -71,10 +77,10 @@ const MaProcessForm = ({handleProcess, inputs, handleChange, setInputs}) => {
                         <Form.Group>
                             <Form.Label className="pt-3">สถานะการดำเนินการ</Form.Label>
                             <Form.Select 
-                                name="status" 
-                                disabled={statusInput || (inputs.old_ma_status === 'ดำเนินการแล้วเสร็จ')}
+                                name="ma_status" 
+                                disabled={statusInput || (inputs.old_ma_status.status === 'ดำเนินการแล้วเสร็จ')}
                                 onChange={handleChange}
-                                value={inputs.old_ma_status || ''}>
+                                value={inputs.old_ma_status.status || ''}>
                                     {(inputs.old_ma_status === 'รอดำเนินการ' || !inputs.old_ma_status) &&
                                         (<option>รอดำเนินการ</option>) 
                                     }
@@ -87,27 +93,27 @@ const MaProcessForm = ({handleProcess, inputs, handleChange, setInputs}) => {
                         <Form.Group>
                             <Form.Label className="pt-3">วันที่เริ่มดำเนินการ</Form.Label>
                             <Form.Control 
-                                name="initialized_date" 
+                                name="ma_initialized_date" 
                                 type="text" 
                                 disabled 
-                                value={DateToDatetime(inputs.initialized_date) || ''} />
+                                value={DateToDatetime(inputs.ma_initialized_date) || ''} />
                         </Form.Group>
 
                         {/** FINALIZED DATE  */}
                         <Form.Group>
                             <Form.Label className="pt-3">วันที่ดำเนินการแล้วเสร็จ</Form.Label>
                             <Form.Control 
-                                name="finalized_date" 
+                                name="ma_finalized_date" 
                                 type="text" 
                                 disabled 
-                                value={DateToDatetime(inputs.finalized_date) || '' } />
+                                value={DateToDatetime(inputs.ma_finalized_date) || '' } />
                         </Form.Group>
 
                         {/** SUBMIT BUTTON  */}
                         <div className="d-grid mt-3">
                             <Button 
                                 type="submit" 
-                                disabled={submitProcessButton || (inputs.old_ma_status === 'ดำเนินการแล้วเสร็จ')}>
+                                disabled={submitProcessButton || (inputs.old_ma_status.status === 'ดำเนินการแล้วเสร็จ')}>
                                 พิจารณาการดำเนินการ
                             </Button>
                         </div>

@@ -32,10 +32,10 @@ const UserManager = () => {
     }   
 
     useEffect(() => {
-        if(role !== 'admin'){
-            window.location.href = "/";
-        }else{
+        if(role.includes('admin')){
             fetchData();
+        }else{
+            window.location.href = "/";
         }
     }, [role]);
 

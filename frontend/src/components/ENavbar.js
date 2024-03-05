@@ -7,7 +7,7 @@ function ENavbar(){
     const role = sessionStorage.getItem('role');
     var adminNav;
 
-    if(role === 'admin'){
+    if(role.includes('admin')){
         adminNav = (
             <Nav.Link href="/admin/users">จัดการผู้ใช้</Nav.Link>
         );

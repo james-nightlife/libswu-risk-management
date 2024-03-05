@@ -19,7 +19,15 @@ const UsersTable = ({currentItems, handleEditButton, itemOffset}) => {
                         <tr key={idx+itemOffset+1}>
                             <td>{idx+itemOffset+1}</td>
                             <td>{data.username}</td>
-                            <td>{data.role}</td>
+                            <td>
+                                <ul>
+                                    {data.role.map((data) => (
+                                    <li>
+                                        {data}
+                                    </li>
+                                    ))} 
+                                </ul>
+                                </td>
                             <td>{DateToDatetime(data.createdAt)}</td>
                             <td>{DateToDatetime(data.updatedAt)}</td>
                             <td className="align-middle">
