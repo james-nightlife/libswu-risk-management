@@ -14,21 +14,12 @@ const RiskProcessForm = ({handleProcess, inputs, handleChange, setInputs}) => {
         setProcessInput(RiskProcessInputControl())
         setStatusInput(RiskProcessInputControl() || !inputs.risk_comment)
         setSubmitProcessButton(RiskProcessInputControl() || !inputs.risk_comment)
-    }, [inputs.old_risk_status])
-
-    useEffect(() => {
-        console.log('RiskProcessForm : inputs.risk_comment is changed')
-        console.log(inputs)
-        setProcessInput(RiskProcessInputControl())
-        setStatusInput(RiskProcessInputControl() || !inputs.risk_comment)
-        setSubmitProcessButton(RiskProcessInputControl() || !inputs.risk_comment)
         setInputs((
             inputs.risk_comment ? 
-            inputs : 
-            inputs.old_risk_status && inputs.old_risk_status.status ? {
+            inputs : {
                 ...inputs, 
-                risk_new_status: inputs.old_risk_status.status,
-            } : inputs
+                new_risk_status: inputs.old_risk_status,
+            }
         ))
     }, [inputs.risk_comment])
 
@@ -72,7 +63,7 @@ const RiskProcessForm = ({handleProcess, inputs, handleChange, setInputs}) => {
                                 name="risk_comment" 
                                 type="text" 
                                 as="textarea"
-                                disabled={processInput || (inputs.old_risk_status.status === 'ดำเนินการแล้วเสร็จ')}
+                                disabled={processInput || (inputs.old_risk_status === 'ดำเนินการแล้วเสร็จ')}
                                 onChange={handleChange}
                                 value={inputs.risk_comment || '' } />
                         </Form.Group>
@@ -80,11 +71,11 @@ const RiskProcessForm = ({handleProcess, inputs, handleChange, setInputs}) => {
                         <Form.Group>
                             <Form.Label className="pt-3">สถานะการดำเนินการ</Form.Label>
                             <Form.Select 
-                                name="risk_new_status" 
-                                disabled={statusInput || (inputs.old_risk_status.status === 'ดำเนินการแล้วเสร็จ')}
+                                name="new_risk_status" 
+                                disabled={statusInput || (inputs.old_risk_status === 'ดำเนินการแล้วเสร็จ')}
                                 onChange={handleChange}
-                                value={inputs.risk_status || '' }>
-                                    {(inputs.old_risk_status.status === 'รอดำเนินการ' || !inputs.old_risk_status.status) &&
+                                value={inputs.new_risk_status || '' }>
+                                    {(inputs.old_risk_status === 'รอดำเนินการ' || !inputs.old_risk_status) &&
                                         (<option>รอดำเนินการ</option>) 
                                     }
                                     <option>อยู่ระหว่างการดำเนินการ</option>
@@ -98,7 +89,7 @@ const RiskProcessForm = ({handleProcess, inputs, handleChange, setInputs}) => {
                                 name="risk_initialized_date" 
                                 type="text" 
                                 disabled 
-                                value={DateToDatetime(inputs.riskinitialized_date) || ''} />
+                                value={DateToDatetime(inputs.risk_initialized_date) || ''} />
                         </Form.Group>
 
                         <Form.Group>
@@ -113,7 +104,7 @@ const RiskProcessForm = ({handleProcess, inputs, handleChange, setInputs}) => {
                         <div className="d-grid mt-3">
                             <Button 
                                 type="submit" 
-                                disabled={submitProcessButton || (inputs.old_risk_status.status === 'ดำเนินการแล้วเสร็จ')}>
+                                disabled={submitProcessButton || (inputs.old_risk_status === 'ดำเนินการแล้วเสร็จ')}>
                                 พิจารณาการดำเนินการ
                             </Button>
                         </div>

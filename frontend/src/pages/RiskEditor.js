@@ -114,39 +114,38 @@ const RiskEditor = () => {
     const handleEvaluation = async (e) => {
         e.preventDefault();
         if(
-            risk.comment &&
-            risk.status
+            risk.risk_comment &&
+            risk.new_risk_status
         ){
             
             ConfirmAlert({
                 title: 'ยืนยันการพิจารณา',
                 html: `ยืนยันการพิจารณาการดำเนินการเกี่ยวกับความเสี่ยง<br>
-                        การดำเนินการ : ${risk.comment}<br>
-                        สถานะเดิม : ${risk.old_status}<br>
-                        สถานะใหม่ : ${risk.status}<br>`,
+                        การดำเนินการ : ${risk.risk_comment}<br>
+                        สถานะเดิม : ${risk.old_risk_status}<br>
+                        สถานะใหม่ : ${risk.new_risk_status}<br>`,
             }, async () => {
                 let initialized_date;
                 let finalized_date;
-                if(risk.status === 'อยู่ระหว่างการดำเนินการ'){
-                    initialized_date = (risk.old_status === 'รอดำเนินการ' ? new Date() : risk.initialized_date)
-                    finalized_date = risk.finalized_date
-                }else if(risk.status === 'ดำเนินการแล้วเสร็จ'){
-                    initialized_date = (risk.old_status === 'รอดำเนินการ' ? new Date() : risk.initialized_date)
+                if(risk.new_risk_status === 'อยู่ระหว่างการดำเนินการ'){
+                    initialized_date = (risk.old_risk_status === 'รอดำเนินการ' ? new Date() : risk.risk_initialized_date)
+                    finalized_date = risk.risk_finalized_date
+                }else if(risk.new_risk_status === 'ดำเนินการแล้วเสร็จ'){
+                    initialized_date = (risk.old_risk_status === 'รอดำเนินการ' ? new Date() : risk.risk_initialized_date)
                     finalized_date = new Date();
                 }
                 const response = await RiskUpdateRequest({
-                    feedback: [
-                        ...risk.feedback,
+                    risk_status: [
+                        ...risk.risk_status,
                         {
                             date: new Date(),
-                            status: risk.status,
-                            comment: risk.comment,
+                            status: risk.new_risk_status,
+                            comment: risk.risk_comment,
                             user: sessionStorage.getItem('username')
                         },
                     ],
-                    status: risk.status,
-                    initialized_date: initialized_date,
-                    finalized_date: finalized_date,        
+                    risk_initialized_date: initialized_date,
+                    risk_finalized_date: finalized_date,        
                 }, id, token)
                 if(response.status === 200){
                     SuccessAlert(response.message)

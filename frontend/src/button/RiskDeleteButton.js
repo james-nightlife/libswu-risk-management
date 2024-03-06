@@ -15,7 +15,10 @@ const RiskDeleteButton = ({inputs, handleDelete}) => {
                 <div className="d-grid">
                     <Button 
                         className="btn-danger" 
-                        disabled={deleteRiskButton || (inputs.old_status === 'ดำเนินการแล้วเสร็จ')}
+                        disabled={deleteRiskButton || 
+                            (inputs.old_risk_status === 'ดำเนินการแล้วเสร็จ') || 
+                            (inputs.old_ma_status === 'ดำเนินการแล้วเสร็จ')
+                        }
                         onClick={handleDelete}>
                         ลบรายงาน
                     </Button>
