@@ -30,8 +30,10 @@ const RiskEditor = () => {
             const data = await res.json()
             setRisk({
                 ...data,
-                old_risk_status: data.risk_status ? data.risk_status[data.risk_status.length - 1] : 'รอดำเนินการ',
-                old_ma_status: data.ma_status ? data.ma_status[data.ma_status.length - 1] : 'รอดำเนินการ',
+                old_risk_status: data.risk_status ? data.risk_status[data.risk_status.length - 1].status : 'รอดำเนินการ',
+                old_ma_status: data.ma_status ? data.ma_status[data.ma_status.length - 1].status : 'รอดำเนินการ',
+                new_risk_status: data.risk_status ? data.risk_status[data.risk_status.length - 1].status : 'รอดำเนินการ',
+                new_ma_status: data.ma_status ? data.ma_status[data.ma_status.length - 1].status : 'รอดำเนินการ',
             });
         }).catch((error) => {
             console.error('Error fetching risk data:', error);
@@ -108,7 +110,7 @@ const RiskEditor = () => {
         }    
     }
 
-    // RISK PROCESS
+    /** HANDLE RISK PROCESS */
     const handleEvaluation = async (e) => {
         e.preventDefault();
         if(
@@ -159,6 +161,56 @@ const RiskEditor = () => {
         }        
     }
 
+    /** HANDLE RISK PROCESS */
+    const handleMaintenance = async (e) => {
+        e.preventDefault();
+        if(
+            risk.ma_comment &&
+            risk.new_ma_status
+        ){
+            
+            ConfirmAlert({
+                title: 'ยืนยันการดำเนินการ',
+                html: `ยืนยันการดำเนินการซ่อมบำรุง<br>
+                        การดำเนินการ : ${risk.ma_comment}<br>
+                        สถานะเดิม : ${risk.old_ma_status}<br>
+                        สถานะใหม่ : ${risk.new_ma_status}<br>`,
+            }, async () => {
+                let initialized_date;
+                let finalized_date;
+                if(risk.new_ma_status === 'อยู่ระหว่างการดำเนินการ'){
+                    initialized_date = (risk.old_ma_status === 'รอดำเนินการ' ? new Date() : risk.ma_initialized_date)
+                    finalized_date = risk.ma_finalized_date
+                }else if(risk.new_ma_status === 'ดำเนินการแล้วเสร็จ'){
+                    initialized_date = (risk.old_ma_status === 'รอดำเนินการ' ? new Date() : risk.ma_initialized_date)
+                    finalized_date = new Date();
+                }
+                const response = await RiskUpdateRequest({
+                    ma_status: [
+                        ...risk.ma_status,
+                        {
+                            date: new Date(),
+                            status: risk.new_ma_status,
+                            comment: risk.ma_comment,
+                            user: sessionStorage.getItem('username')
+                        },
+                    ],
+                    ma_initialized_date: initialized_date,
+                    ma_finalized_date: finalized_date,        
+                }, id, token)
+                if(response.status === 200){
+                    SuccessAlert(response.message)
+                }else if(response.message === 'Token Invalid'){
+                    SessionExpired();
+                }else{
+                    FailAlert(response.message);
+                }
+            })
+        }else{
+            FailAlert('โปรดระบุการดำเนินการเกี่ยวกับความเสี่ยง');
+        }        
+    }
+
     // DELETE
     const handleDelete = async (e) => {
         let response;
@@ -195,7 +247,7 @@ const RiskEditor = () => {
                 setInputs={setRisk} />
             <hr />
             <MaProcessForm
-                handleProcess={handleEvaluation} 
+                handleProcess={handleMaintenance} 
                 handleChange={handleChange} 
                 inputs={risk}
                 setInputs={setRisk}

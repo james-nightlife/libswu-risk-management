@@ -9,18 +9,25 @@ const MaProcessForm = ({handleProcess, inputs, handleChange, setInputs}) => {
     const [submitProcessButton, setSubmitProcessButton] = useState(true);
 
     useEffect(() => {
+        console.log('MaProcessForm : inputs.old_ma_status is changed')
+        console.log(inputs)
+        setProcessInput(MaProcessInputControl(inputs.sub_type))
+        setStatusInput(MaProcessInputControl(inputs.sub_type) || !inputs.ma_comment)
+        setSubmitProcessButton(MaProcessInputControl(inputs.sub_type) || !inputs.ma_comment)
+    }, [inputs.old_ma_status])
+
+    useEffect(() => {
         console.log('MaProcessForm : ma_comment is changed')
-        console.log(inputs.ma_comment)
+        console.log(inputs)
         setProcessInput(MaProcessInputControl(inputs.sub_type))
         setStatusInput(MaProcessInputControl(inputs.sub_type) || !inputs.ma_comment)
         setSubmitProcessButton(MaProcessInputControl(inputs.sub_type) || !inputs.ma_comment)
         setInputs((
             inputs.ma_comment ? 
-            inputs : 
-            inputs.old_ma_status && inputs.old_ma_status.status ? {
+            inputs : {
                 ...inputs, 
-                ma_status: inputs.old_ma_status.status,
-            } : inputs
+                new_ma_status: inputs.old_ma_status,
+            }
         ))
     }, [inputs.ma_comment])
 
@@ -67,7 +74,7 @@ const MaProcessForm = ({handleProcess, inputs, handleChange, setInputs}) => {
                                 as="textarea"
                                 disabled={
                                     processInput || 
-                                    (inputs.old_ma_status.status === 'ดำเนินการแล้วเสร็จ')
+                                    (inputs.old_ma_status === 'ดำเนินการแล้วเสร็จ')
                                 }
                                 onChange={handleChange}
                                 value={inputs.ma_comment || ''} />
@@ -77,10 +84,10 @@ const MaProcessForm = ({handleProcess, inputs, handleChange, setInputs}) => {
                         <Form.Group>
                             <Form.Label className="pt-3">สถานะการดำเนินการ</Form.Label>
                             <Form.Select 
-                                name="ma_status" 
+                                name="new_ma_status" 
                                 disabled={statusInput || (inputs.old_ma_status.status === 'ดำเนินการแล้วเสร็จ')}
                                 onChange={handleChange}
-                                value={inputs.old_ma_status.status || ''}>
+                                value={inputs.new_ma_status || ''}>
                                     {(inputs.old_ma_status === 'รอดำเนินการ' || !inputs.old_ma_status) &&
                                         (<option>รอดำเนินการ</option>) 
                                     }

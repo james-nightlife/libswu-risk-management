@@ -1,4 +1,4 @@
-const MaProcessInputControl = async (subtype) => {
+const MaProcessInputControl = (subtype) => {
     const role = sessionStorage.getItem('role');
     if(
         role.includes('admin') ||
