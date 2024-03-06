@@ -30,10 +30,10 @@ const RiskEditor = () => {
             const data = await res.json()
             setRisk({
                 ...data,
-                old_risk_status: data.risk_status ? data.risk_status[data.risk_status.length - 1].status : 'รอดำเนินการ',
-                old_ma_status: data.ma_status ? data.ma_status[data.ma_status.length - 1].status : 'รอดำเนินการ',
-                new_risk_status: data.risk_status ? data.risk_status[data.risk_status.length - 1].status : 'รอดำเนินการ',
-                new_ma_status: data.ma_status ? data.ma_status[data.ma_status.length - 1].status : 'รอดำเนินการ',
+                old_risk_status: data.risk_status && data.risk_status.length > 0 ? data.risk_status[data.risk_status.length - 1].status : 'รอดำเนินการ',
+                old_ma_status: data.ma_status && data.ma_status.length > 0 ? data.ma_status[data.ma_status.length - 1].status : 'รอดำเนินการ',
+                new_risk_status: data.risk_status && data.risk_status.length > 0 ? data.risk_status[data.risk_status.length - 1].status : 'รอดำเนินการ',
+                new_ma_status: data.ma_status && data.ma_status.length > 0 ? data.ma_status[data.ma_status.length - 1].status : 'รอดำเนินการ',
             });
         }).catch((error) => {
             console.error('Error fetching risk data:', error);
