@@ -93,8 +93,8 @@ const RisksTable = ({currentItems, riskEditorRoute, itemOffset, handlePageClick,
                     className='btn btn-primary'>
                             บันทึกรายงานเป็นไฟล์ CSV
                 </CSVLink> 
+
             </div>
-            
         </Container>
     )
 }
