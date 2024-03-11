@@ -26,6 +26,9 @@ const SignIn = () => {
             const response = await SignInRequest({
                 username: inputs.username.toLowerCase().trim(),
                 password: inputs.password,
+                role: [
+                    'visitor',
+                ]
             });
             if(response.status === 200){
                 Swal.fire({
