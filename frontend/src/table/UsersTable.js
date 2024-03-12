@@ -18,7 +18,7 @@ const UsersTable = ({currentItems, handleEditButton, itemOffset}) => {
                     {currentItems && currentItems.map((data, idx) => (
                         <tr key={idx+itemOffset+1}>
                             <td>{idx+itemOffset+1}</td>
-                            <td>{data.username}</td>
+                            <td>{data.username} <br/>{data.fullname !== '' && `(${data.fullname})`}</td>
                             <td>
                                 <ul>
                                     {data.role.map((data) => (

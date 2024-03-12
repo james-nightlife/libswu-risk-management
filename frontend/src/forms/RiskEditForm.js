@@ -68,14 +68,14 @@ const RiskEditForm = ({handleEdit, handleChange, inputs}) => {
                         onChange={handleChange}
                         disabled >
                         <option value={0}>-- ประเภท --</option>
-                        <option>คอมพิวเตอร์/อุปกรณ์</option>
+                        <option>คอมพิวเตอร์และอุปกรณ์</option>
                         <option>ไฟฟ้า</option>
                         <option>ประปา</option>
                         <option>ลิฟท์</option>
                         <option>เครื่องปรับอากาศ</option>
                         <option>โต๊ะ เก้าอี้</option>
                         <option>อาคารสถานที่</option>
-                        <option>อื่น ๆ</option>
+                        <option>อื่นๆ</option>
                     </Form.Select>
                 </Form.Group>
 

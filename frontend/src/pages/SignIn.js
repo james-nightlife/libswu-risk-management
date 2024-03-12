@@ -7,18 +7,24 @@ import { SignInRequest } from "../requests/SignInRequest";
 import { FailAlert } from "../alert/FailAlert";
 
 const SignIn = () => {
+    /** TITLE */
     document.title = "ลงชื่อเข้าใช้";
 
+    /** INPUTS */
     const [inputs, setInputs] = useState({});
-    
+    const [signInButton, setSignInButton] = useState(false)
+
+    /** HANDLE INPUT */
     const handleChange = (e) => {
         const name = e.target.name;
         const value = e.target.value;
         setInputs(values => ({...values, [name]: value}));
     }
 
+    /** HANDLE AUTHENTICATION */
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setSignInButton(true) // AVOID MULTIPLE REQUESTS THAT WILL CAUSE MULTIPLE INSERTIONS FOR NEW USERS
         if(
             inputs.username && 
             inputs.password
@@ -47,12 +53,15 @@ const SignIn = () => {
                 })
             }else{
                 FailAlert(response.message);
+                setSignInButton(false);
             }
         }else{
             FailAlert('โปรดระบุบัวศรีไอดีและรหัสผ่านของคุณ');
+            setSignInButton(false)
         } 
     }
-    
+
+    /** RENDER */
     return(
         <Container className="p-3">
             <Row>
@@ -68,7 +77,8 @@ const SignIn = () => {
                         <SignInForm 
                             handleSubmit={handleSubmit} 
                             handleChange={handleChange} 
-                            inputs={inputs} />
+                            inputs={inputs}
+                            signInButton={signInButton} />
                     </Container>  
                 </Col>
                 <Col sm></Col>

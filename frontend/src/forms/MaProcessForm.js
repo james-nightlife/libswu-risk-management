@@ -8,10 +8,18 @@ const MaProcessForm = ({handleProcess, inputs, handleChange, setInputs}) => {
     const [statusInput, setStatusInput] = useState(true);
     const [submitProcessButton, setSubmitProcessButton] = useState(true);
     
+    /** SUB-TYPE IS CHANGED aka ENABLING MAINTENANCE */
+    useEffect(() => {
+        setProcessInput(MaProcessInputControl(inputs.sub_type))
+        setStatusInput(MaProcessInputControl(inputs.sub_type) || !inputs.ma_comment)
+        setSubmitProcessButton(MaProcessInputControl(inputs.sub_type) || !inputs.ma_comment)
+    }, [inputs.sub_type])
+
     /** COMMENT INPUT IS CH */
     useEffect(() => {
         // console.log('MaProcessForm : ma_comment is changed')
         // console.log(inputs)
+
         setProcessInput(MaProcessInputControl(inputs.sub_type))
         setStatusInput(MaProcessInputControl(inputs.sub_type) || !inputs.ma_comment)
         setSubmitProcessButton(MaProcessInputControl(inputs.sub_type) || !inputs.ma_comment)

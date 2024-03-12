@@ -54,9 +54,9 @@ const RiskReportForm = ({handleSubmit, inputs, handleChange, setInputs}) => {
         setTypeInput(updateTypeInput)
     }
 
-    /* HANDLE TYPE INPUT */
+    /** HANDLE TYPE INPUT */
     useEffect(() => {
-        console.log('type changed')
+        // console.log('type changed')
         setSubTypeInput((inputs.type && inputs.type.length > 0) ? false : true)
         setDetailInput((inputs.type && inputs.type.length > 0) ? detailInput : true)
         setLocationInput((inputs.type && inputs.type.length > 0) ? locationInput : true)
@@ -89,9 +89,9 @@ const RiskReportForm = ({handleSubmit, inputs, handleChange, setInputs}) => {
         })
     }, [inputs.type])
 
-    /* HANDLE SUB-TYPE INPUT */
+    /** HANDLE SUB-TYPE INPUT */
     useEffect(() => {
-        console.log('subtype changed')
+        // console.log('subtype changed')
         setDetailInput((inputs.subtype && inputs.subtype !== '0') ? false : true)
         setLocationInput((inputs.subtype && inputs.subtype !== '0') ? locationInput : true)
         setFloorsInput((inputs.subtype && inputs.subtype !== '0') ? floorsInput : true)
@@ -105,9 +105,9 @@ const RiskReportForm = ({handleSubmit, inputs, handleChange, setInputs}) => {
         })
     }, [inputs.subtype])
 
-    /* HANDLE DETAIL INPUT */
+    /** HANDLE DETAIL INPUT */
     useEffect(() => {
-        console.log('detail changed')
+        // console.log('detail changed')
         setLocationInput(inputs.detail ? false : true)
         setFloorsInput(inputs.detail ? floorsInput : true)
         setPlacesInput(inputs.detail ? placesInput : true)
@@ -121,9 +121,9 @@ const RiskReportForm = ({handleSubmit, inputs, handleChange, setInputs}) => {
         })
     }, [inputs.detail])
 
-    /* HANDLE LOCATION INPUT */
+    /** HANDLE LOCATION INPUT */
     useEffect(() => {
-        console.log('location changed')
+        // console.log('location changed')
         setFloorsInput((inputs.location && inputs.location !== '0') ? false : true)
         setPlacesInput((inputs.location && inputs.location !== '0') ? placesInput : true)
         setLevelInput((inputs.location && inputs.location !== '0') ? levelInput : true)
@@ -137,9 +137,9 @@ const RiskReportForm = ({handleSubmit, inputs, handleChange, setInputs}) => {
         })
     }, [inputs.location])
 
-    /* HANDLE FLOORS INPUT */
+    /** HANDLE FLOORS INPUT */
     useEffect(() => {
-        console.log('floors changed')
+        // console.log('floors changed')
         setPlacesInput((inputs.floors && inputs.floors !== '0') ? false : true)
         setLevelInput((inputs.floors && inputs.floors !== '0') ? levelInput : true)
         setImageInput((inputs.floors && inputs.floors !== '0') ? imageInput : true)
@@ -153,9 +153,9 @@ const RiskReportForm = ({handleSubmit, inputs, handleChange, setInputs}) => {
         })
     }, [inputs.floors])
 
-    /* HANDLE PLACES INPUT */
+    /** HANDLE PLACES INPUT */
     useEffect(() => {
-        console.log('places changed')
+        // console.log('places changed')
         setLevelInput((typeInput.includes('รายงานความเสี่ยง') && inputs.places) ? false : true)
         setImageInput((typeInput.includes('รายงานความเสี่ยง') && inputs.places) ?  imageInput : (inputs.places) ? false : true)
         setSubmitButton((typeInput.includes('รายงานความเสี่ยง') && inputs.places) ?  imageInput : (inputs.places) ? false : true)
@@ -169,9 +169,9 @@ const RiskReportForm = ({handleSubmit, inputs, handleChange, setInputs}) => {
         })
     }, [inputs.places])
 
-    /* HANDLE LEVEL INPUT */
+    /** HANDLE LEVEL INPUT */
     useEffect(() => {
-        console.log('level changed')
+        // console.log('level changed')
         setImageInput((typeInput.includes('รายงานความเสี่ยง') && inputs.level && inputs.level !== '0') ? false :  (inputs.places) ? false : true)
         setSubmitButton((typeInput.includes('รายงานความเสี่ยง') && inputs.level && inputs.level !== '0') ? false : (inputs.places) ? false : true)
         setInputs((typeInput.includes('รายงานความเสี่ยง') && inputs.level && inputs.level !== '0') ? inputs : {
@@ -185,7 +185,7 @@ const RiskReportForm = ({handleSubmit, inputs, handleChange, setInputs}) => {
         })
     }, [inputs.level])
 
-    /* HANDLE PREVIEW IMAGE */
+    /** HANDLE PREVIEW IMAGE */
     useEffect(() => {
         if(inputs.imagefile){
             const url = URL.createObjectURL(inputs.imagefile)
@@ -230,14 +230,14 @@ const RiskReportForm = ({handleSubmit, inputs, handleChange, setInputs}) => {
                         onChange={handleChange}
                         disabled={subTypeInput} >
                         <option value={0}>-- ประเภท --</option>
-                        <option>คอมพิวเตอร์/อุปกรณ์</option>
+                        <option>คอมพิวเตอร์และอุปกรณ์</option>
                         <option>ไฟฟ้า</option>
                         <option>ประปา</option>
                         <option>ลิฟท์</option>
                         <option>เครื่องปรับอากาศ</option>
                         <option>โต๊ะ เก้าอี้</option>
                         <option>อาคารสถานที่</option>
-                        <option>อื่น ๆ</option>
+                        <option>อื่นๆ</option>
                     </Form.Select>
                 </Form.Group>
 

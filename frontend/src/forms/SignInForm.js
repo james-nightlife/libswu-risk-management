@@ -1,6 +1,7 @@
 import { Button, Form } from "react-bootstrap";
 
-const SignInForm = ({handleSubmit, handleChange, inputs}) => {
+const SignInForm = ({handleSubmit, handleChange, inputs, signInButton}) => {
+    /** RENDER */
     return(
         <>
             <h1 className="text-center p-3">ลงชื่อเข้าใช้</h1>
@@ -29,7 +30,8 @@ const SignInForm = ({handleSubmit, handleChange, inputs}) => {
                     <Button 
                         id="signin-button"
                         variant="primary" 
-                        type="submit">
+                        type="submit"
+                        disabled={signInButton}>
                         ลงชื่อเข้าใช้
                     </Button>
                 </div> 

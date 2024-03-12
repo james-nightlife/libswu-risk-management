@@ -41,8 +41,8 @@ const RiskEditor = () => {
     }
 
     useEffect(() => {
-        console.log('RiskEditor : id is changed')
-        console.log(`id = ${id}`)
+        //console.log('RiskEditor : id is changed')
+        //console.log(`id = ${id}`)
         if(id){
             fetchRiskData();
         }else{

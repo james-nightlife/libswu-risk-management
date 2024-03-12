@@ -1,5 +1,5 @@
 const RiskProcessInputControl = () => {
-    const role = sessionStorage.getItem('role');
+    const role = sessionStorage.getItem('role').split(',');
     if(
         role.includes('admin') ||
         role.includes('committee')
