@@ -33,15 +33,19 @@ const RiskReport = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if(
-            (inputs.type &&
-            inputs.subtype && inputs.subtype !== 0 &&
-            inputs.detail &&
-            inputs.location && inputs.location !== '0' &&
-            inputs.floors && inputs.floors !== '0' &&
-            inputs.places) || 
-            (inputs.type.include('รายงานความเสี่ยง') && 
-            inputs.level && 
-            inputs.level !== '0')
+            (
+                inputs.type &&
+                inputs.subtype && inputs.subtype !== 0 &&
+                inputs.detail &&
+                inputs.location && inputs.location !== '0' &&
+                inputs.floors && inputs.floors !== '0' &&
+                inputs.places
+            ) || 
+            (
+                inputs.type.include('รายงานความเสี่ยง') && 
+                inputs.level && 
+                inputs.level !== '0'
+            )
         ){
             ConfirmAlert({
                 title: 'ยืนยันการรายงาน',
@@ -52,10 +56,12 @@ const RiskReport = () => {
                     สถานที่แจ้ง : ${inputs.location} ชั้น ${inputs.floors} ${inputs.places}<br>
                     ระดับความเสี่ยง : ${inputs.level || 'ไม่เป็นความเสี่ยง'}`,
             }, async () => {
+                
+                const response = await RiskReportRequest(username, inputs, token);
+ 
+                /*
                 let filename;
                 if(inputs.imagefile){
-                    const formData = new FormData();
-                    formData.append('file', inputs.imagefile);
                     filename = await UploadImageRequest({
                         image: inputs.imagefile
                     })
@@ -89,6 +95,7 @@ const RiskReport = () => {
                         },
                     ] : undefined),
                 }, token);
+                */
                 if(response.status === 200){
                     SuccessAlert(response.message)
                 }else if(response.message === 'Token Invalid'){
