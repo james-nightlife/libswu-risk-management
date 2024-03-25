@@ -81,7 +81,7 @@ const RiskReportRequest = async (username, input, token) => {
 
     if(input.type.includes('รายงานแจ้งซ่อม')){
         try{
-            const insertMAReq = await fetch(`${process.env.REACT_APP_SERVER}/risk/record/`, {
+            const insertMAReq = await fetch(`${process.env.REACT_APP_SERVER}/ma/record/`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
