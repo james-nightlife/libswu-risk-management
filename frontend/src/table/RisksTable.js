@@ -9,14 +9,14 @@ const RisksTable = ({currentItems, riskEditorRoute, itemOffset, handlePageClick,
             <Table responsive>
                 <thead>
                     <tr>
-                        <th className="fit">ที่</th>
+                        <th>ที่</th>
                         <th>รายละเอียด</th>
-                        <th className="fit">สถานที่แจ้ง</th>
-                        <th className="fit">ผู้แจ้ง</th>
-                        <th className="fit">วันที่รายงาน</th>
-                        <th className="fit">สถานะความเสี่ยง</th>
-                        <th className="fit">สถานะแจ้งซ่อม</th>
-                        <th className="fit">จัดการ</th>
+                        <th>สถานที่แจ้ง</th>
+                        <th>ผู้แจ้ง</th>
+                        <th>วันที่รายงาน</th>
+                        <th>สถานะความเสี่ยง</th>
+                        <th>สถานะแจ้งซ่อม</th>
+                        <th>จัดการ</th>
                     </tr>
                 </thead>
                 <tbody>

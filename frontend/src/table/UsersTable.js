@@ -11,15 +11,16 @@ const UsersTable = ({currentItems, handleEditButton, itemOffset}) => {
                         <th>สิทธิ์ใช้งาน</th>
                         <th>วันที่สร้างผู้ใช้</th>
                         <th>วันที่ลงชื่อเข้าใช้ล่าสุด</th>
+                        <th className="fit">ที่มาของการลงชื่อเข้าใช้</th>
                         <th>จัดการ</th>
                     </tr>
                 </thead>
                 <tbody>
                     {currentItems && currentItems.map((data, idx) => (
                         <tr key={idx+itemOffset+1}>
-                            <td>{idx+itemOffset+1}</td>
+                            <td className="fit">{idx+itemOffset+1}</td>
                             <td>{data.username} <br/>{data.fullname !== '' && `(${data.fullname})`}</td>
-                            <td>
+                            <td className="fit">
                                 <ul>
                                     {data.role.map((data) => (
                                     <li>
@@ -28,9 +29,10 @@ const UsersTable = ({currentItems, handleEditButton, itemOffset}) => {
                                     ))} 
                                 </ul>
                                 </td>
-                            <td>{DateToDatetime(data.createdAt)}</td>
-                            <td>{DateToDatetime(data.updatedAt)}</td>
-                            <td className="align-middle">
+                            <td className="fit">{DateToDatetime(data.createdAt)}</td>
+                            <td className="fit">{DateToDatetime(data.updatedAt)}</td>
+                            <td>{data.app}</td>
+                            <td className="align-middle fit">
                                 <Button onClick={e => handleEditButton(e, data._id)}>แก้ไข</Button>
                             </td>
                         </tr>

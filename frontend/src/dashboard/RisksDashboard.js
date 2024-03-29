@@ -5,7 +5,7 @@ const RisksDashboard = ({raw}) => {
         <Container className="p-3 border rounded">
             <h1 className='text-center'>จำนวนรายงานทั้งหมด {raw.length} เรื่อง</h1>
             <Row>
-                <Col xl={3} className="mt-3">
+                <Col xxl={3} xl={6} lg={6} md={6} className="mt-3">
                     <Table>
                         <thead>
                             <tr>
@@ -25,7 +25,7 @@ const RisksDashboard = ({raw}) => {
                         </tbody>
                     </Table>
                 </Col>
-                <Col xl={3} className="mt-3">
+                <Col xxl={3} xl={6} lg={6} md={6} className="mt-3">
                     <Table>
                         <thead>
                             <tr>
@@ -45,7 +45,7 @@ const RisksDashboard = ({raw}) => {
                         </tbody>
                     </Table>
                 </Col>
-                <Col xl={3} className="mt-3">
+                <Col xxl={3} xl={6} lg={6} md={6} className="mt-3">
                     <Table>
                         <thead>
                             <tr>
@@ -69,7 +69,7 @@ const RisksDashboard = ({raw}) => {
                         </tbody>
                     </Table>
                 </Col>
-                <Col xl={3} className="mt-3">
+                <Col xxl={3} xl={6} lg={6} md={6} className="mt-3">
                     <Table>
                         <thead>
                             <tr>
