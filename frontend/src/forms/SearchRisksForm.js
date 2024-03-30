@@ -45,7 +45,7 @@ const SearchRisksForm = ({handleChange, inputs, handleClear}) => {
                                     <option>คอมพิวเตอร์และอุปกรณ์</option>
                                     <option>ไฟฟ้า</option>
                                     <option>ประปา</option>
-                                    <option>ลิฟต์</option>
+                                    <option>ลิฟท์</option>
                                     <option>เครื่องปรับอากาศ</option>
                                     <option>โต๊ะ เก้าอี้</option>
                                     <option>อาคารสถานที่</option>

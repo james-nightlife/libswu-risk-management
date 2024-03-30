@@ -31,7 +31,8 @@ const AdminEditUser = () => {
             if(status === 200){
                 setInput({
                     username: data.username,
-                    role: data.role
+                    role: data.role,
+                    oldrole: data.role
                 });
             }else if(status === 500){
                 SessionExpired();
@@ -59,9 +60,9 @@ const AdminEditUser = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if(
-           input.role && 
-           input.role !== '0'
+           input.role.length > 0
         ){
+            console.log(input.role);
             ConfirmAlert({
                 title: 'ยืนยันการแก้ไข',
                 html: `บัวศรีไอดี : ${input.username} <br>
@@ -84,7 +85,11 @@ const AdminEditUser = () => {
 
     return(
         <Container className="p-3">
-            <UserEditForm handleChange={handleChange} handleSubmit={handleSubmit} inputs={input} roleDropdown={roleDropdown} />
+            <UserEditForm 
+                handleChange={handleChange} 
+                handleSubmit={handleSubmit} 
+                inputs={input} 
+                setInputs={setInput} />
         </Container>
     );
 }

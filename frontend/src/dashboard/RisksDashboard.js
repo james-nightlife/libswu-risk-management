@@ -117,8 +117,8 @@ const RisksDashboard = ({raw}) => {
                                 <td>{raw.filter((obj) => obj.sub_type === 'ประปา').length}</td>
                             </tr>
                             <tr>
-                                <td>ลิฟต์</td>
-                                <td>{raw.filter((obj) => obj.sub_type === 'ลิฟต์').length}</td>
+                                <td>ลิฟท์</td>
+                                <td>{raw.filter((obj) => obj.sub_type === 'ลิฟท์').length}</td>
                             </tr>
                             <tr>
                                 <td>เครื่องปรับอากาศ</td>
