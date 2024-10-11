@@ -1,16 +1,17 @@
-import { Container } from 'react-bootstrap';
+
 import { useEffect, useState } from 'react';
-import SearchRisksForm from '../forms/SearchRisksForm';
-import RisksTable from '../table/RisksTable';
-import RisksDashboard from '../dashboard/RisksDashboard';
-import Pagination from '../components/Pagination';
-import { CSVLink } from 'react-csv';
+import { Button, Container } from 'react-bootstrap';
 import { ExportRisksToCSV } from '../functions/ExportsRiskToCSV';
 import { FilterRisks } from '../functions/FilterRisks';
 
+import SearchRisksForm from '../forms/SearchRisksForm';
+import RisksTable from '../table/RisksTable';
+import RisksDashboard from '../dashboard/RisksDashboard';
+import RiskReportButton from '../button/RiskReportButton';
+
 const Home = () => {
     // TITLE
-    document.title = "ระบบรวบรวมรายงานความเสี่ยง สำนักหอสมุดกลาง มหาวิทยาลัยศรีนครินทรวิโรฒ";
+    document.title = "ระบบรวบรวมรายงานความเสี่ยงภายในอาคารสำนักหอสมุดกลางและห้องสมุดองครักษ์ มหาวิทยาลัยศรีนครินทรวิโรฒ";
 
     // FETCH RISKS
     const [raw, setRaw] = useState([]);
@@ -68,11 +69,10 @@ const Home = () => {
         setInputs(values => ({...values, [name]: value}));
     }
 
-    const handleFind = async (e) => {
-        e.preventDefault();
+    useEffect(() => {
         const result = FilterRisks(raw, inputs)
         setRisks(result);
-    }
+    }, [inputs])
 
     const handleClear = async (e) => {
         e.preventDefault();
@@ -81,35 +81,30 @@ const Home = () => {
     
     return(
         <Container className='p-3'>
+            <RiskReportButton />
+            <hr />
             <SearchRisksForm 
-                handleFind={handleFind} 
                 handleChange={handleChange} 
                 inputs={inputs}
                 handleClear={handleClear} />
-            <CSVLink 
-                data={clean}
-                filename='Risks_LibSWU.csv' 
-                className='btn btn-primary'>
-                    บันทึกเป็น CSV
-            </CSVLink>
+            <hr />
             { raw === null ? (
                 <p>Loading...</p>
-            ) : raw.length === 0 ? (
-                <>
-                </>
-            ) : (
+            ) : raw.length > 0 && (
                 <>
                     <RisksTable 
                         currentItems={currentItems}
                         riskEditorRoute={riskEditorRoute}
-                        itemOffset={itemOffset} />
-                    <Pagination 
+                        itemOffset={itemOffset}
                         handlePageClick={handlePageClick}
-                        pageCount={pageCount} /> 
+                        pageCount={pageCount}
+                        clean={clean} />
+                    <hr />
                 </>
             )}
             <RisksDashboard 
                 raw={raw} />
+            <hr />
         </Container>
     );
 }

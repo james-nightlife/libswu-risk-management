@@ -1,8 +1,8 @@
-const RiskProcessInputControl = () => {
+const MaProcessInputControl = (subtype) => {
     const role = sessionStorage.getItem('role').split(',');
     if(
         role.includes('admin') ||
-        role.includes('committee')
+        role.includes(subtype)
     ){
         return(false)
     }else{
@@ -10,4 +10,4 @@ const RiskProcessInputControl = () => {
     }
 }
 
-export {RiskProcessInputControl}
+export { MaProcessInputControl }

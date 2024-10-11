@@ -16,14 +16,27 @@ body {
   font-family: 'Srinakharinwirot' !important;
 }
 
-th {
-  font-weight: normal !important;
-}
-
 td, input, option, select, textarea, p.card-text {
   font-family: 'Sarabun' !important;
 }
 
+th, h2 {
+  font-weight: normal !important;
+}
+
+#navbar{
+  background-color: #BCD85D;
+}
+
+#preview{
+  max-height: 800px;
+}
+
+#home-reportbutton, 
+#home-exportbutton,
+#signin-button {
+  font-size: 20pt;
+}
 
 ul[role=navigation] {
   margin-bottom: 2rem;
@@ -68,6 +81,13 @@ ul[role=navigation] li.disabled a {
   cursor: not-allowed;
 }
 
-#navbar{
-  background-color: #BCD85D;
+#form-asterisk{
+  color: #FF0000;
+  display: inline
+}
+
+.table td.fit, 
+.table th.fit {
+    white-space: nowrap;
+    width: 1%;
 }

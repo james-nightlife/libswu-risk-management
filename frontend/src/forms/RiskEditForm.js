@@ -1,27 +1,113 @@
-import { Button, Form, Image } from "react-bootstrap";
+import { Button, Container, Form, Image } from "react-bootstrap";
 import { DateToDatetime } from "../functions/DateToDatetime";
+import { RiskEditInputControl } from "../functions/RiskEditInputControl";
+import { useEffect, useState } from "react";
 
-const RiskEditForm = ({handleEdit, handleChange, inputs, isAdminOrReporter, imageUrl }) => {
+const RiskEditForm = ({handleEdit, handleChange, inputs}) => {
+    // INPUTS
+    const [riskChecked, setRiskChecked] = useState(false);
+    const [maChecked, setMaChecked] = useState(false);
+
+    // CONTROLLED INPUT
+    const [isAdminOrReporter, setIsAdminOrReporter] = useState(true);
+    const [imageUrl, setImageUrl] = useState('');
+
+    useEffect(() => { 
+        if(inputs){
+            setIsAdminOrReporter(RiskEditInputControl(inputs));
+        }
+        if(inputs.type){
+            setRiskChecked(inputs.type.includes('รายงานความเสี่ยง'));
+            setMaChecked(inputs.type.includes('รายงานแจ้งซ่อม'));
+        }
+    }, [inputs])
+
+    useEffect(() => {
+        if(inputs.newimage){
+            const url = URL.createObjectURL(inputs.newimage)
+            setImageUrl(url);
+            return () => URL.revokeObjectURL(url);
+        }
+    }, [inputs.newimage])
+
     return(
-        <Form onSubmit={handleEdit}>
-                <Form.Group>
-                    <Form.Label className="pt-3">รายละเอียดความเสี่ยง</Form.Label>
+        <Container className="p-3 border rounded">
+            <h1 className="text-center">รายงานความเสี่ยง</h1>
+
+            <div className="text-end">
+                <div id="form-asterisk" className="p">*</div> = จำเป็นต้องกรอกข้อมูล
+            </div>
+
+            <Form onSubmit={handleEdit}>
+
+                {/* TYPE CHECKBOXES */}
+                <Form.Group className="mt-3">
+                    <Form.Label>
+                        ประเภทการรายงาน<div id="form-asterisk" className="p">*</div>
+                    </Form.Label>
+                    <Form.Check
+                        type="checkbox"
+                        checked={riskChecked}
+                        disabled
+                        label="รายงานความเสี่ยง" />
+                    <Form.Check
+                        type="checkbox"
+                        disabled
+                        checked={maChecked}
+                        label="รายงานแจ้งซ่อม" />
+                </Form.Group>
+
+                {/* SUBTYPE INPUT */}
+                <Form.Group className="mt-3">
+                    <Form.Label>
+                        ประเภทของความเสี่ยง<div id="form-asterisk" className="p">*</div>
+                    </Form.Label>
+                    <Form.Select
+                        name="subtype"
+                        value={inputs.sub_type || ''} 
+                        onChange={handleChange}
+                        disabled >
+                        <option value={0}>-- ประเภท --</option>
+                        <option>คอมพิวเตอร์และอุปกรณ์</option>
+                        <option>ไฟฟ้า</option>
+                        <option>ประปา</option>
+                        <option>ลิฟท์</option>
+                        <option>เครื่องปรับอากาศ</option>
+                        <option>โต๊ะ เก้าอี้</option>
+                        <option>อาคารสถานที่</option>
+                        <option>อื่นๆ</option>
+                    </Form.Select>
+                </Form.Group>
+
+
+                <Form.Group className="pt-3">
+                    <Form.Label>
+                        รายละเอียดความเสี่ยง<div id="form-asterisk" className="p">*</div>
+                    </Form.Label>
                     <Form.Control 
                         name="detail" 
                         type="text" 
                         as="textarea"
                         onChange={handleChange}
-                        disabled={isAdminOrReporter || (inputs.old_status === 'ดำเนินการแล้วเสร็จ')}
+                        disabled={isAdminOrReporter || 
+                            (inputs.old_risk_status === 'ดำเนินการแล้วเสร็จ') ||
+                            (inputs.old_ma_status === 'ดำเนินการแล้วเสร็จ')
+                        }
                         value={inputs.detail || ''} />
                 </Form.Group>
 
                 <Form.Group className="mt-3">
-                    <Form.Label>อาคาร</Form.Label>
+                    <Form.Label>
+                        อาคาร<div id="form-asterisk" className="p">*</div>
+                    </Form.Label>
                     <Form.Select 
                         name="location" 
                         value={inputs.location || '0'}
                         onChange={handleChange}
-                        disabled={isAdminOrReporter || (inputs.old_status === 'ดำเนินการแล้วเสร็จ')}>
+                        disabled={isAdminOrReporter || 
+                            (inputs.old_risk_status === 'ดำเนินการแล้วเสร็จ') ||
+                            (inputs.old_ma_status === 'ดำเนินการแล้วเสร็จ')
+                        }>
                         <option value='0'>-- สถานที่ --</option>
                         <option>ประสานมิตร</option>
                         <option>องครักษ์</option>
@@ -29,14 +115,19 @@ const RiskEditForm = ({handleEdit, handleChange, inputs, isAdminOrReporter, imag
                 </Form.Group>
 
                 <Form.Group className="mt-3">
-                    <Form.Label>ชั้น</Form.Label>
+                    <Form.Label>
+                        ชั้น<div id="form-asterisk" className="p">*</div>
+                    </Form.Label>
                     <Form.Select 
                         name="floors" 
                         value={inputs.floors || ''}
                         onChange={handleChange}
-                        disabled={isAdminOrReporter || (inputs.old_status === 'ดำเนินการแล้วเสร็จ')} >
+                        disabled={isAdminOrReporter || 
+                            (inputs.old_risk_status === 'ดำเนินการแล้วเสร็จ') ||
+                            (inputs.old_ma_status === 'ดำเนินการแล้วเสร็จ')
+                        } >
                         <option value='0'>-- ชั้น --</option>
-                        {(inputs.location && inputs.location !== '0') ? (
+                        {(inputs.location && inputs.location !== '0') && (
                             <>
                                 <option>1</option>
                                 <option>2</option>
@@ -47,32 +138,42 @@ const RiskEditForm = ({handleEdit, handleChange, inputs, isAdminOrReporter, imag
                                 <option>7</option>
                                 <option>8</option>
                             </>
-                        ) : (
-                            <>
-                            </>
-                        )
-                        }
+                        )}
                     </Form.Select>
                 </Form.Group>
 
                 <Form.Group className="mt-3">
-                    <Form.Label>ห้อง / จุดที่พบความเสี่ยง</Form.Label>
+                    <Form.Label>
+                        ห้อง / จุดที่พบความเสี่ยง<div id="form-asterisk" className="p">*</div>
+                    </Form.Label>
                     <Form.Control 
                         name="places" 
                         type='text'
                         value={inputs.places || ''}
                         onChange={handleChange}
-                        disabled={isAdminOrReporter || (inputs.old_status === 'ดำเนินการแล้วเสร็จ')} />
+                        disabled={isAdminOrReporter || 
+                            (inputs.old_risk_status === 'ดำเนินการแล้วเสร็จ') ||
+                            (inputs.old_ma_status === 'ดำเนินการแล้วเสร็จ')
+                        } />
                 </Form.Group>
 
                 <Form.Group className="mt-3">
-                    <Form.Label>ระดับความเสี่ยง</Form.Label>
+                    <Form.Label>
+                        ระดับความเสี่ยง<div id="form-asterisk" className="p">*</div>
+                    </Form.Label>
                     <Form.Select 
                         name="level" 
                         value={inputs.level || ''}
                         onChange={handleChange}
-                        disabled={isAdminOrReporter || (inputs.old_status === 'ดำเนินการแล้วเสร็จ')}
-                        >
+                        disabled={
+                            isAdminOrReporter || 
+                            inputs.old_risk_status === 'ดำเนินการแล้วเสร็จ' ||
+                            inputs.old_ma_status === 'ดำเนินการแล้วเสร็จ' ||
+                            (
+                                inputs.type &&
+                                !inputs.type.includes('รายงานความเสี่ยง')
+                            )
+                        } >
                         <option value='0'>-- ระดับ --</option>
                         <option>1</option>
                         <option>2</option>
@@ -89,27 +190,36 @@ const RiskEditForm = ({handleEdit, handleChange, inputs, isAdminOrReporter, imag
                         type="file"
                         onChange={handleChange}
                         accept="image/*"
-                        disabled={isAdminOrReporter || (inputs.old_status === 'ดำเนินการแล้วเสร็จ')} />
+                        disabled={
+                            isAdminOrReporter ||
+                            (inputs.old_risk_status === 'ดำเนินการแล้วเสร็จ') ||
+                            (inputs.old_ma_status === 'ดำเนินการแล้วเสร็จ')
+                        } />
                         {
-                            inputs.newimage ? 
-                            (
-                                <Image 
-                                    className="mt-3" 
-                                    src={imageUrl}
-                                    fluid />
+                            inputs.newimage ?(
+                                <Container className="text-center mt-3 p-3">
+                                    <Image 
+                                        id="preview"
+                                        className="mt-3" 
+                                        src={imageUrl}
+                                        fluid />
+                                </Container>
                             ) :
-                            inputs.image ?
-                            (
-                                <Image 
-                                    className="mt-3" 
-                                    src={`${process.env.REACT_APP_UPLOAD_SERVER}/uploads/${inputs.image}`}
-                                    fluid />
-                            ) :
-                            (
-                                <>
-                                </>
-                            )
-                        
+                            inputs.image && (
+                                <Container className="text-center mt-3 p-3">
+                                    <a 
+                                        href={`${process.env.REACT_APP_UPLOAD_SERVER}/uploads/${inputs.image}`}
+                                        target="_blank"
+                                        rel="noreferrer">
+                                    <Image 
+                                        id="preview"
+                                        className="mt-3" 
+                                        src={`${process.env.REACT_APP_UPLOAD_SERVER}/uploads/${inputs.image}`}
+                                        fluid
+                                        />
+                                    </a>
+                                </Container>  
+                            ) 
                         }
                 </Form.Group>
 
@@ -134,11 +244,17 @@ const RiskEditForm = ({handleEdit, handleChange, inputs, isAdminOrReporter, imag
                 <div className="d-grid mt-3">
                     <Button 
                         type="submit" 
-                        disabled={isAdminOrReporter || (inputs.old_status === 'ดำเนินการแล้วเสร็จ')}>
+                        disabled={
+                            isAdminOrReporter || 
+                            (inputs.old_risk_status === 'ดำเนินการแล้วเสร็จ') ||
+                            (inputs.old_ma_status === 'ดำเนินการแล้วเสร็จ')
+                        }>
                         แก้ไขรายงาน
                     </Button>
                 </div>
             </Form>
+        </Container>
+        
     );
 }
 

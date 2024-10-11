@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import ReactPaginate from "react-paginate";
 
 const Pagination = ({handlePageClick, pageCount}) => {
@@ -9,12 +10,11 @@ const Pagination = ({handlePageClick, pageCount}) => {
                 nextLabel='Next >'
                 onPageChange={handlePageClick}
                 pageRangeDisplayed={0}
-                marginPagesDisplayed={1}
+                marginPagesDisplayed={0}
                 pageCount={pageCount}
                 previousLabel='< Previous'
                 renderOnZeroPageCount={null}
             />
-            <hr />
         </> 
     );
 }

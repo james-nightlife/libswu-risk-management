@@ -1,39 +1,49 @@
 import { Button, Card, Container, Form } from "react-bootstrap";
 import { DateToDatetime } from "../functions/DateToDatetime";
-import { RiskProcessInputControl } from "../functions/RiskProcessInputControl";
 import { useEffect, useState } from "react";
+import { MaProcessInputControl } from "../functions/MaProcessInputControl";
 
-const RiskProcessForm = ({handleProcess, inputs, handleChange, setInputs}) => {
+const MaProcessForm = ({handleProcess, inputs, handleChange, setInputs}) => {
     const [processInput, setProcessInput] = useState(true);
     const [statusInput, setStatusInput] = useState(true);
     const [submitProcessButton, setSubmitProcessButton] = useState(true);
-
+    
+    /** SUB-TYPE IS CHANGED aka ENABLING MAINTENANCE */
     useEffect(() => {
-        console.log('RiskProcessForm : inputs.risk_comment is changed')
-        console.log(inputs)
-        setProcessInput(RiskProcessInputControl())
-        setStatusInput(RiskProcessInputControl() || !inputs.risk_comment)
-        setSubmitProcessButton(RiskProcessInputControl() || !inputs.risk_comment)
+        setProcessInput(MaProcessInputControl(inputs.sub_type))
+        setStatusInput(MaProcessInputControl(inputs.sub_type) || !inputs.ma_comment)
+        setSubmitProcessButton(MaProcessInputControl(inputs.sub_type) || !inputs.ma_comment)
+    }, [inputs.sub_type])
+
+    /** COMMENT INPUT IS CH */
+    useEffect(() => {
+        // console.log('MaProcessForm : ma_comment is changed')
+        // console.log(inputs)
+
+        setProcessInput(MaProcessInputControl(inputs.sub_type))
+        setStatusInput(MaProcessInputControl(inputs.sub_type) || !inputs.ma_comment)
+        setSubmitProcessButton(MaProcessInputControl(inputs.sub_type) || !inputs.ma_comment)
         setInputs((
-            inputs.risk_comment ? 
+            inputs.ma_comment ? 
             inputs : {
                 ...inputs, 
-                new_risk_status: inputs.old_risk_status,
+                new_ma_status: inputs.old_ma_status,
             }
         ))
-    }, [inputs.risk_comment])
+    }, [inputs.ma_comment])
+
 
     return(
         <Container className="p-3 border rounded">
             <h2 className="text-center">
-                การดำเนินการเกี่ยวกับความเสี่ยง
+                การดำเนินการซ่อมบำรุง
             </h2>
             {
-                inputs.risk_status && inputs.risk_status.length > 0 ? (
+                inputs.ma_status && inputs.ma_status.length > 0 ? (
                     <Form onSubmit={handleProcess}>
                         { 
-                            /** TIMELINES */
-                            inputs.risk_status && inputs.risk_status.map((data, idx) => {
+                            /** TIMELINE */
+                            inputs.ma_status && inputs.ma_status.map((data, idx) => {
                                 return(
                                     <Card 
                                         className="mt-3"
@@ -60,22 +70,26 @@ const RiskProcessForm = ({handleProcess, inputs, handleChange, setInputs}) => {
                         <Form.Group>
                             <Form.Label className="pt-3">การดำเนินการ</Form.Label>
                             <Form.Control 
-                                name="risk_comment" 
+                                name="ma_comment" 
                                 type="text" 
                                 as="textarea"
-                                disabled={processInput || (inputs.old_risk_status === 'ดำเนินการแล้วเสร็จ')}
+                                disabled={
+                                    processInput || 
+                                    (inputs.old_ma_status === 'ดำเนินการแล้วเสร็จ')
+                                }
                                 onChange={handleChange}
-                                value={inputs.risk_comment || '' } />
+                                value={inputs.ma_comment || ''} />
                         </Form.Group>
 
+                        {/** STATUS INPUT  */}
                         <Form.Group>
                             <Form.Label className="pt-3">สถานะการดำเนินการ</Form.Label>
                             <Form.Select 
-                                name="new_risk_status" 
-                                disabled={statusInput || (inputs.old_risk_status === 'ดำเนินการแล้วเสร็จ')}
+                                name="new_ma_status" 
+                                disabled={statusInput || (inputs.old_ma_status.status === 'ดำเนินการแล้วเสร็จ')}
                                 onChange={handleChange}
-                                value={inputs.new_risk_status || '' }>
-                                    {(inputs.old_risk_status === 'รอดำเนินการ' || !inputs.old_risk_status) &&
+                                value={inputs.new_ma_status || ''}>
+                                    {(inputs.old_ma_status === 'รอดำเนินการ' || !inputs.old_ma_status) &&
                                         (<option>รอดำเนินการ</option>) 
                                     }
                                     <option>อยู่ระหว่างการดำเนินการ</option>
@@ -83,35 +97,38 @@ const RiskProcessForm = ({handleProcess, inputs, handleChange, setInputs}) => {
                             </Form.Select>
                         </Form.Group>
 
+                        {/** INITIALIZED DATE  */}        
                         <Form.Group>
                             <Form.Label className="pt-3">วันที่เริ่มดำเนินการ</Form.Label>
                             <Form.Control 
-                                name="risk_initialized_date" 
+                                name="ma_initialized_date" 
                                 type="text" 
                                 disabled 
-                                value={DateToDatetime(inputs.risk_initialized_date) || ''} />
+                                value={DateToDatetime(inputs.ma_initialized_date) || ''} />
                         </Form.Group>
 
+                        {/** FINALIZED DATE  */}
                         <Form.Group>
                             <Form.Label className="pt-3">วันที่ดำเนินการแล้วเสร็จ</Form.Label>
                             <Form.Control 
-                                name="risk_finalized_date" 
+                                name="ma_finalized_date" 
                                 type="text" 
                                 disabled 
-                                value={DateToDatetime(inputs.risk_finalized_date) || '' } />
+                                value={DateToDatetime(inputs.ma_finalized_date) || '' } />
                         </Form.Group>
 
+                        {/** SUBMIT BUTTON  */}
                         <div className="d-grid mt-3">
                             <Button 
                                 type="submit" 
-                                disabled={submitProcessButton || (inputs.old_risk_status === 'ดำเนินการแล้วเสร็จ')}>
+                                disabled={submitProcessButton || (inputs.old_ma_status.status === 'ดำเนินการแล้วเสร็จ')}>
                                 พิจารณาการดำเนินการ
                             </Button>
                         </div>
                     </Form>    
                 ) : (
                     <>
-                        ไม่เป็นความเสี่ยง
+                        <>ไม่เป็นรายงานแจ้งซ่อม</>
                     </>
                 )
             }            
@@ -119,4 +136,4 @@ const RiskProcessForm = ({handleProcess, inputs, handleChange, setInputs}) => {
     )
 }
 
-export default RiskProcessForm;
+export default MaProcessForm;

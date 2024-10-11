@@ -4,15 +4,26 @@ const ExportRisksToCSV = (data) => {
     const newdata = [];
     for(var i = 0; i < data.length; i++){
         newdata.push({
-            no: i+1,
+            id: data[i].id,
             detail: data[i].detail,
+            type: data[i].sub_type,
             location: data[i].location,
+            floors: data[i].floors,
+            places: data[i].places,
             reporter: data[i].reporter,
-            status: (!data[i].status ? 'รอดำเนินการ' : data[i].status),
-            createdAt: DateToDatetime(data[i].createdAt, 'en-us'),
-            feedback: (data[i].feedback?.[data[i].feedback?.length -1]?.comment ?? ''),
-            initialized_date: DateToDatetime(data[i].initialized_date, 'en-us'),
-            finalized_date: DateToDatetime(data[i].finalized_date, 'en-us'),
+            risk_status: ((data[i].risk_status && data[i].risk_status.length > 0) && data[i].risk_status[data[i].risk_status.length - 1].status),
+            risk_comment: ((data[i].risk_status && data[i].risk_status.length > 0) && data[i].risk_status[data[i].risk_status.length - 1].comment),
+            risk_user: ((data[i].risk_status && data[i].risk_status.length > 0) && data[i].risk_status[data[i].risk_status.length - 1].user),
+            risk_update_date: ((data[i].risk_status && data[i].risk_status.length > 0) && DateToDatetime(data[i].risk_status[data[i].risk_status.length - 1].date, 'csv')),
+            risk_initialized_date: DateToDatetime(data[i].risk_initialized_date, 'csv'),
+            risk_finalized_date: DateToDatetime(data[i].risk_finalized_date, 'csv'),
+            ma_status: ((data[i].ma_status && data[i].ma_status.length > 0) && data[i].ma_status[data[i].ma_status.length - 1].status),
+            ma_comment: ((data[i].ma_status && data[i].ma_status.length > 0) && data[i].ma_status[data[i].ma_status.length - 1].comment),
+            ma_user: ((data[i].ma_status && data[i].ma_status.length > 0) && data[i].ma_status[data[i].ma_status.length - 1].user),
+            ma_update_date: ((data[i].ma_status && data[i].ma_status.length > 0) && DateToDatetime(data[i].ma_status[data[i].ma_status.length - 1].date, 'csv')),
+            ma_initialized_date: DateToDatetime(data[i].ma_initialized_date, 'csv'),
+            ma_finalized_date: DateToDatetime(data[i].ma_finalized_date, 'csv'),
+            createdAt: DateToDatetime(data[i].createdAt, 'csv'),
         })
     }
     return newdata;

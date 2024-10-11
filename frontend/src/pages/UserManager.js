@@ -32,10 +32,10 @@ const UserManager = () => {
     }   
 
     useEffect(() => {
-        if(role !== 'admin'){
-            window.location.href = "/";
-        }else{
+        if(role.includes('admin')){
             fetchData();
+        }else{
+            window.location.href = "/";
         }
     }, [role]);
 
@@ -60,12 +60,11 @@ const UserManager = () => {
 
     return(
         <Container className='p-3'>
+            <Container className="p-3 border rounded">
+            <h1 className="text-center">จัดการบัญชีผู้ใช้</h1>
             { users === null ? (
                 <p>Loading...</p>
-            ) : users.length === 0 ? (
-                <>
-                </>
-            ) : (
+            ) : users.length > 0 && (
                 <>
                     <UsersTable 
                         handleEditButton={handleEditButton} 
@@ -76,6 +75,7 @@ const UserManager = () => {
                         pageCount={pageCount} />
                 </>
             )}
+            </Container>
         </Container>
     );
 }
