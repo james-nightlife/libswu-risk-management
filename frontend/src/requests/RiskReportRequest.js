@@ -81,6 +81,9 @@ const RiskReportRequest = async (username, input, token) => {
 
     if(input.type.includes('รายงานแจ้งซ่อม')){
         try{
+            const now = new Date();
+            const date = `${now.getFullYear()}-${now.getMonth() < 10 ? `0${now.getMonth()}` : now.getMonth()}-${now.getDate() < 10 ? `0${now.getDate()}` : now.getDate()}`;
+            const time = `${now.getHours() < 10 ? `0${now.getHours()}` : now.getHours()}:${now.getMinutes() < 10 ? `0${now.getMinutes()}` : now.getMinutes()}:${now.getSeconds() < 10 ? `0${now.getSeconds()}` : now.getSeconds()}`
             const insertMAReq = await fetch(`${process.env.REACT_APP_SERVER}/ma/record/`, {
                 method: "POST",
                 headers: {
@@ -111,8 +114,8 @@ const RiskReportRequest = async (username, input, token) => {
                     detriment: `${input.detail}`,
                     uname: username,
                     fname: username,
-                    today: "2024-03-21",
-                    todaytime: "10:20:00",
+                    today: date,
+                    todaytime: time,
                 })
             });
     
