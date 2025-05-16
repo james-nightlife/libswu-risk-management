@@ -56,7 +56,7 @@ const RiskReportForm = ({handleSubmit, inputs, handleChange, setInputs}) => {
 
     /** HANDLE TYPE INPUT */
     useEffect(() => {
-        // console.log('type changed')
+        // console.log(inputs.type)
         setSubTypeInput((inputs.type && inputs.type.length > 0) ? false : true)
         setDetailInput((inputs.type && inputs.type.length > 0) ? detailInput : true)
         setLocationInput((inputs.type && inputs.type.length > 0) ? locationInput : true)
@@ -91,7 +91,7 @@ const RiskReportForm = ({handleSubmit, inputs, handleChange, setInputs}) => {
 
     /** HANDLE SUB-TYPE INPUT */
     useEffect(() => {
-        // console.log('subtype changed')
+        // console.log(inputs.subtype)
         setDetailInput((inputs.subtype && inputs.subtype !== '0') ? false : true)
         setLocationInput((inputs.subtype && inputs.subtype !== '0') ? locationInput : true)
         setFloorsInput((inputs.subtype && inputs.subtype !== '0') ? floorsInput : true)

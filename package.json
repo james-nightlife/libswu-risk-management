@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "install": "cd frontend && npm install && cd ../server && npm install",
-    "start": "npm run server",
-    "server": "cd server && npx nodemon app.js",
-    "frontend": "cd frontend && npm start"
+    "frontend": "cd frontend && npm start",
+    "server": "cd server && npm start",
+    "build-frontend": "cd frontend && npm run build"
   },
   "keywords": [],
   "author": "",

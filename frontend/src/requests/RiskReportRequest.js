@@ -101,14 +101,14 @@ const RiskReportRequest = async (username, input, token) => {
                         input.subtype === 'ประปา' ? 2 :
                         input.subtype === 'ลิฟท์' ? 3 :
                         input.subtype === 'เครื่องปรับอากาศ' ? 4 :
-                        input.subtype === 'โต๊ะ เก้าอี' ? 5 :
-                        input.subtype === 'อาคารสถานที' ? 6 :
+                        input.subtype === 'โต๊ะ เก้าอี้' ? 5 :
+                        input.subtype === 'อาคารสถานที่' ? 6 :
                         input.subtype === 'อื่นๆ' && 7 
     
                     ),
                     type: input.subtype,
                     tel: "",
-                    repairtime: "0000-00-00",
+                    repairtime: null,
                     fac: input.location,
                     flo: `${input.places} ชั้น ${input.floors}`,
                     detriment: `${input.detail}`,
